@@ -25,12 +25,11 @@ export class MasteredElementService {
       .insert(masteredElementsSchema)
       .values({
         userId,
-        content: JSON.stringify(content),
+        content: content as any,
         masteredAt: new Date(),
       })
       .returning();
 
-    entity.content = JSON.parse(entity.content as string);
     return entity;
   }
 
@@ -41,10 +40,7 @@ export class MasteredElementService {
       .where(eq(masteredElementsSchema.userId, userId))
       .orderBy(desc(masteredElementsSchema.masteredAt));
 
-    return result.map((item) => ({
-      ...item,
-      content: JSON.parse(item.content as string),
-    }));
+    return result;
   }
 
   async removeMasteredElement(userId: string, elementId: string) {
@@ -71,7 +67,7 @@ export class MasteredElementService {
       .where(
         and(
           eq(masteredElementsSchema.userId, userId),
-          eq(masteredElementsSchema.content, JSON.stringify(content)),
+          eq(masteredElementsSchema.content, content as any),
         ),
       )
       .limit(1);

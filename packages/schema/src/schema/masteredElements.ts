@@ -1,11 +1,11 @@
 import { createId } from "@paralleldrive/cuid2";
-import { jsonb, pgTable, text, timestamp } from "drizzle-orm/pg-core";
+import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 
-export const masteredElements = pgTable("mastered_elements", {
+export const masteredElements = sqliteTable("mastered_elements", {
   id: text("id")
     .primaryKey()
     .$defaultFn(() => createId()),
   userId: text("user_id").notNull(),
-  content: jsonb("content").notNull(),
-  masteredAt: timestamp("mastered_at").defaultNow(),
+  content: text("content", { mode: "json" }).notNull(),
+  masteredAt: integer("mastered_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
 });

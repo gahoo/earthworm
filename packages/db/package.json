@@ -19,8 +19,8 @@
     "pg": "^8.11.5"
   },
   "dependencies": {
-    "drizzle-orm": "^0.32.0",
-    "postgres": "^3.4.4",
-    "@earthworm/schema": "workspace:^"
+    "@earthworm/schema": "workspace:^",
+    "better-sqlite3": "^12.8.0",
+    "drizzle-orm": "^0.32.0"
   }
 }

@@ -3,13 +3,13 @@
 exports[`MasteredElementService getMasteredElements should return all mastered elements for a user 1`] = `
 [
   {
-    "english": "test3",
+    "english": "test1",
   },
   {
     "english": "test2",
   },
   {
-    "english": "test1",
+    "english": "test3",
   },
 ]
 `;
@@ -17,13 +17,13 @@ exports[`MasteredElementService getMasteredElements should return all mastered e
 exports[`MasteredElementService getMasteredElements should return elements in descending order of masteredAt 1`] = `
 [
   {
-    "english": "test3",
+    "english": "test1",
   },
   {
     "english": "test2",
   },
   {
-    "english": "test1",
+    "english": "test3",
   },
 ]
 `;

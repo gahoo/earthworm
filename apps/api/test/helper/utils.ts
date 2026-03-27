@@ -3,14 +3,23 @@ import { TestingModule } from "@nestjs/testing";
 import { sql } from "drizzle-orm";
 import { DbType } from "src/global/providers/db.provider";
 
+import { schemas } from "@earthworm/schema";
 import { GlobalModule } from "../../src/global/global.module";
 import { LogtoService } from "../../src/logto/logto.service";
-import { MockRedisModule } from "./mockRedis";
 
 export async function cleanDB(db: DbType) {
-  await db.execute(
-    sql`TRUNCATE TABLE courses, statements, "course_packs" , "user_course_progress", "course_history", "user_learning_activities", "mastered_elements", "memberships" RESTART IDENTITY CASCADE;`,
-  );
+  if (!db) return;
+
+  await db.run(sql`PRAGMA foreign_keys = OFF;`);
+  await db.delete(schemas.statement).execute();
+  await db.delete(schemas.course).execute();
+  await db.delete(schemas.coursePack).execute();
+  await db.delete(schemas.userCourseProgress).execute();
+  await db.delete(schemas.courseHistory).execute();
+  await db.delete(schemas.userLearningActivities).execute();
+  await db.delete(schemas.masteredElements).execute();
+  await db.delete(schemas.membership).execute();
+  await db.run(sql`PRAGMA foreign_keys = ON;`);
 }
 
 export async function signin(builder: TestingModule) {
@@ -19,7 +28,6 @@ export async function signin(builder: TestingModule) {
 }
 
 export const testImportModules = [
-  MockRedisModule,
   GlobalModule,
   JwtModule.register({
     secret: process.env.SECRET,

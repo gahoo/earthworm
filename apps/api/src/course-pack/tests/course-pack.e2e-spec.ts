@@ -1,6 +1,6 @@
 import { INestApplication } from "@nestjs/common";
 import { Test, TestingModule } from "@nestjs/testing";
-import * as request from "supertest";
+import request from "supertest";
 
 import { insertCourse, insertCoursePack, insertStatement } from "../../../test/fixture/db";
 import { cleanDB, signin } from "../../../test/helper/utils";

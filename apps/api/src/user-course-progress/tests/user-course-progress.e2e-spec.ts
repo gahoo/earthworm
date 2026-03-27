@@ -2,7 +2,7 @@ import { INestApplication } from "@nestjs/common";
 import { Test, TestingModule } from "@nestjs/testing";
 import { createId } from "@paralleldrive/cuid2";
 import { and, eq } from "drizzle-orm";
-import * as request from "supertest";
+import request from "supertest";
 
 import { userCourseProgress } from "@earthworm/schema";
 import { insertUserCourseProgress } from "../../../test/fixture/db";

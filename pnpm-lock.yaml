@@ -11,6 +11,12 @@ importers:
       '@t3-oss/env-core':
         specifier: ^0.7.1
         version: 0.7.3(typescript@5.4.5)(zod@3.23.8)
+      '@types/better-sqlite3':
+        specifier: ^7.6.13
+        version: 7.6.13
+      better-sqlite3:
+        specifier: ^12.8.0
+        version: 12.8.0
       zod:
         specifier: ^3.22.4
         version: 3.23.8
@@ -81,9 +87,6 @@ importers:
       '@earthworm/schema':
         specifier: workspace:^
         version: link:../../packages/schema
-      '@nestjs-modules/ioredis':
-        specifier: ^2.0.1
-        version: 2.0.2(@nestjs/common@10.3.9(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.1.14)(rxjs@7.8.1))(@nestjs/core@10.3.9(@nestjs/common@10.3.9(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.1.14)(rxjs@7.8.1))(@nestjs/platform-express@10.3.9)(encoding@0.1.13)(reflect-metadata@0.1.14)(rxjs@7.8.1))(ioredis@5.4.1)(reflect-metadata@0.1.14)(rxjs@7.8.1)
       '@nestjs/common':
         specifier: ^10.0.0
         version: 10.3.9(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.1.14)(rxjs@7.8.1)
@@ -111,6 +114,9 @@ importers:
       axios:
         specifier: ^1.6.6
         version: 1.7.2(debug@4.3.5)
+      better-sqlite3:
+        specifier: ^12.8.0
+        version: 12.8.0
       class-transformer:
         specifier: ^0.5.1
         version: 0.5.1
@@ -119,16 +125,10 @@ importers:
         version: 0.14.1
       drizzle-orm:
         specifier: ^0.32.0
-        version: 0.32.0(@electric-sql/pglite@0.1.5)(@opentelemetry/api@1.9.0)(pg@8.12.0)(postgres@3.4.4)
-      ioredis:
-        specifier: ^5.3.2
-        version: 5.4.1
+        version: 0.32.0(@electric-sql/pglite@0.1.5)(@opentelemetry/api@1.9.0)(@types/better-sqlite3@7.6.13)(better-sqlite3@12.8.0)(pg@8.12.0)(postgres@3.4.4)
       jose:
         specifier: ^5.2.4
         version: 5.4.0
-      postgres:
-        specifier: ^3.4.4
-        version: 3.4.4
       reflect-metadata:
         specifier: ^0.1.13
         version: 0.1.14
@@ -142,9 +142,6 @@ importers:
         specifier: ^8.1.2
         version: 8.1.2
     devDependencies:
-      '@electric-sql/pglite':
-        specifier: ^0.1.2
-        version: 0.1.5
       '@nestjs/cli':
         specifier: ^10.0.0
         version: 10.3.2(esbuild@0.21.5)
@@ -172,9 +169,6 @@ importers:
       cross-env:
         specifier: ^7.0.3
         version: 7.0.3
-      ioredis-mock:
-        specifier: ^8.9.0
-        version: 8.9.0(@types/ioredis-mock@8.2.5)(ioredis@5.4.1)
       jest:
         specifier: ^29.5.0
         version: 29.7.0(@types/node@20.14.2)(ts-node@10.9.2(@types/node@20.14.2)(typescript@5.4.5))
@@ -262,7 +256,7 @@ importers:
         version: 1.7.0(ioredis@5.4.1)(magicast@0.3.4)(rollup@4.18.0)
       '@nuxt/test-utils':
         specifier: ^3.10.0
-        version: 3.13.1(@jest/globals@29.7.0)(@vue/test-utils@2.4.6)(h3@1.12.0)(happy-dom@13.10.1)(nitropack@2.9.6(@opentelemetry/api@1.9.0))(rollup@4.18.0)(vite@5.3.1(@types/node@20.14.9)(terser@5.31.1))(vitest@1.6.0(@types/node@20.14.9)(happy-dom@13.10.1)(terser@5.31.1))(vue-router@4.3.3(vue@3.4.29(typescript@5.4.5)))(vue@3.4.29(typescript@5.4.5))
+        version: 3.13.1(@jest/globals@29.7.0)(@vue/test-utils@2.4.6)(h3@1.12.0)(happy-dom@13.10.1)(nitropack@2.9.6(@opentelemetry/api@1.9.0)(better-sqlite3@12.8.0))(rollup@4.18.0)(vite@5.3.1(@types/node@20.14.9)(terser@5.31.1))(vitest@1.6.0(@types/node@20.14.9)(happy-dom@13.10.1)(terser@5.31.1))(vue-router@4.3.3(vue@3.4.29(typescript@5.4.5)))(vue@3.4.29(typescript@5.4.5))
       '@nuxt/ui':
         specifier: ^2.18.4
         version: 2.18.4(axios@1.7.2)(focus-trap@7.5.4)(magicast@0.3.4)(rollup@4.18.0)(ts-node@10.9.2(@types/node@20.14.9)(typescript@5.4.5))(vite@5.3.1(@types/node@20.14.9)(terser@5.31.1))(vue@3.4.29(typescript@5.4.5))
@@ -283,7 +277,7 @@ importers:
         version: 10.11.0(vue@3.4.29(typescript@5.4.5))
       '@vueuse/nuxt':
         specifier: ^10.7.2
-        version: 10.10.1(nuxt@3.12.1(@opentelemetry/api@1.9.0)(@parcel/watcher@2.4.1)(@types/node@20.14.9)(@unocss/reset@0.61.0)(axios@1.7.2)(floating-vue@5.2.2(@nuxt/kit@3.12.4(magicast@0.3.4)(rollup@4.18.0))(vue@3.4.29(typescript@5.4.5)))(fuse.js@7.0.0)(ioredis@5.4.1)(rollup@4.18.0)(terser@5.31.1)(typescript@5.4.5)(unocss@0.61.0(postcss@8.4.38)(rollup@4.18.0)(vite@5.3.1(@types/node@20.14.9)(terser@5.31.1)))(vite@5.3.1(@types/node@20.14.9)(terser@5.31.1)))(rollup@4.18.0)(vue@3.4.29(typescript@5.4.5))
+        version: 10.10.1(nuxt@3.12.1(@opentelemetry/api@1.9.0)(@parcel/watcher@2.4.1)(@types/node@20.14.9)(@unocss/reset@0.61.0)(axios@1.7.2)(better-sqlite3@12.8.0)(floating-vue@5.2.2(@nuxt/kit@3.12.4(magicast@0.3.4)(rollup@4.18.0))(vue@3.4.29(typescript@5.4.5)))(fuse.js@7.0.0)(ioredis@5.4.1)(rollup@4.18.0)(terser@5.31.1)(typescript@5.4.5)(unocss@0.61.0(postcss@8.4.38)(rollup@4.18.0)(vite@5.3.1(@types/node@20.14.9)(terser@5.31.1)))(vite@5.3.1(@types/node@20.14.9)(terser@5.31.1)))(rollup@4.18.0)(vue@3.4.29(typescript@5.4.5))
       cypress:
         specifier: ^13.6.4
         version: 13.11.0
@@ -295,7 +289,7 @@ importers:
         version: 13.10.1
       nuxt:
         specifier: ^3.9.0
-        version: 3.12.1(@opentelemetry/api@1.9.0)(@parcel/watcher@2.4.1)(@types/node@20.14.9)(@unocss/reset@0.61.0)(axios@1.7.2)(floating-vue@5.2.2(@nuxt/kit@3.12.4(magicast@0.3.4)(rollup@4.18.0))(vue@3.4.29(typescript@5.4.5)))(fuse.js@7.0.0)(ioredis@5.4.1)(rollup@4.18.0)(terser@5.31.1)(typescript@5.4.5)(unocss@0.61.0(postcss@8.4.38)(rollup@4.18.0)(vite@5.3.1(@types/node@20.14.9)(terser@5.31.1)))(vite@5.3.1(@types/node@20.14.9)(terser@5.31.1))
+        version: 3.12.1(@opentelemetry/api@1.9.0)(@parcel/watcher@2.4.1)(@types/node@20.14.9)(@unocss/reset@0.61.0)(axios@1.7.2)(better-sqlite3@12.8.0)(floating-vue@5.2.2(@nuxt/kit@3.12.4(magicast@0.3.4)(rollup@4.18.0))(vue@3.4.29(typescript@5.4.5)))(fuse.js@7.0.0)(ioredis@5.4.1)(rollup@4.18.0)(terser@5.31.1)(typescript@5.4.5)(unocss@0.61.0(postcss@8.4.38)(rollup@4.18.0)(vite@5.3.1(@types/node@20.14.9)(terser@5.31.1)))(vite@5.3.1(@types/node@20.14.9)(terser@5.31.1))
       start-server-and-test:
         specifier: ^2.0.3
         version: 2.0.4
@@ -342,12 +336,12 @@ importers:
       '@earthworm/schema':
         specifier: workspace:^
         version: link:../schema
+      better-sqlite3:
+        specifier: ^12.8.0
+        version: 12.8.0
       drizzle-orm:
         specifier: ^0.32.0
-        version: 0.32.0(@electric-sql/pglite@0.1.5)(@opentelemetry/api@1.9.0)(pg@8.12.0)(postgres@3.4.4)
-      postgres:
-        specifier: ^3.4.4
-        version: 3.4.4
+        version: 0.32.0(@electric-sql/pglite@0.1.5)(@opentelemetry/api@1.9.0)(@types/better-sqlite3@7.6.13)(better-sqlite3@12.8.0)(pg@8.12.0)(postgres@3.4.4)
     devDependencies:
       drizzle-kit:
         specifier: ^0.23.0
@@ -369,7 +363,7 @@ importers:
         version: link:../schema
       drizzle-orm:
         specifier: ^0.32.0
-        version: 0.32.0(@electric-sql/pglite@0.1.5)(@opentelemetry/api@1.9.0)(pg@8.12.0)(postgres@3.4.4)
+        version: 0.32.0(@electric-sql/pglite@0.1.5)(@opentelemetry/api@1.9.0)(@types/better-sqlite3@7.6.13)(better-sqlite3@12.8.0)(pg@8.12.0)(postgres@3.4.4)
       postgres:
         specifier: ^3.4.4
         version: 3.4.4
@@ -391,7 +385,7 @@ importers:
         version: 2.2.2
       drizzle-orm:
         specifier: ^0.32.0
-        version: 0.32.0(@electric-sql/pglite@0.1.5)(@opentelemetry/api@1.9.0)(pg@8.12.0)(postgres@3.4.4)
+        version: 0.32.0(@electric-sql/pglite@0.1.5)(@opentelemetry/api@1.9.0)(@types/better-sqlite3@7.6.13)(better-sqlite3@12.8.0)(pg@8.12.0)(postgres@3.4.4)
 
   packages/xingrong-courses:
     dependencies:
@@ -403,7 +397,7 @@ importers:
         version: link:../schema
       drizzle-orm:
         specifier: ^0.32.0
-        version: 0.32.0(@electric-sql/pglite@0.1.5)(@opentelemetry/api@1.9.0)(pg@8.12.0)(postgres@3.4.4)
+        version: 0.32.0(@electric-sql/pglite@0.1.5)(@opentelemetry/api@1.9.0)(@types/better-sqlite3@7.6.13)(better-sqlite3@12.8.0)(pg@8.12.0)(postgres@3.4.4)
       inquirer:
         specifier: ^9.2.13
         version: 9.2.23
@@ -1449,9 +1443,6 @@ packages:
     resolution: {integrity: sha512-ErXXzENMH5pJt5/ssXV0DfWUZqly8nGzf0UcBV9xTnP+KyffE2mqyxIMBrZ8ijQck2nU0TQm40EQB53YreyWHw==}
     engines: {node: '>=18'}
 
-  '@ioredis/as-callback@3.0.0':
-    resolution: {integrity: sha512-Kqv1rZ3WbgOrS+hgzJ5xG5WQuhvzzSTRYvNeyPMLOAM78MHSnuKI20JeJGbpuAt//LCuP0vsexZcorqW7kWhJg==}
-
   '@ioredis/commands@1.2.0':
     resolution: {integrity: sha512-Sx1pU8EM64o2BrqNpEO1CNLtKQwyhuXuqyfH7oGKCk+1a33d2r5saW8zNwm3j6BTExtjrv2BxTgzzkMwts6vGg==}
 
@@ -1596,13 +1587,6 @@ packages:
   '@microsoft/tsdoc@0.14.2':
     resolution: {integrity: sha512-9b8mPpKrfeGRuhFH5iO1iwCLeIIsV6+H1sRfxbkoGXIyQE2BTsPd9zqSqQJ+pv5sJ/hT5M1zvOFL02MnEezFug==}
 
-  '@nestjs-modules/ioredis@2.0.2':
-    resolution: {integrity: sha512-8pzSvT8R3XP6p8ZzQmEN8OnY0yWrJ/elFhwQK+PID2zf1SLBkAZ18bDcx3SKQ2atledt0gd9kBeP5xT4MlyS7Q==}
-    peerDependencies:
-      '@nestjs/common': '>=6.7.0'
-      '@nestjs/core': '>=6.7.0'
-      ioredis: '>=5.0.0'
-
   '@nestjs/cli@10.3.2':
     resolution: {integrity: sha512-aWmD1GLluWrbuC4a1Iz/XBk5p74Uj6nIVZj6Ov03JbTfgtWqGFLtXuMetvzMiHxfrHehx/myt2iKAPRhKdZvTg==}
     engines: {node: '>= 16.14'}
@@ -1702,54 +1686,6 @@ packages:
       class-transformer:
         optional: true
       class-validator:
-        optional: true
-
-  '@nestjs/terminus@10.2.0':
-    resolution: {integrity: sha512-zPs98xvJ4ogEimRQOz8eU90mb7z+W/kd/mL4peOgrJ/VqER+ibN2Cboj65uJZW3XuNhpOqaeYOJte86InJd44A==}
-    peerDependencies:
-      '@grpc/grpc-js': '*'
-      '@grpc/proto-loader': '*'
-      '@mikro-orm/core': '*'
-      '@mikro-orm/nestjs': '*'
-      '@nestjs/axios': ^1.0.0 || ^2.0.0 || ^3.0.0
-      '@nestjs/common': ^9.0.0 || ^10.0.0
-      '@nestjs/core': ^9.0.0 || ^10.0.0
-      '@nestjs/microservices': ^9.0.0 || ^10.0.0
-      '@nestjs/mongoose': ^9.0.0 || ^10.0.0
-      '@nestjs/sequelize': ^9.0.0 || ^10.0.0
-      '@nestjs/typeorm': ^9.0.0 || ^10.0.0
-      '@prisma/client': '*'
-      mongoose: '*'
-      reflect-metadata: 0.1.x
-      rxjs: 7.x
-      sequelize: '*'
-      typeorm: '*'
-    peerDependenciesMeta:
-      '@grpc/grpc-js':
-        optional: true
-      '@grpc/proto-loader':
-        optional: true
-      '@mikro-orm/core':
-        optional: true
-      '@mikro-orm/nestjs':
-        optional: true
-      '@nestjs/axios':
-        optional: true
-      '@nestjs/microservices':
-        optional: true
-      '@nestjs/mongoose':
-        optional: true
-      '@nestjs/sequelize':
-        optional: true
-      '@nestjs/typeorm':
-        optional: true
-      '@prisma/client':
-        optional: true
-      mongoose:
-        optional: true
-      sequelize:
-        optional: true
-      typeorm:
         optional: true
 
   '@nestjs/testing@10.3.9':
@@ -2050,35 +1986,30 @@ packages:
     engines: {node: '>= 10.0.0'}
     cpu: [arm]
     os: [linux]
-    libc: [glibc]
 
   '@parcel/watcher-linux-arm64-glibc@2.4.1':
     resolution: {integrity: sha512-BJ7mH985OADVLpbrzCLgrJ3TOpiZggE9FMblfO65PlOCdG++xJpKUJ0Aol74ZUIYfb8WsRlUdgrZxKkz3zXWYA==}
     engines: {node: '>= 10.0.0'}
     cpu: [arm64]
     os: [linux]
-    libc: [glibc]
 
   '@parcel/watcher-linux-arm64-musl@2.4.1':
     resolution: {integrity: sha512-p4Xb7JGq3MLgAfYhslU2SjoV9G0kI0Xry0kuxeG/41UfpjHGOhv7UoUDAz/jb1u2elbhazy4rRBL8PegPJFBhA==}
     engines: {node: '>= 10.0.0'}
     cpu: [arm64]
     os: [linux]
-    libc: [musl]
 
   '@parcel/watcher-linux-x64-glibc@2.4.1':
     resolution: {integrity: sha512-s9O3fByZ/2pyYDPoLM6zt92yu6P4E39a03zvO0qCHOTjxmt3GHRMLuRZEWhWLASTMSrrnVNWdVI/+pUElJBBBg==}
     engines: {node: '>= 10.0.0'}
     cpu: [x64]
     os: [linux]
-    libc: [glibc]
 
   '@parcel/watcher-linux-x64-musl@2.4.1':
     resolution: {integrity: sha512-L2nZTYR1myLNST0O632g0Dx9LyMNHrn6TOt76sYxWLdff3cB22/GZX2UPtJnaqQPdCRoszoY5rcOj4oMTtp5fQ==}
     engines: {node: '>= 10.0.0'}
     cpu: [x64]
     os: [linux]
-    libc: [musl]
 
   '@parcel/watcher-wasm@2.4.1':
     resolution: {integrity: sha512-/ZR0RxqxU/xxDGzbzosMjh4W6NdYFMqq2nvo2b8SLi7rsl/4jkL8S5stIikorNkdR50oVDvqb/3JT05WM+CRRA==}
@@ -2227,55 +2158,46 @@ packages:
     resolution: {integrity: sha512-C/zbRYRXFjWvz9Z4haRxcTdnkPt1BtCkz+7RtBSuNmKzMzp3ZxdM28Mpccn6pt28/UWUCTXa+b0Mx1k3g6NOMA==}
     cpu: [arm]
     os: [linux]
-    libc: [glibc]
 
   '@rollup/rollup-linux-arm-musleabihf@4.18.0':
     resolution: {integrity: sha512-l3m9ewPgjQSXrUMHg93vt0hYCGnrMOcUpTz6FLtbwljo2HluS4zTXFy2571YQbisTnfTKPZ01u/ukJdQTLGh9A==}
     cpu: [arm]
     os: [linux]
-    libc: [musl]
 
   '@rollup/rollup-linux-arm64-gnu@4.18.0':
     resolution: {integrity: sha512-rJ5D47d8WD7J+7STKdCUAgmQk49xuFrRi9pZkWoRD1UeSMakbcepWXPF8ycChBoAqs1pb2wzvbY6Q33WmN2ftw==}
     cpu: [arm64]
     os: [linux]
-    libc: [glibc]
 
   '@rollup/rollup-linux-arm64-musl@4.18.0':
     resolution: {integrity: sha512-be6Yx37b24ZwxQ+wOQXXLZqpq4jTckJhtGlWGZs68TgdKXJgw54lUUoFYrg6Zs/kjzAQwEwYbp8JxZVzZLRepQ==}
     cpu: [arm64]
     os: [linux]
-    libc: [musl]
 
   '@rollup/rollup-linux-powerpc64le-gnu@4.18.0':
     resolution: {integrity: sha512-hNVMQK+qrA9Todu9+wqrXOHxFiD5YmdEi3paj6vP02Kx1hjd2LLYR2eaN7DsEshg09+9uzWi2W18MJDlG0cxJA==}
     cpu: [ppc64]
     os: [linux]
-    libc: [glibc]
 
   '@rollup/rollup-linux-riscv64-gnu@4.18.0':
     resolution: {integrity: sha512-ROCM7i+m1NfdrsmvwSzoxp9HFtmKGHEqu5NNDiZWQtXLA8S5HBCkVvKAxJ8U+CVctHwV2Gb5VUaK7UAkzhDjlg==}
     cpu: [riscv64]
     os: [linux]
-    libc: [glibc]
 
   '@rollup/rollup-linux-s390x-gnu@4.18.0':
     resolution: {integrity: sha512-0UyyRHyDN42QL+NbqevXIIUnKA47A+45WyasO+y2bGJ1mhQrfrtXUpTxCOrfxCR4esV3/RLYyucGVPiUsO8xjg==}
     cpu: [s390x]
     os: [linux]
-    libc: [glibc]
 
   '@rollup/rollup-linux-x64-gnu@4.18.0':
     resolution: {integrity: sha512-xuglR2rBVHA5UsI8h8UbX4VJ470PtGCf5Vpswh7p2ukaqBGFTnsfzxUBetoWBWymHMxbIG0Cmx7Y9qDZzr648w==}
     cpu: [x64]
     os: [linux]
-    libc: [glibc]
 
   '@rollup/rollup-linux-x64-musl@4.18.0':
     resolution: {integrity: sha512-LKaqQL9osY/ir2geuLVvRRs+utWUNilzdE90TpyoX0eNqPzWjRm14oMEE+YLve4k/NAqCdPkGYDaDF5Sw+xBfg==}
     cpu: [x64]
     os: [linux]
-    libc: [musl]
 
   '@rollup/rollup-win32-arm64-msvc@4.18.0':
     resolution: {integrity: sha512-7J6TkZQFGo9qBKH0pk2cEVSRhJbL6MtfWxth7Y5YmZs57Pi+4x6c2dStAUvaQkHQLnEQv1jzBUW43GvZW8OFqA==}
@@ -2435,6 +2357,9 @@ packages:
   '@types/babel__traverse@7.20.6':
     resolution: {integrity: sha512-r1bzfrm0tomOI8g1SzvCaQHo6Lcv6zu0EA+W2kHrt8dyrHQxGzBBL4kdkzIS+jBMV+EYcMAEAqXqYaLJq5rOZg==}
 
+  '@types/better-sqlite3@7.6.13':
+    resolution: {integrity: sha512-NMv9ASNARoKksWtsq/SHakpYAYnhBrQgGD8zkLYk/jaK8jUGn08CfEdTRgYhMypUQAfzSP8W6gNLe0q19/t4VA==}
+
   '@types/body-parser@1.19.5':
     resolution: {integrity: sha512-fB3Zu92ucau0iQ0JMCFQE7b/dv8Ot07NI3KaZIkIUNXq82k4eBAqUaneXfleGY9JWskeS9y+u0nXMyspcuQrCg==}
 
@@ -2482,9 +2407,6 @@ packages:
 
   '@types/inquirer@9.0.7':
     resolution: {integrity: sha512-Q0zyBupO6NxGRZut/JdmqYKOnN95Eg5V8Csg3PGKkP+FnvsUZx1jAyK7fztIszxxMuoBA6E3KXWvdZVXIpx60g==}
-
-  '@types/ioredis-mock@8.2.5':
-    resolution: {integrity: sha512-cZyuwC9LGtg7s5G9/w6rpy3IOZ6F/hFR0pQlWYZESMo1xQUYbDpa6haqB4grTePjsGzcB/YLBFCjqRunK5wieg==}
 
   '@types/istanbul-lib-coverage@2.0.6':
     resolution: {integrity: sha512-2QF/t/auWm0lsy8XtKVPG19v3sSOQlJe/YHZgfjb/KBBHOGSV+J2q/S671rcq9uTBrLAXmZpqJiaQbMT+zNU1w==}
@@ -3056,9 +2978,6 @@ packages:
   animejs@3.2.2:
     resolution: {integrity: sha512-Ao95qWLpDPXXM+WrmwcKbl6uNlC5tjnowlaRYtuVDHHoygjtIPfDUoK9NthrlZsQSKjZXlmji2TrBUAVbiH0LQ==}
 
-  ansi-align@3.0.1:
-    resolution: {integrity: sha512-IOfwwBF5iczOjp/WeY4YxyjqAFMQoZufdQWDd19SEExbVLNXqvpzSJ/M7Za4/sCPmQ0+GRquoA7bGcINcxew6w==}
-
   ansi-colors@4.1.3:
     resolution: {integrity: sha512-/6w/C21Pm1A7aZitlI5Ni/2J6FFQN8i1Cvz3kHABAAbw93v/NlvKdVOqz7CCWz/3iv/JplRSEEZ83XION15ovw==}
     engines: {node: '>=6'}
@@ -3274,6 +3193,10 @@ packages:
   bcrypt-pbkdf@1.0.2:
     resolution: {integrity: sha512-qeFIXtP4MSoi6NLqO12WfqARWWuCKi2Rn/9hJLEmtB5yTNr9DqFWkJRCf2qShWzPeAMRnOgCrq0sg/KLv5ES9w==}
 
+  better-sqlite3@12.8.0:
+    resolution: {integrity: sha512-RxD2Vd96sQDjQr20kdP+F+dK/1OUNiVOl200vKBZY8u0vTwysfolF6Hq+3ZK2+h8My9YvZhHsF+RSGZW2VYrPQ==}
+    engines: {node: 20.x || 22.x || 23.x || 24.x || 25.x}
+
   binary-extensions@2.3.0:
     resolution: {integrity: sha512-Ceh+7ox5qe7LJuLHoY0feh3pHuUDHAcRUeyL2VYghZwfpkNIy/+8Ocg0a3UuSoYzavmylwuLWQOf3hl0jjMMIw==}
     engines: {node: '>=8'}
@@ -3299,10 +3222,6 @@ packages:
 
   boolbase@1.0.0:
     resolution: {integrity: sha512-JZOSA7Mo9sNGB8+UjSgzdLtokWAky1zbztM3WRLCbZ70/3cTANmQmOdR7y2g+J0e2WXywy1yS468tY+IruqEww==}
-
-  boxen@5.1.2:
-    resolution: {integrity: sha512-9gYgQKXx+1nP8mP7CzFyaUARhg7D3n1dF/FnErWmu9l6JvGpNUN278h0aSb+QjoiKSWG+iZ3uHrcqk0qrY9RQQ==}
-    engines: {node: '>=10'}
 
   brace-expansion@1.1.11:
     resolution: {integrity: sha512-iCuPHDFgrHX7H2vEI/5xpz07zSHB00TpugqhmYtVmMO6518mCuRMoOYFldEBl0g187ufozdaHgWKcYFb61qGiA==}
@@ -3460,10 +3379,6 @@ packages:
   chardet@0.7.0:
     resolution: {integrity: sha512-mT8iDcrh03qDGRRmoA2hmBJnxpllMR+0/0qlzjqZES6NdiWDcZkCNAk4rPFZ9Q85r27unkiNNg8ZOiwZXBHwcA==}
 
-  check-disk-space@3.4.0:
-    resolution: {integrity: sha512-drVkSqfwA+TvuEhFipiR1OC9boEGZL5RrWvVsOthdcvQNXyCCuKkEiTOTXZ7qxSf/GLwq4GvzfrQD/Wz325hgw==}
-    engines: {node: '>=16'}
-
   check-error@1.0.3:
     resolution: {integrity: sha512-iKEoDYaRmd1mxM90a2OEfWhjsjPpYPuQ+lMYsoxB126+t8fw7ySEO48nmDg5COTjxDI65/Y2OWpeEHk3ZOe8zg==}
 
@@ -3516,10 +3431,6 @@ packages:
 
   clear@0.1.0:
     resolution: {integrity: sha512-qMjRnoL+JDPJHeLePZJuao6+8orzHMGP04A8CdwCNsKhRbOnKRjefxONR7bwILT3MHecxKBjHkKL/tkZ8r4Uzw==}
-
-  cli-boxes@2.2.1:
-    resolution: {integrity: sha512-y4coMcylgSCdVinjiDBuR8PCC2bLjyGTwEmPb9NHR/QaNU6EUOXcTY/s6VjGMD6ENSEaeQYHCY0GNGS5jfMwPw==}
-    engines: {node: '>=6'}
 
   cli-cursor@3.1.0:
     resolution: {integrity: sha512-I/zHAwsKf9FqGoXM4WWRACob9+SNukZTd94DWF57E4toouRulbCxcUh6RKUEOQlYTHJnzkPMySvPNaaSLNfLZw==}
@@ -4498,14 +4409,6 @@ packages:
   fd-slicer@1.1.0:
     resolution: {integrity: sha512-cE1qsB/VwyQozZ+q1dGxR8LBYNZeofhEdUNGSMbQD3Gw2lAzX9Zb3uIU6Ebc/Fmyjo9AWWfnn0AUCHqtevs/8g==}
 
-  fengari-interop@0.1.3:
-    resolution: {integrity: sha512-EtZ+oTu3kEwVJnoymFPBVLIbQcCoy9uWCVnMA6h3M/RqHkUBsLYp29+RRHf9rKr6GwjubWREU1O7RretFIXjHw==}
-    peerDependencies:
-      fengari: ^0.1.0
-
-  fengari@0.1.4:
-    resolution: {integrity: sha512-6ujqUuiIYmcgkGz8MGAdERU57EIluGGPSUgGPTsco657EHa+srq0S3/YUl/r9kx1+D+d4rGfYObd+m8K22gB1g==}
-
   fflate@0.7.4:
     resolution: {integrity: sha512-5u2V/CDW15QM1XbbgS+0DfPxVB+jUKhWEKuuFuHncbk3tEEqzmoXL+2KyOFuKGqOnmdIy0/davWF1CkuwtibCw==}
 
@@ -5010,13 +4913,6 @@ packages:
   interpret@1.4.0:
     resolution: {integrity: sha512-agE4QfB2Lkp9uICn7BAqoscw4SZP9kTE2hxiFI3jBPmXJfdqiahTbUuKGsMoN2GtqL9AxhYioAcVvgsb1HvRbA==}
     engines: {node: '>= 0.10'}
-
-  ioredis-mock@8.9.0:
-    resolution: {integrity: sha512-yIglcCkI1lvhwJVoMsR51fotZVsPsSk07ecTCgRTRlicG0Vq3lke6aAaHklyjmRNRsdYAgswqC2A0bPtQK4LSw==}
-    engines: {node: '>=12.22'}
-    peerDependencies:
-      '@types/ioredis-mock': ^8
-      ioredis: ^5
 
   ioredis@5.4.1:
     resolution: {integrity: sha512-2YZsvl7jopIa1gaePkeMtd9rAcSjOOjPtpcLlOeusyO+XH2SK5ZcT+UCrElPP+WVIInh2TzeI4XW9ENaSLVVHA==}
@@ -6611,6 +6507,7 @@ packages:
   prebuild-install@7.1.2:
     resolution: {integrity: sha512-UnNke3IQb6sgarcZIDU3gbMeTp/9SSU1DAIkil7PrqG1vZlBtY5msYccSKSHDqa3hNg436IXK+SNImReuA1wEQ==}
     engines: {node: '>=10'}
+    deprecated: No longer maintained. Please contact the author of the relevant native addon; alternatives are available.
     hasBin: true
 
   prettier-plugin-tailwindcss@0.5.13:
@@ -6827,10 +6724,6 @@ packages:
   readdirp@3.6.0:
     resolution: {integrity: sha512-hOS089on8RduqdbhvQ5Z37A0ESjsqz6qnRcffsMU3495FuTdqSm+7bhJ29JvIOsBDEEnan5DPu9t3To9VRlMzA==}
     engines: {node: '>=8.10.0'}
-
-  readline-sync@1.4.10:
-    resolution: {integrity: sha512-gNva8/6UAe8QYepIQH/jQ2qn91Qj0B9sYjMBBs3QOB8F2CXcKgLxQaJRP76sWVRQt+QU+8fAkCbCvjjMFu7Ycw==}
-    engines: {node: '>= 0.8.0'}
 
   rechoir@0.6.2:
     resolution: {integrity: sha512-HFM8rkZ+i3zrV+4LQjwQ0W+ez98pApMGM3HUrN04j3CqzPOzl9nmP15Y8YXNm8QHGv/eacOVEjqhmWpkRV0NAw==}
@@ -7632,10 +7525,6 @@ packages:
     resolution: {integrity: sha512-0fr/mIH1dlO+x7TlcMy+bIDqKPsw/70tVyeHW787goQjhmqaZe10uwLujubK9q9Lg6Fiho1KUKDYz0Z7k7g5/g==}
     engines: {node: '>=4'}
 
-  type-fest@0.20.2:
-    resolution: {integrity: sha512-Ne+eE4r0/iWnpAxD852z3A+N0Bt5RN//NjJwRd2VFHEmrywxf5vsZlh4R6lixl6B+wz/8d+maTSAkN1FIkI3LQ==}
-    engines: {node: '>=10'}
-
   type-fest@0.21.3:
     resolution: {integrity: sha512-t0rzBq87m3fVcduHDUFhKmyyX+9eo6WQjZvf51Ea/M0Q7+T374Jp1aUiyUl0GKxp8M/OETVHSDvmkyPgvX+X2w==}
     engines: {node: '>=10'}
@@ -8207,10 +8096,6 @@ packages:
 
   wide-align@1.1.5:
     resolution: {integrity: sha512-eDMORYaPNZ4sQIuuYPDHdQvf4gyCF9rEEV/yPxGfwPkRodwEgiMUUXTx/dex+Me0wxx53S+NgUHaP7y3MGlDmg==}
-
-  widest-line@3.1.0:
-    resolution: {integrity: sha512-NsmoXalsWVDMGupxZ5R08ka9flZjjiLvHVAWYOKtiKM8ujtZWr9cRffak+uSE48+Ob8ObalXpwyeUiyDD6QFgg==}
-    engines: {node: '>=8'}
 
   wordwrap@1.0.0:
     resolution: {integrity: sha512-gvVzJFlPycKc5dZN4yPkP8w7Dc37BtP1yczEneOb4uq34pXZcvrtRTmWV8W+Ume+XCxKgbjM+nevkyFPMybd4Q==}
@@ -8854,7 +8739,8 @@ snapshots:
     transitivePeerDependencies:
       - '@algolia/client-search'
 
-  '@electric-sql/pglite@0.1.5': {}
+  '@electric-sql/pglite@0.1.5':
+    optional: true
 
   '@esbuild-kit/core-utils@3.3.2':
     dependencies:
@@ -9227,8 +9113,6 @@ snapshots:
 
   '@inquirer/figures@1.0.3': {}
 
-  '@ioredis/as-callback@3.0.0': {}
-
   '@ioredis/commands@1.2.0': {}
 
   '@isaacs/cliui@8.0.2':
@@ -9266,14 +9150,14 @@ snapshots:
       '@jest/test-result': 29.7.0
       '@jest/transform': 29.7.0
       '@jest/types': 29.6.3
-      '@types/node': 20.14.2
+      '@types/node': 20.14.9
       ansi-escapes: 4.3.2
       chalk: 4.1.2
       ci-info: 3.9.0
       exit: 0.1.2
       graceful-fs: 4.2.11
       jest-changed-files: 29.7.0
-      jest-config: 29.7.0(@types/node@20.14.2)(ts-node@10.9.2(@types/node@20.14.2)(typescript@5.4.5))
+      jest-config: 29.7.0(@types/node@20.14.9)(ts-node@10.9.2(@types/node@20.14.2)(typescript@5.4.5))
       jest-haste-map: 29.7.0
       jest-message-util: 29.7.0
       jest-regex-util: 29.6.3
@@ -9504,30 +9388,6 @@ snapshots:
 
   '@microsoft/tsdoc@0.14.2': {}
 
-  '@nestjs-modules/ioredis@2.0.2(@nestjs/common@10.3.9(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.1.14)(rxjs@7.8.1))(@nestjs/core@10.3.9(@nestjs/common@10.3.9(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.1.14)(rxjs@7.8.1))(@nestjs/platform-express@10.3.9)(encoding@0.1.13)(reflect-metadata@0.1.14)(rxjs@7.8.1))(ioredis@5.4.1)(reflect-metadata@0.1.14)(rxjs@7.8.1)':
-    dependencies:
-      '@nestjs/common': 10.3.9(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.1.14)(rxjs@7.8.1)
-      '@nestjs/core': 10.3.9(@nestjs/common@10.3.9(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.1.14)(rxjs@7.8.1))(@nestjs/platform-express@10.3.9)(encoding@0.1.13)(reflect-metadata@0.1.14)(rxjs@7.8.1)
-      ioredis: 5.4.1
-    optionalDependencies:
-      '@nestjs/terminus': 10.2.0(@nestjs/common@10.3.9(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.1.14)(rxjs@7.8.1))(@nestjs/core@10.3.9(@nestjs/common@10.3.9(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.1.14)(rxjs@7.8.1))(@nestjs/platform-express@10.3.9)(encoding@0.1.13)(reflect-metadata@0.1.14)(rxjs@7.8.1))(reflect-metadata@0.1.14)(rxjs@7.8.1)
-    transitivePeerDependencies:
-      - '@grpc/grpc-js'
-      - '@grpc/proto-loader'
-      - '@mikro-orm/core'
-      - '@mikro-orm/nestjs'
-      - '@nestjs/axios'
-      - '@nestjs/microservices'
-      - '@nestjs/mongoose'
-      - '@nestjs/sequelize'
-      - '@nestjs/typeorm'
-      - '@prisma/client'
-      - mongoose
-      - reflect-metadata
-      - rxjs
-      - sequelize
-      - typeorm
-
   '@nestjs/cli@10.3.2(esbuild@0.21.5)':
     dependencies:
       '@angular-devkit/core': 17.1.2(chokidar@3.6.0)
@@ -9663,16 +9523,6 @@ snapshots:
       class-transformer: 0.5.1
       class-validator: 0.14.1
 
-  '@nestjs/terminus@10.2.0(@nestjs/common@10.3.9(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.1.14)(rxjs@7.8.1))(@nestjs/core@10.3.9(@nestjs/common@10.3.9(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.1.14)(rxjs@7.8.1))(@nestjs/platform-express@10.3.9)(encoding@0.1.13)(reflect-metadata@0.1.14)(rxjs@7.8.1))(reflect-metadata@0.1.14)(rxjs@7.8.1)':
-    dependencies:
-      '@nestjs/common': 10.3.9(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.1.14)(rxjs@7.8.1)
-      '@nestjs/core': 10.3.9(@nestjs/common@10.3.9(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.1.14)(rxjs@7.8.1))(@nestjs/platform-express@10.3.9)(encoding@0.1.13)(reflect-metadata@0.1.14)(rxjs@7.8.1)
-      boxen: 5.1.2
-      check-disk-space: 3.4.0
-      reflect-metadata: 0.1.14
-      rxjs: 7.8.1
-    optional: true
-
   '@nestjs/testing@10.3.9(@nestjs/common@10.3.9(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.1.14)(rxjs@7.8.1))(@nestjs/core@10.3.9(@nestjs/common@10.3.9(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.1.14)(rxjs@7.8.1))(@nestjs/platform-express@10.3.9)(encoding@0.1.13)(reflect-metadata@0.1.14)(rxjs@7.8.1))(@nestjs/platform-express@10.3.9(@nestjs/common@10.3.9(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.1.14)(rxjs@7.8.1))(@nestjs/core@10.3.9))':
     dependencies:
       '@nestjs/common': 10.3.9(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.1.14)(rxjs@7.8.1)
@@ -9781,12 +9631,12 @@ snapshots:
 
   '@nuxt/devalue@2.0.2': {}
 
-  '@nuxt/devtools-kit@1.3.3(magicast@0.3.4)(nuxt@3.12.1(@opentelemetry/api@1.9.0)(@parcel/watcher@2.4.1)(@types/node@20.14.9)(@unocss/reset@0.61.0)(axios@1.7.2)(floating-vue@5.2.2(@nuxt/kit@3.12.4(magicast@0.3.4)(rollup@4.18.0))(vue@3.4.29(typescript@5.4.5)))(fuse.js@7.0.0)(ioredis@5.4.1)(rollup@4.18.0)(terser@5.31.1)(typescript@5.4.5)(unocss@0.61.0(postcss@8.4.38)(rollup@4.18.0)(vite@5.3.1(@types/node@20.14.9)(terser@5.31.1)))(vite@5.3.1(@types/node@20.14.9)(terser@5.31.1)))(rollup@4.18.0)(vite@5.3.1(@types/node@20.14.9)(terser@5.31.1))':
+  '@nuxt/devtools-kit@1.3.3(magicast@0.3.4)(nuxt@3.12.1(@opentelemetry/api@1.9.0)(@parcel/watcher@2.4.1)(@types/node@20.14.9)(@unocss/reset@0.61.0)(axios@1.7.2)(better-sqlite3@12.8.0)(floating-vue@5.2.2(@nuxt/kit@3.12.4(magicast@0.3.4)(rollup@4.18.0))(vue@3.4.29(typescript@5.4.5)))(fuse.js@7.0.0)(ioredis@5.4.1)(rollup@4.18.0)(terser@5.31.1)(typescript@5.4.5)(unocss@0.61.0(postcss@8.4.38)(rollup@4.18.0)(vite@5.3.1(@types/node@20.14.9)(terser@5.31.1)))(vite@5.3.1(@types/node@20.14.9)(terser@5.31.1)))(rollup@4.18.0)(vite@5.3.1(@types/node@20.14.9)(terser@5.31.1))':
     dependencies:
       '@nuxt/kit': 3.12.4(magicast@0.3.4)(rollup@4.18.0)
       '@nuxt/schema': 3.12.1(rollup@4.18.0)
       execa: 7.2.0
-      nuxt: 3.12.1(@opentelemetry/api@1.9.0)(@parcel/watcher@2.4.1)(@types/node@20.14.9)(@unocss/reset@0.61.0)(axios@1.7.2)(floating-vue@5.2.2(@nuxt/kit@3.12.4(magicast@0.3.4)(rollup@4.18.0))(vue@3.4.29(typescript@5.4.5)))(fuse.js@7.0.0)(ioredis@5.4.1)(rollup@4.18.0)(terser@5.31.1)(typescript@5.4.5)(unocss@0.61.0(postcss@8.4.38)(rollup@4.18.0)(vite@5.3.1(@types/node@20.14.9)(terser@5.31.1)))(vite@5.3.1(@types/node@20.14.9)(terser@5.31.1))
+      nuxt: 3.12.1(@opentelemetry/api@1.9.0)(@parcel/watcher@2.4.1)(@types/node@20.14.9)(@unocss/reset@0.61.0)(axios@1.7.2)(better-sqlite3@12.8.0)(floating-vue@5.2.2(@nuxt/kit@3.12.4(magicast@0.3.4)(rollup@4.18.0))(vue@3.4.29(typescript@5.4.5)))(fuse.js@7.0.0)(ioredis@5.4.1)(rollup@4.18.0)(terser@5.31.1)(typescript@5.4.5)(unocss@0.61.0(postcss@8.4.38)(rollup@4.18.0)(vite@5.3.1(@types/node@20.14.9)(terser@5.31.1)))(vite@5.3.1(@types/node@20.14.9)(terser@5.31.1))
       vite: 5.3.1(@types/node@20.14.9)(terser@5.31.1)
     transitivePeerDependencies:
       - magicast
@@ -9817,10 +9667,10 @@ snapshots:
       rc9: 2.1.2
       semver: 7.6.3
 
-  '@nuxt/devtools@1.3.3(@unocss/reset@0.61.0)(axios@1.7.2)(floating-vue@5.2.2(@nuxt/kit@3.12.4(magicast@0.3.4)(rollup@4.18.0))(vue@3.4.29(typescript@5.4.5)))(fuse.js@7.0.0)(nuxt@3.12.1(@opentelemetry/api@1.9.0)(@parcel/watcher@2.4.1)(@types/node@20.14.9)(@unocss/reset@0.61.0)(axios@1.7.2)(floating-vue@5.2.2(@nuxt/kit@3.12.4(magicast@0.3.4)(rollup@4.18.0))(vue@3.4.29(typescript@5.4.5)))(fuse.js@7.0.0)(ioredis@5.4.1)(rollup@4.18.0)(terser@5.31.1)(typescript@5.4.5)(unocss@0.61.0(postcss@8.4.38)(rollup@4.18.0)(vite@5.3.1(@types/node@20.14.9)(terser@5.31.1)))(vite@5.3.1(@types/node@20.14.9)(terser@5.31.1)))(rollup@4.18.0)(unocss@0.61.0(postcss@8.4.38)(rollup@4.18.0)(vite@5.3.1(@types/node@20.14.9)(terser@5.31.1)))(vite@5.3.1(@types/node@20.14.9)(terser@5.31.1))(vue@3.4.29(typescript@5.4.5))':
+  '@nuxt/devtools@1.3.3(@unocss/reset@0.61.0)(axios@1.7.2)(floating-vue@5.2.2(@nuxt/kit@3.12.4(magicast@0.3.4)(rollup@4.18.0))(vue@3.4.29(typescript@5.4.5)))(fuse.js@7.0.0)(nuxt@3.12.1(@opentelemetry/api@1.9.0)(@parcel/watcher@2.4.1)(@types/node@20.14.9)(@unocss/reset@0.61.0)(axios@1.7.2)(better-sqlite3@12.8.0)(floating-vue@5.2.2(@nuxt/kit@3.12.4(magicast@0.3.4)(rollup@4.18.0))(vue@3.4.29(typescript@5.4.5)))(fuse.js@7.0.0)(ioredis@5.4.1)(rollup@4.18.0)(terser@5.31.1)(typescript@5.4.5)(unocss@0.61.0(postcss@8.4.38)(rollup@4.18.0)(vite@5.3.1(@types/node@20.14.9)(terser@5.31.1)))(vite@5.3.1(@types/node@20.14.9)(terser@5.31.1)))(rollup@4.18.0)(unocss@0.61.0(postcss@8.4.38)(rollup@4.18.0)(vite@5.3.1(@types/node@20.14.9)(terser@5.31.1)))(vite@5.3.1(@types/node@20.14.9)(terser@5.31.1))(vue@3.4.29(typescript@5.4.5))':
     dependencies:
       '@antfu/utils': 0.7.8
-      '@nuxt/devtools-kit': 1.3.3(magicast@0.3.4)(nuxt@3.12.1(@opentelemetry/api@1.9.0)(@parcel/watcher@2.4.1)(@types/node@20.14.9)(@unocss/reset@0.61.0)(axios@1.7.2)(floating-vue@5.2.2(@nuxt/kit@3.12.4(magicast@0.3.4)(rollup@4.18.0))(vue@3.4.29(typescript@5.4.5)))(fuse.js@7.0.0)(ioredis@5.4.1)(rollup@4.18.0)(terser@5.31.1)(typescript@5.4.5)(unocss@0.61.0(postcss@8.4.38)(rollup@4.18.0)(vite@5.3.1(@types/node@20.14.9)(terser@5.31.1)))(vite@5.3.1(@types/node@20.14.9)(terser@5.31.1)))(rollup@4.18.0)(vite@5.3.1(@types/node@20.14.9)(terser@5.31.1))
+      '@nuxt/devtools-kit': 1.3.3(magicast@0.3.4)(nuxt@3.12.1(@opentelemetry/api@1.9.0)(@parcel/watcher@2.4.1)(@types/node@20.14.9)(@unocss/reset@0.61.0)(axios@1.7.2)(better-sqlite3@12.8.0)(floating-vue@5.2.2(@nuxt/kit@3.12.4(magicast@0.3.4)(rollup@4.18.0))(vue@3.4.29(typescript@5.4.5)))(fuse.js@7.0.0)(ioredis@5.4.1)(rollup@4.18.0)(terser@5.31.1)(typescript@5.4.5)(unocss@0.61.0(postcss@8.4.38)(rollup@4.18.0)(vite@5.3.1(@types/node@20.14.9)(terser@5.31.1)))(vite@5.3.1(@types/node@20.14.9)(terser@5.31.1)))(rollup@4.18.0)(vite@5.3.1(@types/node@20.14.9)(terser@5.31.1))
       '@nuxt/devtools-wizard': 1.3.3
       '@nuxt/kit': 3.12.1(rollup@4.18.0)
       '@vue/devtools-applet': 7.1.3(@unocss/reset@0.61.0)(axios@1.7.2)(floating-vue@5.2.2(@nuxt/kit@3.12.4(magicast@0.3.4)(rollup@4.18.0))(vue@3.4.29(typescript@5.4.5)))(fuse.js@7.0.0)(unocss@0.61.0(postcss@8.4.38)(rollup@4.18.0)(vite@5.3.1(@types/node@20.14.9)(terser@5.31.1)))(vite@5.3.1(@types/node@20.14.9)(terser@5.31.1))(vue@3.4.29(typescript@5.4.5))
@@ -9841,7 +9691,7 @@ snapshots:
       launch-editor: 2.6.1
       local-pkg: 0.5.0
       magicast: 0.3.4
-      nuxt: 3.12.1(@opentelemetry/api@1.9.0)(@parcel/watcher@2.4.1)(@types/node@20.14.9)(@unocss/reset@0.61.0)(axios@1.7.2)(floating-vue@5.2.2(@nuxt/kit@3.12.4(magicast@0.3.4)(rollup@4.18.0))(vue@3.4.29(typescript@5.4.5)))(fuse.js@7.0.0)(ioredis@5.4.1)(rollup@4.18.0)(terser@5.31.1)(typescript@5.4.5)(unocss@0.61.0(postcss@8.4.38)(rollup@4.18.0)(vite@5.3.1(@types/node@20.14.9)(terser@5.31.1)))(vite@5.3.1(@types/node@20.14.9)(terser@5.31.1))
+      nuxt: 3.12.1(@opentelemetry/api@1.9.0)(@parcel/watcher@2.4.1)(@types/node@20.14.9)(@unocss/reset@0.61.0)(axios@1.7.2)(better-sqlite3@12.8.0)(floating-vue@5.2.2(@nuxt/kit@3.12.4(magicast@0.3.4)(rollup@4.18.0))(vue@3.4.29(typescript@5.4.5)))(fuse.js@7.0.0)(ioredis@5.4.1)(rollup@4.18.0)(terser@5.31.1)(typescript@5.4.5)(unocss@0.61.0(postcss@8.4.38)(rollup@4.18.0)(vite@5.3.1(@types/node@20.14.9)(terser@5.31.1)))(vite@5.3.1(@types/node@20.14.9)(terser@5.31.1))
       nypm: 0.3.8
       ohash: 1.1.3
       pacote: 18.0.6
@@ -10047,7 +9897,7 @@ snapshots:
       - rollup
       - supports-color
 
-  '@nuxt/test-utils@3.13.1(@jest/globals@29.7.0)(@vue/test-utils@2.4.6)(h3@1.12.0)(happy-dom@13.10.1)(nitropack@2.9.6(@opentelemetry/api@1.9.0))(rollup@4.18.0)(vite@5.3.1(@types/node@20.14.9)(terser@5.31.1))(vitest@1.6.0(@types/node@20.14.9)(happy-dom@13.10.1)(terser@5.31.1))(vue-router@4.3.3(vue@3.4.29(typescript@5.4.5)))(vue@3.4.29(typescript@5.4.5))':
+  '@nuxt/test-utils@3.13.1(@jest/globals@29.7.0)(@vue/test-utils@2.4.6)(h3@1.12.0)(happy-dom@13.10.1)(nitropack@2.9.6(@opentelemetry/api@1.9.0)(better-sqlite3@12.8.0))(rollup@4.18.0)(vite@5.3.1(@types/node@20.14.9)(terser@5.31.1))(vitest@1.6.0(@types/node@20.14.9)(happy-dom@13.10.1)(terser@5.31.1))(vue-router@4.3.3(vue@3.4.29(typescript@5.4.5)))(vue@3.4.29(typescript@5.4.5))':
     dependencies:
       '@nuxt/kit': 3.12.1(rollup@4.18.0)
       '@nuxt/schema': 3.12.1(rollup@4.18.0)
@@ -10062,7 +9912,7 @@ snapshots:
       h3: 1.12.0
       local-pkg: 0.5.0
       magic-string: 0.30.10
-      nitropack: 2.9.6(@opentelemetry/api@1.9.0)
+      nitropack: 2.9.6(@opentelemetry/api@1.9.0)(better-sqlite3@12.8.0)
       node-fetch-native: 1.6.4
       ofetch: 1.3.4
       pathe: 1.1.2
@@ -10074,7 +9924,7 @@ snapshots:
       unenv: 1.9.0
       unplugin: 1.10.1
       vite: 5.3.1(@types/node@20.14.9)(terser@5.31.1)
-      vitest-environment-nuxt: 1.0.0(@jest/globals@29.7.0)(@vue/test-utils@2.4.6)(h3@1.12.0)(happy-dom@13.10.1)(nitropack@2.9.6(@opentelemetry/api@1.9.0))(rollup@4.18.0)(vite@5.3.1(@types/node@20.14.9)(terser@5.31.1))(vitest@1.6.0(@types/node@20.14.9)(happy-dom@13.10.1)(terser@5.31.1))(vue-router@4.3.3(vue@3.4.29(typescript@5.4.5)))(vue@3.4.29(typescript@5.4.5))
+      vitest-environment-nuxt: 1.0.0(@jest/globals@29.7.0)(@vue/test-utils@2.4.6)(h3@1.12.0)(happy-dom@13.10.1)(nitropack@2.9.6(@opentelemetry/api@1.9.0)(better-sqlite3@12.8.0))(rollup@4.18.0)(vite@5.3.1(@types/node@20.14.9)(terser@5.31.1))(vitest@1.6.0(@types/node@20.14.9)(happy-dom@13.10.1)(terser@5.31.1))(vue-router@4.3.3(vue@3.4.29(typescript@5.4.5)))(vue@3.4.29(typescript@5.4.5))
       vue: 3.4.29(typescript@5.4.5)
       vue-router: 4.3.3(vue@3.4.29(typescript@5.4.5))
     optionalDependencies:
@@ -10645,10 +10495,14 @@ snapshots:
     dependencies:
       '@babel/types': 7.24.7
 
+  '@types/better-sqlite3@7.6.13':
+    dependencies:
+      '@types/node': 20.14.9
+
   '@types/body-parser@1.19.5':
     dependencies:
       '@types/connect': 3.4.38
-      '@types/node': 20.14.2
+      '@types/node': 20.14.9
 
   '@types/canvas-confetti@1.6.4': {}
 
@@ -10674,7 +10528,7 @@ snapshots:
 
   '@types/express-serve-static-core@4.19.3':
     dependencies:
-      '@types/node': 20.14.2
+      '@types/node': 20.14.9
       '@types/qs': 6.9.15
       '@types/range-parser': 1.2.7
       '@types/send': 0.17.4
@@ -10708,13 +10562,6 @@ snapshots:
       '@types/through': 0.0.33
       rxjs: 7.8.1
 
-  '@types/ioredis-mock@8.2.5':
-    dependencies:
-      '@types/node': 20.14.9
-      ioredis: 5.4.1
-    transitivePeerDependencies:
-      - supports-color
-
   '@types/istanbul-lib-coverage@2.0.6': {}
 
   '@types/istanbul-lib-report@3.0.3':
@@ -10738,7 +10585,7 @@ snapshots:
 
   '@types/jsonwebtoken@9.0.5':
     dependencies:
-      '@types/node': 20.14.2
+      '@types/node': 20.14.9
 
   '@types/linkify-it@5.0.0': {}
 
@@ -10793,7 +10640,7 @@ snapshots:
   '@types/serve-static@1.15.7':
     dependencies:
       '@types/http-errors': 2.0.4
-      '@types/node': 20.14.2
+      '@types/node': 20.14.9
       '@types/send': 0.17.4
 
   '@types/sinonjs__fake-timers@8.1.1': {}
@@ -10806,7 +10653,7 @@ snapshots:
     dependencies:
       '@types/cookiejar': 2.1.5
       '@types/methods': 1.1.4
-      '@types/node': 20.14.2
+      '@types/node': 20.14.9
 
   '@types/supertest@6.0.2':
     dependencies:
@@ -11373,13 +11220,13 @@ snapshots:
 
   '@vueuse/metadata@10.11.0': {}
 
-  '@vueuse/nuxt@10.10.1(nuxt@3.12.1(@opentelemetry/api@1.9.0)(@parcel/watcher@2.4.1)(@types/node@20.14.9)(@unocss/reset@0.61.0)(axios@1.7.2)(floating-vue@5.2.2(@nuxt/kit@3.12.4(magicast@0.3.4)(rollup@4.18.0))(vue@3.4.29(typescript@5.4.5)))(fuse.js@7.0.0)(ioredis@5.4.1)(rollup@4.18.0)(terser@5.31.1)(typescript@5.4.5)(unocss@0.61.0(postcss@8.4.38)(rollup@4.18.0)(vite@5.3.1(@types/node@20.14.9)(terser@5.31.1)))(vite@5.3.1(@types/node@20.14.9)(terser@5.31.1)))(rollup@4.18.0)(vue@3.4.29(typescript@5.4.5))':
+  '@vueuse/nuxt@10.10.1(nuxt@3.12.1(@opentelemetry/api@1.9.0)(@parcel/watcher@2.4.1)(@types/node@20.14.9)(@unocss/reset@0.61.0)(axios@1.7.2)(better-sqlite3@12.8.0)(floating-vue@5.2.2(@nuxt/kit@3.12.4(magicast@0.3.4)(rollup@4.18.0))(vue@3.4.29(typescript@5.4.5)))(fuse.js@7.0.0)(ioredis@5.4.1)(rollup@4.18.0)(terser@5.31.1)(typescript@5.4.5)(unocss@0.61.0(postcss@8.4.38)(rollup@4.18.0)(vite@5.3.1(@types/node@20.14.9)(terser@5.31.1)))(vite@5.3.1(@types/node@20.14.9)(terser@5.31.1)))(rollup@4.18.0)(vue@3.4.29(typescript@5.4.5))':
     dependencies:
       '@nuxt/kit': 3.12.1(rollup@4.18.0)
       '@vueuse/core': 10.10.1(vue@3.4.29(typescript@5.4.5))
       '@vueuse/metadata': 10.10.1
       local-pkg: 0.5.0
-      nuxt: 3.12.1(@opentelemetry/api@1.9.0)(@parcel/watcher@2.4.1)(@types/node@20.14.9)(@unocss/reset@0.61.0)(axios@1.7.2)(floating-vue@5.2.2(@nuxt/kit@3.12.4(magicast@0.3.4)(rollup@4.18.0))(vue@3.4.29(typescript@5.4.5)))(fuse.js@7.0.0)(ioredis@5.4.1)(rollup@4.18.0)(terser@5.31.1)(typescript@5.4.5)(unocss@0.61.0(postcss@8.4.38)(rollup@4.18.0)(vite@5.3.1(@types/node@20.14.9)(terser@5.31.1)))(vite@5.3.1(@types/node@20.14.9)(terser@5.31.1))
+      nuxt: 3.12.1(@opentelemetry/api@1.9.0)(@parcel/watcher@2.4.1)(@types/node@20.14.9)(@unocss/reset@0.61.0)(axios@1.7.2)(better-sqlite3@12.8.0)(floating-vue@5.2.2(@nuxt/kit@3.12.4(magicast@0.3.4)(rollup@4.18.0))(vue@3.4.29(typescript@5.4.5)))(fuse.js@7.0.0)(ioredis@5.4.1)(rollup@4.18.0)(terser@5.31.1)(typescript@5.4.5)(unocss@0.61.0(postcss@8.4.38)(rollup@4.18.0)(vite@5.3.1(@types/node@20.14.9)(terser@5.31.1)))(vite@5.3.1(@types/node@20.14.9)(terser@5.31.1))
       vue-demi: 0.14.8(vue@3.4.29(typescript@5.4.5))
     transitivePeerDependencies:
       - '@vue/composition-api'
@@ -11584,11 +11431,6 @@ snapshots:
       '@algolia/transporter': 4.23.3
 
   animejs@3.2.2: {}
-
-  ansi-align@3.0.1:
-    dependencies:
-      string-width: 4.2.3
-    optional: true
 
   ansi-colors@4.1.3: {}
 
@@ -11834,6 +11676,11 @@ snapshots:
     dependencies:
       tweetnacl: 0.14.5
 
+  better-sqlite3@12.8.0:
+    dependencies:
+      bindings: 1.5.0
+      prebuild-install: 7.1.2
+
   binary-extensions@2.3.0: {}
 
   bindings@1.5.0:
@@ -11870,18 +11717,6 @@ snapshots:
       - supports-color
 
   boolbase@1.0.0: {}
-
-  boxen@5.1.2:
-    dependencies:
-      ansi-align: 3.0.1
-      camelcase: 6.3.0
-      chalk: 4.1.2
-      cli-boxes: 2.2.1
-      string-width: 4.2.3
-      type-fest: 0.20.2
-      widest-line: 3.1.0
-      wrap-ansi: 7.0.0
-    optional: true
 
   brace-expansion@1.1.11:
     dependencies:
@@ -12075,9 +11910,6 @@ snapshots:
 
   chardet@0.7.0: {}
 
-  check-disk-space@3.4.0:
-    optional: true
-
   check-error@1.0.3:
     dependencies:
       get-func-name: 2.0.2
@@ -12098,8 +11930,7 @@ snapshots:
     optionalDependencies:
       fsevents: 2.3.3
 
-  chownr@1.1.4:
-    optional: true
+  chownr@1.1.4: {}
 
   chownr@2.0.0: {}
 
@@ -12126,9 +11957,6 @@ snapshots:
   clean-stack@2.2.0: {}
 
   clear@0.1.0: {}
-
-  cli-boxes@2.2.1:
-    optional: true
 
   cli-cursor@3.1.0:
     dependencies:
@@ -12609,7 +12437,9 @@ snapshots:
 
   dayjs@1.11.11: {}
 
-  db0@0.1.4: {}
+  db0@0.1.4(better-sqlite3@12.8.0):
+    optionalDependencies:
+      better-sqlite3: 12.8.0
 
   debug@2.6.9:
     dependencies:
@@ -12630,7 +12460,6 @@ snapshots:
   decompress-response@6.0.0:
     dependencies:
       mimic-response: 3.1.0
-    optional: true
 
   dedent@1.5.3: {}
 
@@ -12642,8 +12471,7 @@ snapshots:
 
   deep-equal@1.0.1: {}
 
-  deep-extend@0.6.0:
-    optional: true
+  deep-extend@0.6.0: {}
 
   deepmerge@4.3.1: {}
 
@@ -12748,6 +12576,15 @@ snapshots:
       esbuild-register: 3.5.0(esbuild@0.19.12)
     transitivePeerDependencies:
       - supports-color
+
+  drizzle-orm@0.32.0(@electric-sql/pglite@0.1.5)(@opentelemetry/api@1.9.0)(@types/better-sqlite3@7.6.13)(better-sqlite3@12.8.0)(pg@8.12.0)(postgres@3.4.4):
+    optionalDependencies:
+      '@electric-sql/pglite': 0.1.5
+      '@opentelemetry/api': 1.9.0
+      '@types/better-sqlite3': 7.6.13
+      better-sqlite3: 12.8.0
+      pg: 8.12.0
+      postgres: 3.4.4
 
   drizzle-orm@0.32.0(@electric-sql/pglite@0.1.5)(@opentelemetry/api@1.9.0)(pg@8.12.0)(postgres@3.4.4):
     optionalDependencies:
@@ -13049,8 +12886,7 @@ snapshots:
 
   exit@0.1.2: {}
 
-  expand-template@2.0.3:
-    optional: true
+  expand-template@2.0.3: {}
 
   expect@29.7.0:
     dependencies:
@@ -13156,16 +12992,6 @@ snapshots:
   fd-slicer@1.1.0:
     dependencies:
       pend: 1.2.0
-
-  fengari-interop@0.1.3(fengari@0.1.4):
-    dependencies:
-      fengari: 0.1.4
-
-  fengari@0.1.4:
-    dependencies:
-      readline-sync: 1.4.10
-      sprintf-js: 1.1.3
-      tmp: 0.0.33
 
   fflate@0.7.4: {}
 
@@ -13280,8 +13106,7 @@ snapshots:
 
   from@0.1.7: {}
 
-  fs-constants@1.0.0:
-    optional: true
+  fs-constants@1.0.0: {}
 
   fs-extra@10.1.0:
     dependencies:
@@ -13408,8 +13233,7 @@ snapshots:
     dependencies:
       git-up: 7.0.0
 
-  github-from-package@0.0.0:
-    optional: true
+  github-from-package@0.0.0: {}
 
   glob-parent@5.1.2:
     dependencies:
@@ -13772,16 +13596,6 @@ snapshots:
 
   interpret@1.4.0: {}
 
-  ioredis-mock@8.9.0(@types/ioredis-mock@8.2.5)(ioredis@5.4.1):
-    dependencies:
-      '@ioredis/as-callback': 3.0.0
-      '@ioredis/commands': 1.2.0
-      '@types/ioredis-mock': 8.2.5
-      fengari: 0.1.4
-      fengari-interop: 0.1.3(fengari@0.1.4)
-      ioredis: 5.4.1
-      semver: 7.6.3
-
   ioredis@5.4.1:
     dependencies:
       '@ioredis/commands': 1.2.0
@@ -14089,6 +13903,37 @@ snapshots:
       strip-json-comments: 3.1.1
     optionalDependencies:
       '@types/node': 20.14.2
+      ts-node: 10.9.2(@types/node@20.14.2)(typescript@5.4.5)
+    transitivePeerDependencies:
+      - babel-plugin-macros
+      - supports-color
+
+  jest-config@29.7.0(@types/node@20.14.9)(ts-node@10.9.2(@types/node@20.14.2)(typescript@5.4.5)):
+    dependencies:
+      '@babel/core': 7.24.7
+      '@jest/test-sequencer': 29.7.0
+      '@jest/types': 29.6.3
+      babel-jest: 29.7.0(@babel/core@7.24.7)
+      chalk: 4.1.2
+      ci-info: 3.9.0
+      deepmerge: 4.3.1
+      glob: 7.2.3
+      graceful-fs: 4.2.11
+      jest-circus: 29.7.0
+      jest-environment-node: 29.7.0
+      jest-get-type: 29.6.3
+      jest-regex-util: 29.6.3
+      jest-resolve: 29.7.0
+      jest-runner: 29.7.0
+      jest-util: 29.7.0
+      jest-validate: 29.7.0
+      micromatch: 4.0.7
+      parse-json: 5.2.0
+      pretty-format: 29.7.0
+      slash: 3.0.0
+      strip-json-comments: 3.1.1
+    optionalDependencies:
+      '@types/node': 20.14.9
       ts-node: 10.9.2(@types/node@20.14.2)(typescript@5.4.5)
     transitivePeerDependencies:
       - babel-plugin-macros
@@ -14768,8 +14613,7 @@ snapshots:
 
   mimic-fn@4.0.0: {}
 
-  mimic-response@3.1.0:
-    optional: true
+  mimic-response@3.1.0: {}
 
   mini-svg-data-uri@1.4.4: {}
 
@@ -14840,8 +14684,7 @@ snapshots:
 
   mitt@3.0.1: {}
 
-  mkdirp-classic@0.5.3:
-    optional: true
+  mkdirp-classic@0.5.3: {}
 
   mkdirp@0.5.6:
     dependencies:
@@ -14890,8 +14733,7 @@ snapshots:
 
   nanoid@5.0.7: {}
 
-  napi-build-utils@1.0.2:
-    optional: true
+  napi-build-utils@1.0.2: {}
 
   natural-compare@1.4.0: {}
 
@@ -14899,7 +14741,7 @@ snapshots:
 
   neo-async@2.6.2: {}
 
-  nitropack@2.9.6(@opentelemetry/api@1.9.0):
+  nitropack@2.9.6(@opentelemetry/api@1.9.0)(better-sqlite3@12.8.0):
     dependencies:
       '@cloudflare/kv-asset-handler': 0.3.2
       '@netlify/functions': 2.7.0(@opentelemetry/api@1.9.0)
@@ -14922,7 +14764,7 @@ snapshots:
       cookie-es: 1.1.0
       croner: 8.0.2
       crossws: 0.2.4
-      db0: 0.1.4
+      db0: 0.1.4(better-sqlite3@12.8.0)
       defu: 6.1.4
       destr: 2.0.3
       dot-prop: 8.0.2
@@ -14992,7 +14834,6 @@ snapshots:
   node-abi@3.65.0:
     dependencies:
       semver: 7.6.3
-    optional: true
 
   node-abort-controller@3.1.1: {}
 
@@ -15121,10 +14962,10 @@ snapshots:
     optionalDependencies:
       fsevents: 2.3.3
 
-  nuxt@3.12.1(@opentelemetry/api@1.9.0)(@parcel/watcher@2.4.1)(@types/node@20.14.9)(@unocss/reset@0.61.0)(axios@1.7.2)(floating-vue@5.2.2(@nuxt/kit@3.12.4(magicast@0.3.4)(rollup@4.18.0))(vue@3.4.29(typescript@5.4.5)))(fuse.js@7.0.0)(ioredis@5.4.1)(rollup@4.18.0)(terser@5.31.1)(typescript@5.4.5)(unocss@0.61.0(postcss@8.4.38)(rollup@4.18.0)(vite@5.3.1(@types/node@20.14.9)(terser@5.31.1)))(vite@5.3.1(@types/node@20.14.9)(terser@5.31.1)):
+  nuxt@3.12.1(@opentelemetry/api@1.9.0)(@parcel/watcher@2.4.1)(@types/node@20.14.9)(@unocss/reset@0.61.0)(axios@1.7.2)(better-sqlite3@12.8.0)(floating-vue@5.2.2(@nuxt/kit@3.12.4(magicast@0.3.4)(rollup@4.18.0))(vue@3.4.29(typescript@5.4.5)))(fuse.js@7.0.0)(ioredis@5.4.1)(rollup@4.18.0)(terser@5.31.1)(typescript@5.4.5)(unocss@0.61.0(postcss@8.4.38)(rollup@4.18.0)(vite@5.3.1(@types/node@20.14.9)(terser@5.31.1)))(vite@5.3.1(@types/node@20.14.9)(terser@5.31.1)):
     dependencies:
       '@nuxt/devalue': 2.0.2
-      '@nuxt/devtools': 1.3.3(@unocss/reset@0.61.0)(axios@1.7.2)(floating-vue@5.2.2(@nuxt/kit@3.12.4(magicast@0.3.4)(rollup@4.18.0))(vue@3.4.29(typescript@5.4.5)))(fuse.js@7.0.0)(nuxt@3.12.1(@opentelemetry/api@1.9.0)(@parcel/watcher@2.4.1)(@types/node@20.14.9)(@unocss/reset@0.61.0)(axios@1.7.2)(floating-vue@5.2.2(@nuxt/kit@3.12.4(magicast@0.3.4)(rollup@4.18.0))(vue@3.4.29(typescript@5.4.5)))(fuse.js@7.0.0)(ioredis@5.4.1)(rollup@4.18.0)(terser@5.31.1)(typescript@5.4.5)(unocss@0.61.0(postcss@8.4.38)(rollup@4.18.0)(vite@5.3.1(@types/node@20.14.9)(terser@5.31.1)))(vite@5.3.1(@types/node@20.14.9)(terser@5.31.1)))(rollup@4.18.0)(unocss@0.61.0(postcss@8.4.38)(rollup@4.18.0)(vite@5.3.1(@types/node@20.14.9)(terser@5.31.1)))(vite@5.3.1(@types/node@20.14.9)(terser@5.31.1))(vue@3.4.29(typescript@5.4.5))
+      '@nuxt/devtools': 1.3.3(@unocss/reset@0.61.0)(axios@1.7.2)(floating-vue@5.2.2(@nuxt/kit@3.12.4(magicast@0.3.4)(rollup@4.18.0))(vue@3.4.29(typescript@5.4.5)))(fuse.js@7.0.0)(nuxt@3.12.1(@opentelemetry/api@1.9.0)(@parcel/watcher@2.4.1)(@types/node@20.14.9)(@unocss/reset@0.61.0)(axios@1.7.2)(better-sqlite3@12.8.0)(floating-vue@5.2.2(@nuxt/kit@3.12.4(magicast@0.3.4)(rollup@4.18.0))(vue@3.4.29(typescript@5.4.5)))(fuse.js@7.0.0)(ioredis@5.4.1)(rollup@4.18.0)(terser@5.31.1)(typescript@5.4.5)(unocss@0.61.0(postcss@8.4.38)(rollup@4.18.0)(vite@5.3.1(@types/node@20.14.9)(terser@5.31.1)))(vite@5.3.1(@types/node@20.14.9)(terser@5.31.1)))(rollup@4.18.0)(unocss@0.61.0(postcss@8.4.38)(rollup@4.18.0)(vite@5.3.1(@types/node@20.14.9)(terser@5.31.1)))(vite@5.3.1(@types/node@20.14.9)(terser@5.31.1))(vue@3.4.29(typescript@5.4.5))
       '@nuxt/kit': 3.12.1(rollup@4.18.0)
       '@nuxt/schema': 3.12.1(rollup@4.18.0)
       '@nuxt/telemetry': 2.5.4(rollup@4.18.0)
@@ -15153,7 +14994,7 @@ snapshots:
       knitwork: 1.1.0
       magic-string: 0.30.10
       mlly: 1.7.1
-      nitropack: 2.9.6(@opentelemetry/api@1.9.0)
+      nitropack: 2.9.6(@opentelemetry/api@1.9.0)(better-sqlite3@12.8.0)
       nuxi: 3.12.0
       nypm: 0.3.8
       ofetch: 1.3.4
@@ -15788,7 +15629,6 @@ snapshots:
       simple-get: 4.0.1
       tar-fs: 2.1.1
       tunnel-agent: 0.6.0
-    optional: true
 
   prettier-plugin-tailwindcss@0.5.13(@ianvs/prettier-plugin-sort-imports@4.2.1(@vue/compiler-sfc@3.4.29)(prettier@3.3.2))(prettier@3.3.2):
     dependencies:
@@ -15904,7 +15744,6 @@ snapshots:
       ini: 1.3.8
       minimist: 1.2.8
       strip-json-comments: 2.0.1
-    optional: true
 
   react-is@18.3.1: {}
 
@@ -15956,8 +15795,6 @@ snapshots:
   readdirp@3.6.0:
     dependencies:
       picomatch: 2.3.1
-
-  readline-sync@1.4.10: {}
 
   rechoir@0.6.2:
     dependencies:
@@ -16222,15 +16059,13 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  simple-concat@1.0.1:
-    optional: true
+  simple-concat@1.0.1: {}
 
   simple-get@4.0.1:
     dependencies:
       decompress-response: 6.0.0
       once: 1.4.0
       simple-concat: 1.0.1
-    optional: true
 
   simple-git-hooks@2.11.1: {}
 
@@ -16458,8 +16293,7 @@ snapshots:
 
   strip-final-newline@3.0.0: {}
 
-  strip-json-comments@2.0.1:
-    optional: true
+  strip-json-comments@2.0.1: {}
 
   strip-json-comments@3.1.1: {}
 
@@ -16619,7 +16453,6 @@ snapshots:
       mkdirp-classic: 0.5.3
       pump: 3.0.0
       tar-stream: 2.2.0
-    optional: true
 
   tar-fs@3.0.6:
     dependencies:
@@ -16637,7 +16470,6 @@ snapshots:
       fs-constants: 1.0.0
       inherits: 2.0.4
       readable-stream: 3.6.2
-    optional: true
 
   tar-stream@3.1.7:
     dependencies:
@@ -16909,9 +16741,6 @@ snapshots:
   tweetnacl@0.14.5: {}
 
   type-detect@4.0.8: {}
-
-  type-fest@0.20.2:
-    optional: true
 
   type-fest@0.21.3: {}
 
@@ -17359,9 +17188,9 @@ snapshots:
       - typescript
       - universal-cookie
 
-  vitest-environment-nuxt@1.0.0(@jest/globals@29.7.0)(@vue/test-utils@2.4.6)(h3@1.12.0)(happy-dom@13.10.1)(nitropack@2.9.6(@opentelemetry/api@1.9.0))(rollup@4.18.0)(vite@5.3.1(@types/node@20.14.9)(terser@5.31.1))(vitest@1.6.0(@types/node@20.14.9)(happy-dom@13.10.1)(terser@5.31.1))(vue-router@4.3.3(vue@3.4.29(typescript@5.4.5)))(vue@3.4.29(typescript@5.4.5)):
+  vitest-environment-nuxt@1.0.0(@jest/globals@29.7.0)(@vue/test-utils@2.4.6)(h3@1.12.0)(happy-dom@13.10.1)(nitropack@2.9.6(@opentelemetry/api@1.9.0)(better-sqlite3@12.8.0))(rollup@4.18.0)(vite@5.3.1(@types/node@20.14.9)(terser@5.31.1))(vitest@1.6.0(@types/node@20.14.9)(happy-dom@13.10.1)(terser@5.31.1))(vue-router@4.3.3(vue@3.4.29(typescript@5.4.5)))(vue@3.4.29(typescript@5.4.5)):
     dependencies:
-      '@nuxt/test-utils': 3.13.1(@jest/globals@29.7.0)(@vue/test-utils@2.4.6)(h3@1.12.0)(happy-dom@13.10.1)(nitropack@2.9.6(@opentelemetry/api@1.9.0))(rollup@4.18.0)(vite@5.3.1(@types/node@20.14.9)(terser@5.31.1))(vitest@1.6.0(@types/node@20.14.9)(happy-dom@13.10.1)(terser@5.31.1))(vue-router@4.3.3(vue@3.4.29(typescript@5.4.5)))(vue@3.4.29(typescript@5.4.5))
+      '@nuxt/test-utils': 3.13.1(@jest/globals@29.7.0)(@vue/test-utils@2.4.6)(h3@1.12.0)(happy-dom@13.10.1)(nitropack@2.9.6(@opentelemetry/api@1.9.0)(better-sqlite3@12.8.0))(rollup@4.18.0)(vite@5.3.1(@types/node@20.14.9)(terser@5.31.1))(vitest@1.6.0(@types/node@20.14.9)(happy-dom@13.10.1)(terser@5.31.1))(vue-router@4.3.3(vue@3.4.29(typescript@5.4.5)))(vue@3.4.29(typescript@5.4.5))
     transitivePeerDependencies:
       - '@cucumber/cucumber'
       - '@jest/globals'
@@ -17614,11 +17443,6 @@ snapshots:
   wide-align@1.1.5:
     dependencies:
       string-width: 4.2.3
-
-  widest-line@3.1.0:
-    dependencies:
-      string-width: 4.2.3
-    optional: true
 
   wordwrap@1.0.0: {}
 

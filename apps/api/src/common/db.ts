@@ -1,20 +1,20 @@
 import { Logger } from "@nestjs/common";
+import Database from "better-sqlite3";
 import { DefaultLogger, LogWriter } from "drizzle-orm";
-import { drizzle } from "drizzle-orm/postgres-js";
-import * as postgres from "postgres";
+import { drizzle } from "drizzle-orm/better-sqlite3";
 
 import { schemas } from "@earthworm/schema";
 
-let connection: postgres.Sql;
+let connection: Database.Database;
 
 async function createConnection() {
-  return postgres(process.env.DATABASE_URL ?? "");
+  return new Database(process.env.DATABASE_URL ?? "sqlite.db");
 }
 
 export async function endDB() {
   if (connection) {
-    await connection.end();
-    connection = null;
+    connection.close();
+    connection = null as any;
   }
 }
 
