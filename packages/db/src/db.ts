@@ -9,8 +9,13 @@ import { schemas } from "@earthworm/schema";
 const envName = process.env.NODE_ENV === "prod" ? ".env.prod" : ".env";
 dotenv.config({ path: path.resolve(__dirname, `../../../apps/api/${envName}`) });
 
-console.log("connection string: ", process.env.DATABASE_URL);
-const connection = new Database(process.env.DATABASE_URL ?? "sqlite.db");
+let dbUrl = process.env.DATABASE_URL ?? "sqlite.db";
+if (dbUrl === "sqlite.db") {
+  dbUrl = path.resolve(__dirname, `../../../apps/api/sqlite.db`);
+}
+
+console.log("connection string: ", dbUrl);
+const connection = new Database(dbUrl);
 
 export const db = drizzle(connection, {
   schema: schemas,
