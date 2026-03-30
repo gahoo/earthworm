@@ -27,9 +27,7 @@
 
 - **Node.js version >= v20**
   > 使用来自 .node-version 的版本 [支持的工具](https://github.com/shadowspawn/node-version-usage#compatibility-testing)
-- **Postgres version >= 8.0.0**
-- **Redis version >= 5.0.0**
-- 项目依赖 **Docker**，所以请确保你本地已安装并成功运行
+- **Docker**（非必选项，但是推荐用来快速启动 Logto 服务）
 
 ### 编辑器
 
@@ -38,11 +36,9 @@
 - 安装推荐的插件 [extensions.json](./.vscode/extensions.json)
 
 ```bash
-docker --version # Docker version 24.0.7, build afdd53b
-
 node --version # v20+
-
 pnpm -v # 8+
+docker --version # Docker version 24.0.7, build afdd53b (可选)
 ```
 
 ### 1. 安装依赖
@@ -69,57 +65,15 @@ cp ./apps/api/.env.example ./apps/api/.env
 cp ./apps/client/.env.example ./apps/client/.env
 ```
 
-### 3. 恢复 Logto 的数据
+### 3. 初始化数据库表结构
 
-解压缩 `logto_db_init_data.zip` 到 `.volumes/`
-
-```bash
-unzip logto_db_init_data.zip -d .volumes/
-```
-
-- 后台地址: http://localhost:3011
-- 用户名: admin
-- 密码: WkN7g5-i8ZrJckX
-
-> 如果你想 [手动配置 Logto](https://github.com/cuixueshe/earthworm/wiki/%E8%BF%81%E7%A7%BB-Logto-%E7%94%A8%E6%88%B7%E7%B3%BB%E7%BB%9F%E5%90%8E%E6%9C%AC%E5%9C%B0%E5%90%AF%E5%8A%A8%E9%85%8D%E7%BD%AE%E6%96%B9%E6%A1%88%EF%BC%88%E8%B4%A1%E7%8C%AE%E8%80%85%EF%BC%89)
-
-### 4. 启动 Docker Compose 服务
-
-后端用到了 Postgres 和 Redis 服务，通过下面在 `package.json` 中配置的命令启动和停止。
-
-```bash
-# 启动
-pnpm docker:start
-
-# 下面这些命令等你用的时候在执行，不要傻乎乎的刚启动就停止哈 😊
-# 停止
-pnpm docker:stop
-# 删除
-pnpm docker:delete
-# 完全删除（包括 Volume 数据）
-pnpm docker:down
-```
-
-当然如果你更喜欢手动挡
-
-```bash
-docker compose up -d
-docker compose stop
-docker compose down
-
-# 兼容老版本 docker 的命令
-docker-compose up -d
-```
-
-### 5. 初始化数据库表结构
-
-执行这个命令时，尽量与上个命令间隔一点时间，因为刚刚使用的 `-d` 参数会让其服务挂起在后台执行，此时 docker 服务可能还在 running 中，若是发现报错了那就再执行一遍。😊
+当前项目使用的是轻量化的 SQLite 数据库，可直接在本地初始化。
 
 ```bash
 pnpm db:init
 ```
 
-### 6. 创建并上传课程数据
+### 4. 创建并上传课程数据
 
 **只有第一次初始化数据库后需要执行**。
 
@@ -127,13 +81,36 @@ pnpm db:init
 pnpm db:upload
 ```
 
-### 7. 启动后端服务
+### 5. 启动 Logto 认证服务
+
+本项目采用了 Logto 维护用户数据认证。为了快速启动体验，建议通过 Docker 开启 Logto 服务：
+
+```bash
+# 启动
+pnpm docker:start
+```
+
+如不希望使用 Docker，你需要手工从源码运行 Logto 应用服务，可参考 [Logto 官方本地运行指南](https://docs.logto.io/docs/recipes/deployment/oss/#local)。
+
+> **注意：** 若希望复用初始化好的测试账号配置，可直接还原本地数据。
+>
+> ```bash
+> unzip logto_db_init_data.zip -d .volumes/
+> ```
+>
+> - 后台地址: http://localhost:3011
+> - 用户名: admin
+> - 密码: WkN7g5-i8ZrJckX
+>
+> 如果你想 [手动配置 Logto](https://github.com/cuixueshe/earthworm/wiki/%E8%BF%81%E7%A7%BB-Logto-%E7%94%A8%E6%88%B7%E7%B3%BB%E7%BB%9F%E5%90%8E%E6%9C%AC%E5%9C%B0%E5%90%AF%E5%8A%A8%E9%85%8D%E7%BD%AE%E6%96%B9%E6%A1%88%EF%BC%88%E8%B4%A1%E7%8C%AE%E8%80%85%EF%BC%89)
+
+### 6. 启动后端服务
 
 ```bash
 pnpm dev:serve
 ```
 
-### 8. 启动前端服务
+### 7. 启动前端服务
 
 ```bash
 pnpm dev:client

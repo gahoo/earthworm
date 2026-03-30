@@ -27,16 +27,12 @@ By constructing sentences with conjunctions, it helps you learn English better~ 
 
 - **Node.js version >= v20**
   > Use the version from .node-version. [Supported tools](https://github.com/shadowspawn/node-version-usage#compatibility-testing)
-- **Postgres version >= 14.0.0**
-- **Redis version >= 5.0.0**
-- **Docker**. please make sure it is installed and running successfully on your local machine.
+- **Docker** (Optional, recommended for starting Logto authentication service via `docker-compose`)
 
 ```bash
-docker --version # Docker version 24.0.7, build afdd53b
-
 node --version # v20+
-
 pnpm -v # 8+
+docker --version # Docker version 24.0.7, build afdd53b (Optional)
 ```
 
 ### Editor
@@ -69,57 +65,15 @@ cp ./apps/api/.env.example ./apps/api/.env
 cp ./apps/client/.env.example ./apps/client/.env
 ```
 
-### 3. Restore Data Of Logto
+### 3. Initialize Database Schema
 
-Uncompress `logto_db_init_data.zip` to `.volumes/`
-
-```bash
-unzip logto_db_init_data.zip -d .volumes/
-```
-
-- Admin URL: http://localhost:3011
-- Username: admin
-- Password: WkN7g5-i8ZrJckX
-
-> if you want to [Manual Configuration Logto](https://github.com/cuixueshe/earthworm/wiki/%E8%BF%81%E7%A7%BB-Logto-%E7%94%A8%E6%88%B7%E7%B3%BB%E7%BB%9F%E5%90%8E%E6%9C%AC%E5%9C%B0%E5%90%AF%E5%8A%A8%E9%85%8D%E7%BD%AE%E6%96%B9%E6%A1%88%EF%BC%88%E8%B4%A1%E7%8C%AE%E8%80%85%EF%BC%89)
-
-### 4. Start Docker Compose Service
-
-The backend relies on Postgres and Redis services. Start and stop these services using the commands configured in `package.json` below.
-
-```bash
-# start
-pnpm docker:start
-
-# When needed, execute the following command
-# stop
-pnpm docker:stop
-# delete
-pnpm docker:delete
-# Complete deletion (including Volume data)
-pnpm docker:down
-```
-
-If you prefer manual, you can use the commands below.
-
-```bash
-docker compose up -d
-docker compose stop
-docker compose down
-
-# commands compatible with older versions of Docker
-docker-compose up -d
-```
-
-### 5. Initialize Database Schema
-
-When executing this command, try to keep a little time from the previous command, because the `-d` parameter just used will suspend its service execution in the background. At this time, the docker service may still be running. If an error is found, execute it again.
+This project uses a lightweight local SQLite database.
 
 ```bash
 pnpm db:init
 ```
 
-### 6. Create and Upload Course Data
+### 4. Create and Upload Course Data
 
 **Only Execute This During the Initial Database Initialization**.
 
@@ -127,13 +81,36 @@ pnpm db:init
 pnpm db:upload
 ```
 
-### 7. Start the Backend Service
+### 5. Start Logto Service (Authentication)
+
+Logto manages user authentication. The easiest way to start it is via Docker Compose:
+
+```bash
+# start
+pnpm docker:start
+```
+
+If you prefer running without Docker, you will need to manually [Setup and Run Logto Node.js App locally](https://docs.logto.io/docs/recipes/deployment/oss/#local).
+
+> **Note:** If you want to use the predefined test data, you can restore Logto Data:
+>
+> ```bash
+> unzip logto_db_init_data.zip -d .volumes/
+> ```
+>
+> - Admin URL: http://localhost:3011
+> - Username: admin
+> - Password: WkN7g5-i8ZrJckX
+>
+> if you want to [Manual Configuration Logto](https://github.com/cuixueshe/earthworm/wiki/%E8%BF%81%E7%A7%BB-Logto-%E7%94%A8%E6%88%B7%E7%B3%BB%E7%BB%9F%E5%90%8E%E6%9C%AC%E5%9C%B0%E5%90%AF%E5%8A%A8%E9%85%8D%E7%BD%AE%E6%96%B9%E6%A1%88%EF%BC%88%E8%B4%A1%E7%8C%AE%E8%80%85%EF%BC%89)
+
+### 6. Start the Backend Service
 
 ```bash
 pnpm dev:serve
 ```
 
-### 8. Start the Frontend Service
+### 7. Start the Frontend Service
 
 ```bash
 pnpm dev:client
