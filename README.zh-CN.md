@@ -27,7 +27,7 @@
 
 - **Node.js version >= v20**
   > 使用来自 .node-version 的版本 [支持的工具](https://github.com/shadowspawn/node-version-usage#compatibility-testing)
-- **Docker**（非必选项，但是推荐用来快速启动 Logto 服务）
+- **Docker**（非必选项，如果你想使用 Docker Compose 一键启动后端环境）
 
 ### 编辑器
 
@@ -38,7 +38,6 @@
 ```bash
 node --version # v20+
 pnpm -v # 8+
-docker --version # Docker version 24.0.7, build afdd53b (可选)
 ```
 
 ### 1. 安装依赖
@@ -81,39 +80,29 @@ pnpm db:init
 pnpm db:upload
 ```
 
-### 5. 启动 Logto 认证服务
+### 5. 关于用户认证（本地管理）
 
-本项目采用了 Logto 维护用户数据认证。为了快速启动体验，建议通过 Docker 开启 Logto 服务：
+项目目前采用纯本地化的用户系统。启动前后端服务后，你可以在首页点击登录/注册，输入用户名（和可选的密码）即可直接创建并登录你的账号。无需依赖和配置额外的第三方认证服务。
 
+### 6. 启动服务 (两种方式)
+
+**方式一：本地 Node 运行 (推荐开发使用)**
+
+分别启动后端服务和前端服务：
+```bash
+# 启动后端服务
+pnpm dev:serve
+
+# 启动前端服务
+pnpm dev:client
+```
+
+**方式二：使用 Docker 启动**
+
+如果想快速在本地体验或者部署，直接使用 Docker Compose 启动全栈服务：
 ```bash
 # 启动
-pnpm docker:start
-```
-
-如不希望使用 Docker，你需要手工从源码运行 Logto 应用服务，可参考 [Logto 官方本地运行指南](https://docs.logto.io/docs/recipes/deployment/oss/#local)。
-
-> **注意：** 若希望复用初始化好的测试账号配置，可直接还原本地数据。
->
-> ```bash
-> unzip logto_db_init_data.zip -d .volumes/
-> ```
->
-> - 后台地址: http://localhost:3011
-> - 用户名: admin
-> - 密码: WkN7g5-i8ZrJckX
->
-> 如果你想 [手动配置 Logto](https://github.com/cuixueshe/earthworm/wiki/%E8%BF%81%E7%A7%BB-Logto-%E7%94%A8%E6%88%B7%E7%B3%BB%E7%BB%9F%E5%90%8E%E6%9C%AC%E5%9C%B0%E5%90%AF%E5%8A%A8%E9%85%8D%E7%BD%AE%E6%96%B9%E6%A1%88%EF%BC%88%E8%B4%A1%E7%8C%AE%E8%80%85%EF%BC%89)
-
-### 6. 启动后端服务
-
-```bash
-pnpm dev:serve
-```
-
-### 7. 启动前端服务
-
-```bash
-pnpm dev:client
+docker-compose up -d
 ```
 
 ## 🛠️ 关于测试

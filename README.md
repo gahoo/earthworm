@@ -27,12 +27,11 @@ By constructing sentences with conjunctions, it helps you learn English better~ 
 
 - **Node.js version >= v20**
   > Use the version from .node-version. [Supported tools](https://github.com/shadowspawn/node-version-usage#compatibility-testing)
-- **Docker** (Optional, recommended for starting Logto authentication service via `docker-compose`)
+- **Docker** (Optional, if you wish to start the backend stack via Docker Compose)
 
 ```bash
 node --version # v20+
 pnpm -v # 8+
-docker --version # Docker version 24.0.7, build afdd53b (Optional)
 ```
 
 ### Editor
@@ -81,39 +80,28 @@ pnpm db:init
 pnpm db:upload
 ```
 
-### 5. Start Logto Service (Authentication)
+### 5. Authentication
 
-Logto manages user authentication. The easiest way to start it is via Docker Compose:
+The project uses simple local authentication now. After starting both services, simply navigate to the front-end url, click "login/register" on the landing page, and type a username (with an optional password) to create your account or log in seamlessly.
 
+### 6. Start the Application (Two Ways)
+
+**Option 1: Run Locally via Node.js (Recommended for Development)**
+
+Start the backend and frontend separately:
 ```bash
-# start
-pnpm docker:start
-```
-
-If you prefer running without Docker, you will need to manually [Setup and Run Logto Node.js App locally](https://docs.logto.io/docs/recipes/deployment/oss/#local).
-
-> **Note:** If you want to use the predefined test data, you can restore Logto Data:
->
-> ```bash
-> unzip logto_db_init_data.zip -d .volumes/
-> ```
->
-> - Admin URL: http://localhost:3011
-> - Username: admin
-> - Password: WkN7g5-i8ZrJckX
->
-> if you want to [Manual Configuration Logto](https://github.com/cuixueshe/earthworm/wiki/%E8%BF%81%E7%A7%BB-Logto-%E7%94%A8%E6%88%B7%E7%B3%BB%E7%BB%9F%E5%90%8E%E6%9C%AC%E5%9C%B0%E5%90%AF%E5%8A%A8%E9%85%8D%E7%BD%AE%E6%96%B9%E6%A1%88%EF%BC%88%E8%B4%A1%E7%8C%AE%E8%80%85%EF%BC%89)
-
-### 6. Start the Backend Service
-
-```bash
+# Start backend
 pnpm dev:serve
+
+# Start frontend
+pnpm dev:client
 ```
 
-### 7. Start the Frontend Service
+**Option 2: Run via Docker Compose**
 
+To quickly deploy or test locally, you can start the full stack using Docker:
 ```bash
-pnpm dev:client
+docker-compose up -d
 ```
 
 ## 🛠️ About testing
