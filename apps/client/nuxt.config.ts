@@ -41,15 +41,11 @@ export default defineNuxtConfig({
     "@hypernym/nuxt-anime",
     "@nuxt/image",
   ],
-  plugins: ["~/plugins/logto.ts", "~/plugins/http.ts"],
+  plugins: ["~/plugins/http.ts"],
   runtimeConfig: {
     public: {
       apiBase: process.env.API_BASE || "",
-      endpoint: process.env.LOGTO_ENDPOINT || "",
-      appId: process.env.LOGTO_APP_ID || "",
       backendEndpoint: process.env.BACKEND_ENDPOINT || "",
-      signInRedirectURI: process.env.LOGTO_SIGN_IN_REDIRECT_URI || "",
-      signOutRedirectURI: process.env.LOGTO_SIGN_OUT_REDIRECT_URI || "",
       helpDocsURL: process.env.HELP_DOCS_URL || "",
     },
   },

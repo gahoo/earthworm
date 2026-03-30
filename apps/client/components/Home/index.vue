@@ -16,9 +16,6 @@
           <div class="text-3xl font-medium">{{ userStore.user?.username }}</div>
           <MembershipBadge></MembershipBadge>
         </div>
-        <div class="text-md text-gray-400">
-          {{ userStore.user?.name }}
-        </div>
       </div>
       <hr class="my-5 dark:border-gray-700" />
       <!-- TODO: 等后续勋章制作完成再放出来 -->

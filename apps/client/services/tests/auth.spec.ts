@@ -1,17 +1,13 @@
-import { useLogto } from "@logto/vue";
 import { beforeAll, describe, expect, it, vi } from "vitest";
 
 import { getSignInCallback, setupAuth, signIn } from "../auth";
 
 import "../auth";
 
-vi.mock("@logto/vue");
-
-vi.mocked(useLogto).mockImplementation(() => {
-  return {
-    signIn: vi.fn(),
-  } as any;
-});
+vi.mock("nuxt/app", () => ({
+  useRuntimeConfig: () => ({ public: {} }),
+  navigateTo: vi.fn(),
+}));
 
 describe("auth", () => {
   beforeAll(() => {

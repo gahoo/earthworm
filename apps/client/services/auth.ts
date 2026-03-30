@@ -1,34 +1,35 @@
-import { useLogto } from "@logto/vue";
-import { useRuntimeConfig } from "nuxt/app";
+import { navigateTo } from "nuxt/app";
 
-let logto: ReturnType<typeof useLogto>;
-let runtimeConfig: ReturnType<typeof useRuntimeConfig>;
 export async function setupAuth() {
-  logto = useLogto();
-  runtimeConfig = useRuntimeConfig();
+  // Initialization logic if any
 }
 
 export async function signIn(callback?: string) {
   callback && setSignInCallback(callback);
-  logto.signIn(runtimeConfig.public.signInRedirectURI);
+  navigateTo("/login");
 }
 
 export function signOut() {
-  return logto.signOut(runtimeConfig.public.signOutRedirectURI);
+  if (typeof window !== "undefined") {
+    localStorage.removeItem("auth_token");
+  }
+  navigateTo("/login");
 }
 
 export function isAuthenticated() {
-  return logto.isAuthenticated.value;
+  if (typeof window === "undefined") return false;
+  return !!localStorage.getItem("auth_token");
 }
 
 export async function getToken() {
-  const accessToken = await logto.getAccessToken(runtimeConfig.public.backendEndpoint);
-
-  return accessToken;
+  if (typeof window === "undefined") return null;
+  return localStorage.getItem("auth_token");
 }
 
-export function fetchUserInfo() {
-  return logto.fetchUserInfo();
+export function setToken(token: string) {
+  if (typeof window !== "undefined") {
+    localStorage.setItem("auth_token", token);
+  }
 }
 
 export function getSignInCallback() {

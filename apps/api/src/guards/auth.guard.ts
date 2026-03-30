@@ -9,7 +9,6 @@ import { JwtService } from "@nestjs/jwt";
 import { Request } from "express";
 
 export const UncheckAuth = () => SetMetadata("uncheck", true);
-// Deprecated permissions check since we no longer use Logto scopes
 export const Permissions = (...permissions: string[]) => SetMetadata("permissions", permissions);
 
 @Injectable()
