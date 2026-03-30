@@ -1,20 +1,22 @@
 import { createId } from "@paralleldrive/cuid2";
-import { date, integer, jsonb, pgTable, text, timestamp, unique } from "drizzle-orm/pg-core";
+import { integer, sqliteTable, text, unique } from "drizzle-orm/sqlite-core";
 
-export const userLearningActivities = pgTable(
+export const userLearningActivities = sqliteTable(
   "user_learning_activities",
   {
     id: text("id")
       .primaryKey()
       .$defaultFn(() => createId()),
     userId: text("user_id").notNull(),
-    date: date("date").notNull(),
+    date: text("date").notNull(),
     activityType: text("activity_type").notNull(),
     courseId: text("course_id"),
     duration: integer("duration").notNull(),
-    metadata: jsonb("metadata"),
-    createdAt: timestamp("created_at").notNull().defaultNow(),
-    updatedAt: timestamp("updated_at").$onUpdateFn(() => new Date()),
+    metadata: text("metadata", { mode: "json" }),
+    createdAt: integer("created_at", { mode: "timestamp" })
+      .notNull()
+      .$defaultFn(() => new Date()),
+    updatedAt: integer("updated_at", { mode: "timestamp" }).$onUpdateFn(() => new Date()),
   },
   (t) => ({
     unq: unique().on(t.userId, t.date, t.activityType),

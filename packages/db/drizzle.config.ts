@@ -10,8 +10,8 @@ console.log("process.env.DATABASE_URL: ", process.env.DATABASE_URL);
 export default {
   schema: "../schema/src/schema/*",
   out: "./drizzle",
-  dialect: "postgresql",
+  dialect: "sqlite",
   dbCredentials: {
-    url: process.env.DATABASE_URL || "",
+    url: process.env.DATABASE_URL === "sqlite.db" ? "../../apps/api/sqlite.db" : (process.env.DATABASE_URL || "../../apps/api/sqlite.db"),
   },
 } satisfies Config;

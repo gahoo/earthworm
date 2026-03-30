@@ -7,7 +7,6 @@ import {
   createRankListWithUserFinishedCourse2Times,
 } from "../../../test/fixture/rank";
 import { createUser } from "../../../test/fixture/user";
-import { MockRedisModule } from "../../../test/helper/mockRedis";
 import { UserService } from "../../user/user.service";
 import { RankPeriod, RankService } from "../rank.service";
 
@@ -112,7 +111,6 @@ async function setupTesting() {
 
   const moduleRef: TestingModule = await Test.createTestingModule({
     imports: [
-      MockRedisModule,
       JwtModule.register({
         secret: process.env.SECRET,
         signOptions: { expiresIn: "7d" },

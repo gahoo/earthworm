@@ -113,7 +113,7 @@ describe("MembershipService", () => {
       type: "founder",
       start_date: new Date(),
       end_date: new Date(),
-      isActive: true,
+      isActive: true as any,
     });
 
     const result = await service.isFounderMembership(userId);
@@ -128,7 +128,7 @@ describe("MembershipService", () => {
       type: MembershipType.REGULAR,
       start_date: new Date(),
       end_date: new Date(),
-      isActive: true,
+      isActive: true as any,
     });
 
     const result = await service.isFounderMembership(userId);

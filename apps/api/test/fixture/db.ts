@@ -10,7 +10,7 @@ export async function insertCoursePack(db: DbType, values?: Partial<CoursePackIn
     order: 1,
     title: "课程包",
     description: "这是一个课程包",
-    isFree: true,
+    isFree: true as any,
     creatorId: "test",
     shareLevel: "public",
   } satisfies CoursePackInsert;

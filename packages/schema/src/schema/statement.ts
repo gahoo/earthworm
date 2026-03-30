@@ -1,10 +1,10 @@
 import { createId } from "@paralleldrive/cuid2";
 import { relations } from "drizzle-orm";
-import { integer, pgTable, text, timestamp } from "drizzle-orm/pg-core";
+import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 
 import { course } from "./course";
 
-export const statement = pgTable("statements", {
+export const statement = sqliteTable("statements", {
   id: text("id")
     .primaryKey()
     .$defaultFn(() => createId()),
@@ -15,8 +15,10 @@ export const statement = pgTable("statements", {
   courseId: text("course_id")
     .notNull()
     .references(() => course.id),
-  createdAt: timestamp("created_at").notNull().defaultNow(),
-  updatedAt: timestamp("updated_at").$onUpdateFn(() => new Date()),
+  createdAt: integer("created_at", { mode: "timestamp" })
+    .notNull()
+    .$defaultFn(() => new Date()),
+  updatedAt: integer("updated_at", { mode: "timestamp" }).$onUpdateFn(() => new Date()),
 });
 
 export const statementRelations = relations(statement, ({ one }) => ({

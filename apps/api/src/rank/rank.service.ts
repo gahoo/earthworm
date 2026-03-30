@@ -1,6 +1,4 @@
-import { InjectRedis } from "@nestjs-modules/ioredis";
 import { Injectable, Logger } from "@nestjs/common";
-import Redis from "ioredis";
 
 import { UserEntity } from "../user/user.decorators";
 import { UserService } from "../user/user.service";
@@ -23,23 +21,23 @@ export class RankService {
     [RankPeriod.MONTHLY]: `${this.FINISH_COUNT_KEY}:${RankPeriod.MONTHLY}Rank`,
     [RankPeriod.YEARLY]: `${this.FINISH_COUNT_KEY}:${RankPeriod.YEARLY}Rank`,
   };
-  constructor(
-    @InjectRedis() private readonly redis: Redis,
-    private readonly userService: UserService,
-  ) {}
+
+  // Mocked in-memory store since Redis is removed
+  private memoryStore: Record<string, Record<string, number>> = {};
+
+  constructor(private readonly userService: UserService) {}
 
   async userFinishCourse(userId: string) {
     const counts = {};
     for (const period of Object.keys(this.rankKeys)) {
       const rankKey = this.rankKeys[period];
-      let count = await this.redis.zscore(rankKey, userId);
-      if (!count) {
-        await this.redis.zadd(rankKey, 1, userId);
-      } else {
-        await this.redis.zincrby(rankKey, 1, userId);
+      if (!this.memoryStore[rankKey]) {
+        this.memoryStore[rankKey] = {};
       }
-      count = await this.redis.zscore(rankKey, userId);
-      counts[period] = count;
+
+      let count = this.memoryStore[rankKey][userId] || 0;
+      this.memoryStore[rankKey][userId] = count + 1;
+      counts[period] = this.memoryStore[rankKey][userId];
     }
 
     return counts;
@@ -64,17 +62,18 @@ export class RankService {
     // return [member, count, member, count, ...]
     let self = null;
     const rankPeriod = this.rankKeys[period];
-    const rankList = this.convertRankListToObjectArray(
-      await this.redis.zrevrange(rankPeriod, 0, 24, "WITHSCORES"),
-    );
+
+    const store = this.memoryStore[rankPeriod] || {};
+    const sortedEntries = Object.entries(store).sort((a, b) => b[1] - a[1]);
+    const rankList = sortedEntries.slice(0, 25).map(([userId, count]) => ({ userId, count }));
 
     if (user) {
-      const userRank = await this.redis.zrevrank(rankPeriod, user.userId);
-      const userCount = await this.redis.zscore(rankPeriod, user.userId);
+      const userIndex = sortedEntries.findIndex(([uid]) => uid === user.userId);
+      const userCount = store[user.userId];
       self = {
         userId: user.userId,
-        count: userCount === null ? -1 : parseInt(userCount),
-        rank: userRank === null ? -1 : userRank + 1,
+        count: userCount === undefined ? -1 : userCount,
+        rank: userIndex === -1 ? -1 : userIndex + 1,
       };
     }
 
@@ -125,7 +124,7 @@ export class RankService {
   async resetRankList(period: RankPeriodAlias = RankPeriod.WEEKLY) {
     const rankKey = this.rankKeys[period];
     try {
-      await this.redis.del(rankKey);
+      delete this.memoryStore[rankKey];
       this.logger.verbose(`${period}重置排行榜成功: ${new Date()}`);
     } catch (error) {
       this.logger.error(`${period}重置排行榜时发生错误: ${error}`);
