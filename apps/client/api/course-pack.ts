@@ -32,3 +32,41 @@ export async function fetchCoursePack(coursePackId: string) {
     method: "get",
   })) as CoursePack;
 }
+
+export async function createCoursePack(data: { title: string, description?: string }) {
+  const http = getHttp();
+  return await http<any>("/course-pack", {
+    method: "post",
+    body: data
+  });
+}
+
+export async function deleteCoursePack(id: string) {
+  const http = getHttp();
+  return await http<any>(`/course-pack/${id}`, {
+    method: "delete"
+  });
+}
+
+export async function exportCoursePack(id: string) {
+  const http = getHttp();
+  return await http<any>(`/course-pack/${id}/export`, {
+    method: "get"
+  });
+}
+
+export async function importCoursePack(data: any) {
+  const http = getHttp();
+  return await http<any>("/course-pack/import", {
+    method: "post",
+    body: data
+  });
+}
+
+export async function generateCourseViaAI(data: { materialNames: string[], prompt?: string }) {
+  const http = getHttp();
+  return await http<any>("/ai/generate-course", {
+    method: "post",
+    body: data
+  });
+}

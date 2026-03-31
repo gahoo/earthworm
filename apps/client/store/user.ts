@@ -29,7 +29,7 @@ export const useUserStore = defineStore("user", () => {
   }
 
   function isFounderMembership() {
-    return user.value?.membership.details?.type === MembershipType.FOUNDER;
+    return user.value?.membership?.details?.type === MembershipType.FOUNDER;
   }
 
   return {
