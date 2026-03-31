@@ -1,31 +1,34 @@
-import { HttpException, Inject, Injectable } from "@nestjs/common";
+import { HttpException, HttpStatus, Inject, Injectable } from "@nestjs/common";
 import { eq } from "drizzle-orm";
 
-import { course, coursePack } from "@earthworm/schema";
+import { course, coursePack, users } from "@earthworm/schema";
 import { DB, DbType } from "../global/providers/db.provider";
-import { LogtoService } from "../logto/logto.service";
 import { MembershipService } from "../membership/membership.service";
 import { type MembershipDetails } from "../membership/types/membership.types";
 import { UserCourseProgressService } from "../user-course-progress/user-course-progress.service";
 import { UserEntity } from "../user/user.decorators";
 import { UpdateUserDto } from "./model/user.dto";
-import { type LogtoUserInfo } from "./types/user.types";
 
 @Injectable()
 export class UserService {
   constructor(
     @Inject(DB) private db: DbType,
-    private readonly logtoService: LogtoService,
     private readonly userCourseProgressService: UserCourseProgressService,
     private readonly membershipService: MembershipService,
   ) {}
 
   async findUser(uId: string) {
     try {
-      const { data: logtoUserInfo } = await this.logtoService.logtoApi.get(`/api/users/${uId}`);
+      const userInfo = await this.db.query.users.findFirst({
+        where: eq(users.id, uId),
+      });
+      if (!userInfo) {
+        return undefined;
+      }
+
       const membershipInfo = await this.getMembershipInfo(uId);
       return {
-        ...logtoUserInfo,
+        ...userInfo,
         membership: membershipInfo,
       };
     } catch (error) {
@@ -36,14 +39,19 @@ export class UserService {
 
   /**
    * 返回当前登录用户的信息
-   * logto 相关的信息是在 client 获取得
-   * 所以这里只需要返回 earthworm 服务相关的信息就可以了(比如是否为会员)
    * @param uId
    * @returns
    */
   async findCurrentUser(uId: string) {
     try {
+      const userInfo = await this.db.query.users.findFirst({
+        where: eq(users.id, uId),
+      });
+
+      if (!userInfo) return undefined;
+
       return {
+        ...userInfo,
         membership: await this.getMembershipInfo(uId),
       };
     } catch (error) {
@@ -63,10 +71,14 @@ export class UserService {
 
   async updateUser(user: UserEntity, dto: UpdateUserDto) {
     try {
-      const { data } = await this.logtoService.logtoApi.patch(`/api/users/${user.userId}`, dto);
-      return { data };
+      const [updatedUser] = await this.db
+        .update(users)
+        .set(dto)
+        .where(eq(users.id, user.userId))
+        .returning();
+      return { data: updatedUser };
     } catch (e) {
-      throw new HttpException(e.response.data.message, e.response.status);
+      throw new HttpException("Error updating user", HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 

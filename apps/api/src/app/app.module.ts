@@ -6,7 +6,7 @@ import { CoursePackModule } from "../course-pack/course-pack.module";
 import { CourseModule } from "../course/course.module";
 import { CronJobModule } from "../cron-job/cron-job.module";
 import { GlobalModule } from "../global/global.module";
-import { LogtoModule } from "../logto/logto.module";
+import { AuthModule } from "../auth/auth.module";
 import { MasteredElementModule } from "../mastered-element/mastered-element.module";
 import { MembershipModule } from "../membership/membership.module";
 import { RankModule } from "../rank/rank.module";
@@ -18,7 +18,7 @@ import { UserModule } from "../user/user.module";
 @Module({
   imports: [
     GlobalModule,
-    LogtoModule,
+    AuthModule,
     UserModule,
     CoursePackModule,
     CourseModule,

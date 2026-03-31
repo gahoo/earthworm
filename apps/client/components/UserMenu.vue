@@ -21,7 +21,6 @@
               <div class="text-xl font-bold">{{ userStore.user?.username }}</div>
               <MembershipBadge></MembershipBadge>
             </div>
-            <div class="text-sm opacity-75">{{ userStore.user?.name }}</div>
           </div>
         </div>
 

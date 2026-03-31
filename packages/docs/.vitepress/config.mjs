@@ -32,7 +32,6 @@ export default defineConfig({
         text: "贡献代码",
         items: [
           { text: "如何贡献代码？", link: "/contribution/" },
-          { text: "如何配置logto?", link: "/contribution/config-logto" },
         ],
       },
     ],
