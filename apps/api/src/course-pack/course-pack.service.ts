@@ -150,4 +150,65 @@ export class CoursePackService {
   async completeCourse(userId: string, coursePackId: string, courseId: string) {
     return await this.courseService.completeCourse(userId, coursePackId, courseId);
   }
+
+  async createCoursePack(userId: string, title: string, description: string) {
+    const packs = await this.db.query.coursePack.findMany({
+      where: eq(coursePack.creatorId, userId)
+    });
+
+    const newCoursePack = await this.db.insert(coursePack).values({
+      title,
+      description,
+      creatorId: userId,
+      shareLevel: 'private',
+      order: packs.length + 1
+    }).returning();
+    return newCoursePack[0];
+  }
+
+  async deleteCoursePack(userId: string, coursePackId: string) {
+    const cp = await this.findOne(coursePackId);
+    if (cp.creatorId !== userId) {
+      throw new NotFoundException(`CoursePack with ID ${coursePackId} not found`);
+    }
+
+    await this.db.delete(coursePack).where(eq(coursePack.id, coursePackId));
+    await this.db.delete(course).where(eq(course.coursePackId, coursePackId));
+    return { success: true };
+  }
+
+  async exportCoursePack(userId: string, coursePackId: string) {
+    const cp = await this.findOneWithCourses(userId, coursePackId);
+    if (cp.creatorId !== userId) {
+      throw new NotFoundException(`CoursePack with ID ${coursePackId} not found`);
+    }
+
+    return {
+      title: cp.title,
+      description: cp.description,
+      isFree: cp.isFree,
+      cover: cp.cover,
+      courses: cp.courses.map((c) => ({
+        title: c.title,
+        description: c.description || '',
+      }))
+    };
+  }
+
+  async importCoursePack(userId: string, data: any) {
+    const newCp = await this.createCoursePack(userId, data.title || 'Imported Course', data.description || '');
+
+    if (data.courses && Array.isArray(data.courses)) {
+      for (const [index, c] of data.courses.entries()) {
+        await this.db.insert(course).values({
+          title: c.title,
+          description: c.description || c.content || '', // Fallback to content if provided
+          coursePackId: newCp.id,
+          order: index + 1
+        });
+      }
+    }
+
+    return newCp;
+  }
 }

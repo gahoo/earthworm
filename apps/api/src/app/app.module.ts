@@ -14,9 +14,13 @@ import { ToolModule } from "../tool/tool.module";
 import { UserCourseProgressModule } from "../user-course-progress/user-course-progress.module";
 import { UserLearningActivityModule } from "../user-learning-activity/user-learning-activity.module";
 import { UserModule } from "../user/user.module";
+import { AiModule } from "../ai/ai.module";
+import { MaterialModule } from "../material/material.module";
 
 @Module({
   imports: [
+    AiModule,
+    MaterialModule,
     GlobalModule,
     AuthModule,
     UserModule,

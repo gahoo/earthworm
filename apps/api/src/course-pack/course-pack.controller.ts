@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Post, UseGuards } from "@nestjs/common";
+import { Controller, Get, Param, Post, Delete, Body, UseGuards } from "@nestjs/common";
 
 import { AuthGuard, UncheckAuth } from "../guards/auth.guard";
 import { User, UserEntity } from "../user/user.decorators";
@@ -50,3 +50,27 @@ export class CoursePackController {
     return this.coursePackService.completeCourse(user.userId, coursePackId, courseId);
   }
 }
+
+  @UseGuards(AuthGuard)
+  @Post()
+  async createCoursePack(@User() user: UserEntity, @Body() body: { title: string, description: string }) {
+    return await this.coursePackService.createCoursePack(user.userId, body.title, body.description);
+  }
+
+  @UseGuards(AuthGuard)
+  @Delete(':coursePackId')
+  async deleteCoursePack(@User() user: UserEntity, @Param('coursePackId') coursePackId: string) {
+    return await this.coursePackService.deleteCoursePack(user.userId, coursePackId);
+  }
+
+  @UseGuards(AuthGuard)
+  @Get(':coursePackId/export')
+  async exportCoursePack(@User() user: UserEntity, @Param('coursePackId') coursePackId: string) {
+    return await this.coursePackService.exportCoursePack(user.userId, coursePackId);
+  }
+
+  @UseGuards(AuthGuard)
+  @Post('import')
+  async importCoursePack(@User() user: UserEntity, @Body() body: any) {
+    return await this.coursePackService.importCoursePack(user.userId, body);
+  }
