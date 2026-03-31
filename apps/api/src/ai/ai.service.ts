@@ -74,13 +74,16 @@ ${combinedText}`;
   }
 
   private async generateWithGemini(systemPrompt: string) {
-    const customFetch = (url: RequestInfo | URL, init?: RequestInit) => {
+    const customFetch = (url: string | Request | URL, init?: RequestInit) => {
       return fetch(url, init);
     };
 
     // Ensure fetch is explicitly passed or native fetch is used, but without overriding globals
     const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-pro" }, { fetch: customFetch as any });
+    const model = genAI.getGenerativeModel(
+      { model: "gemini-1.5-pro" },
+      { customClient: { fetch: customFetch as any } } as any
+    );
 
     const result = await model.generateContent({
         contents: [{ role: 'user', parts: [{ text: systemPrompt }] }],
