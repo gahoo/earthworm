@@ -49,7 +49,6 @@ export class CoursePackController {
   ) {
     return this.coursePackService.completeCourse(user.userId, coursePackId, courseId);
   }
-}
 
   @UseGuards(AuthGuard)
   @Post()
@@ -74,3 +73,4 @@ export class CoursePackController {
   async importCoursePack(@User() user: UserEntity, @Body() body: any) {
     return await this.coursePackService.importCoursePack(user.userId, body);
   }
+}
