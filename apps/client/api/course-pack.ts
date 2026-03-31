@@ -70,3 +70,26 @@ export async function generateCourseViaAI(data: { materialNames: string[], promp
     body: data
   });
 }
+
+export async function createCourse(coursePackId: string, data: { title: string, description?: string }) {
+  const http = getHttp();
+  return await http<any>(`/course-pack/${coursePackId}/courses`, {
+    method: "post",
+    body: data
+  });
+}
+
+export async function deleteCourse(coursePackId: string, courseId: string) {
+  const http = getHttp();
+  return await http<any>(`/course-pack/${coursePackId}/courses/${courseId}`, {
+    method: "delete"
+  });
+}
+
+export async function updateCourse(coursePackId: string, courseId: string, data: { title?: string, description?: string }) {
+  const http = getHttp();
+  return await http<any>(`/course-pack/${coursePackId}/courses/${courseId}`, {
+    method: "post",
+    body: data
+  });
+}

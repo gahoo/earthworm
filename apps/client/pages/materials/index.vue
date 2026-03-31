@@ -1,11 +1,11 @@
 <template>
-  <div class="container mx-auto p-4 pt-8">
+  <div class="flex w-full flex-col p-4 relative">
     <div class="mb-8 flex items-center justify-between">
-      <h1 class="text-2xl font-bold text-gray-800 dark:text-white">Materials Library</h1>
+      <h1 class="text-3xl dark:border-gray-600 font-bold">Materials Library</h1>
 
       <div class="flex items-center space-x-2">
-        <button class="btn btn-primary" @click="handleUploadClick">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>
+        <button class="btn btn-primary btn-sm" @click="handleUploadClick">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>
           Upload Material
         </button>
         <input type="file" ref="fileInput" class="hidden" @change="onFileChange" multiple accept=".txt,.pdf,.srt,.vtt,.md" />
@@ -57,8 +57,6 @@
 import { ref, onMounted } from 'vue';
 import { toast } from 'vue-sonner';
 import { fetchMaterials, uploadMaterial, deleteMaterial, type Material } from '~/api/material';
-
-definePageMeta({ layout: "default" });
 
 const materials = ref<Material[]>([]);
 const loading = ref(true);

@@ -6,7 +6,7 @@
       <div v-if="isAuthenticated()" class="flex items-center space-x-2">
         <button class="btn btn-primary btn-sm" @click="showCreateModal = true">Create Course Pack</button>
         <button class="btn btn-outline btn-sm" @click="handleImportClick">Import Course Pack</button>
-        <input type="file" ref="importInput" class="hidden" @change="onImportFile" accept=".json" />
+        <input type="file" ref="importInput" class="hidden" @change="onImportFile" accept=".json,.zip" />
         <button class="btn btn-secondary btn-sm" @click="showAiGenerateModal = true">AI Generate</button>
       </div>
     </div>
@@ -108,6 +108,7 @@
 <script setup lang="ts">
 import { ref, watch } from "vue";
 import { toast } from 'vue-sonner';
+import JSZip from 'jszip';
 
 import type { CoursePack } from "~/types";
 import CoursePackCard from "~/components/courses/CoursePackCard.vue";
@@ -198,11 +199,31 @@ const removeCoursePack = async (id: string) => {
 const exportPack = async (id: string, title: string) => {
   try {
     const data = await exportCoursePack(id);
-    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+
+    const zip = new JSZip();
+
+    // Add meta file
+    const metaData = {
+      title: data.title,
+      description: data.description,
+      isFree: data.isFree,
+      cover: data.cover
+    };
+    zip.file("meta.json", JSON.stringify(metaData, null, 2));
+
+    // Add each course as a separate JSON file
+    if (data.courses && data.courses.length > 0) {
+      const coursesFolder = zip.folder("courses");
+      data.courses.forEach((course: any, index: number) => {
+        coursesFolder?.file(`${index + 1}_${course.title.replace(/\s+/g, '_')}.json`, JSON.stringify(course, null, 2));
+      });
+    }
+
+    const blob = await zip.generateAsync({ type: "blob" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `${title.replace(/\s+/g, '_')}_export.json`;
+    a.download = `${title.replace(/\s+/g, '_')}_export.zip`;
     a.click();
     URL.revokeObjectURL(url);
     toast.success('Export successful');
@@ -222,25 +243,56 @@ const onImportFile = async (event: Event) => {
   if (!input.files || input.files.length === 0) return;
 
   const file = input.files[0];
-  const reader = new FileReader();
+  const toastId = toast.loading('Importing course pack...');
 
-  reader.onload = async (e) => {
-    try {
-      const content = e.target?.result as string;
-      const data = JSON.parse(content);
-      const toastId = toast.loading('Importing course pack...');
+  try {
+    let importData: any = {};
 
-      await importCoursePack(data);
-      toast.success('Course pack imported successfully', { id: toastId });
-      await setup();
-    } catch (err) {
-      toast.error('Invalid JSON file or failed to import');
-    } finally {
-      input.value = '';
+    if (file.name.endsWith('.zip')) {
+      const zip = await JSZip.loadAsync(file);
+
+      // Try to read meta.json
+      const metaFile = zip.file("meta.json");
+      if (metaFile) {
+        const metaContent = await metaFile.async("string");
+        importData = JSON.parse(metaContent);
+      } else {
+        importData.title = file.name.replace('.zip', '');
+        importData.description = 'Imported from ZIP';
+      }
+
+      importData.courses = [];
+      const coursesFolder = zip.folder("courses");
+
+      if (coursesFolder) {
+        const files = Object.keys(coursesFolder.files)
+          .filter(name => name.endsWith('.json') && !coursesFolder.files[name].dir)
+          .sort(); // Sort to maintain numerical order if files are named like "1_xxx.json"
+
+        for (const fileName of files) {
+          const content = await coursesFolder.files[fileName].async("string");
+          try {
+            const courseData = JSON.parse(content);
+            importData.courses.push(courseData);
+          } catch (e) {
+            console.error(`Skipping invalid course JSON: ${fileName}`);
+          }
+        }
+      }
+    } else {
+      // Handle plain JSON upload
+      const content = await file.text();
+      importData = JSON.parse(content);
     }
-  };
 
-  reader.readAsText(file);
+    await importCoursePack(importData);
+    toast.success('Course pack imported successfully', { id: toastId });
+    await setup();
+  } catch (err) {
+    toast.error('Invalid file or failed to import', { id: toastId });
+  } finally {
+    input.value = '';
+  }
 };
 
 const generateViaAi = async () => {

@@ -211,4 +211,47 @@ export class CoursePackService {
 
     return newCp;
   }
+
+  async createCourse(userId: string, coursePackId: string, title: string, description: string = '') {
+    const cp = await this.findOne(coursePackId);
+    if (cp.creatorId !== userId) {
+      throw new NotFoundException(`CoursePack with ID ${coursePackId} not found`);
+    }
+
+    const currentCourses = await this.db.query.course.findMany({
+      where: eq(course.coursePackId, coursePackId),
+    });
+
+    const newCourse = await this.db.insert(course).values({
+      title,
+      description,
+      coursePackId,
+      order: currentCourses.length + 1
+    }).returning();
+    return newCourse[0];
+  }
+
+  async deleteCourse(userId: string, coursePackId: string, courseId: string) {
+    const cp = await this.findOne(coursePackId);
+    if (cp.creatorId !== userId) {
+      throw new NotFoundException(`CoursePack with ID ${coursePackId} not found`);
+    }
+
+    await this.db.delete(course).where(eq(course.id, courseId));
+    return { success: true };
+  }
+
+  async updateCourse(userId: string, coursePackId: string, courseId: string, data: { title?: string, description?: string }) {
+    const cp = await this.findOne(coursePackId);
+    if (cp.creatorId !== userId) {
+      throw new NotFoundException(`CoursePack with ID ${coursePackId} not found`);
+    }
+
+    const updatedCourse = await this.db.update(course)
+      .set(data)
+      .where(eq(course.id, courseId))
+      .returning();
+
+    return updatedCourse[0];
+  }
 }
