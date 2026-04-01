@@ -99,7 +99,7 @@ const editingCourseId = ref('');
 const newCourse = ref({ title: '', description: '' });
 
 const isCreator = computed(() => {
-  return coursePackStore.currentCoursePack?.creatorId === userStore.user?.userId;
+  return coursePackStore.currentCoursePack?.creatorId === userStore.user?.id;
 });
 
 setup();

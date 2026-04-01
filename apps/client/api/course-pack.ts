@@ -44,6 +44,14 @@ export async function createCoursePack(data: { title: string, description?: stri
   });
 }
 
+export async function updateCoursePack(id: string, data: { title?: string, description?: string }) {
+  const http = getHttp();
+  return await http<any>(`/course-pack/${id}`, {
+    method: "patch",
+    body: data
+  });
+}
+
 export async function deleteCoursePack(id: string) {
   const http = getHttp();
   return await http<any>(`/course-pack/${id}`, {

@@ -41,7 +41,10 @@
             </td>
             <td>{{ formatSize(mat.size) }}</td>
             <td>{{ new Date(mat.createdAt).toLocaleDateString() }}</td>
-            <td>
+            <td class="space-x-2">
+              <button class="btn btn-ghost btn-xs text-primary" @click="previewMaterial(mat)">
+                Preview
+              </button>
               <button class="btn btn-ghost btn-xs text-error" @click="removeMaterial(mat.name)">
                 Delete
               </button>
@@ -57,6 +60,7 @@
 import { ref, onMounted } from 'vue';
 import { toast } from 'vue-sonner';
 import { fetchMaterials, uploadMaterial, deleteMaterial, type Material } from '~/api/material';
+import { getToken } from '~/services/auth';
 
 const materials = ref<Material[]>([]);
 const loading = ref(true);
@@ -115,6 +119,40 @@ const onFileChange = async (event: Event) => {
   }
 
   input.value = ''; // Reset input
+};
+
+const previewMaterial = async (mat: Material) => {
+  const config = useRuntimeConfig();
+  const baseURL = config.public.apiBase as string;
+  const token = await getToken();
+
+  // Create URL and add access token
+  const url = new URL(`${baseURL}/materials/${encodeURIComponent(mat.name)}`);
+
+  // Note: if the endpoint requires auth via headers, opening in a new tab directly won't send headers.
+  // One approach is to fetch it as a blob and create an object URL.
+  // We'll fetch it and open the blob URL so the user can preview it safely.
+  const toastId = toast.loading('Loading preview...');
+
+  fetch(url.toString(), {
+    headers: {
+      'Authorization': `Bearer ${token}`
+    }
+  })
+  .then(res => {
+    if (!res.ok) throw new Error('Failed to load material');
+    return res.blob();
+  })
+  .then(blob => {
+    const objectUrl = URL.createObjectURL(blob);
+    window.open(objectUrl, '_blank');
+    toast.dismiss(toastId);
+  })
+  .catch(err => {
+    toast.dismiss(toastId);
+    toast.error('Failed to preview material');
+    console.error(err);
+  });
 };
 
 const removeMaterial = async (name: string) => {

@@ -77,6 +77,14 @@ export class MaterialService {
     throw new NotFoundException('Material not found');
   }
 
+  async getMaterialPath(userId: string, name: string): Promise<string> {
+    const safePath = this.getSafeFilePath(userId, name);
+    if (!fs.existsSync(safePath)) {
+      throw new NotFoundException(`Material ${name} not found`);
+    }
+    return safePath;
+  }
+
   async readMaterialText(userId: string, name: string): Promise<string> {
     const safePath = this.getSafeFilePath(userId, name);
     if (!fs.existsSync(safePath)) {

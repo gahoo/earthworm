@@ -4,7 +4,7 @@
       <h2 class="text-3xl dark:border-gray-600">课程包列表</h2>
 
       <div v-if="isAuthenticated()" class="flex items-center space-x-2">
-        <button class="btn btn-primary btn-sm" @click="showCreateModal = true">Create Course Pack</button>
+        <button class="btn btn-primary btn-sm" @click="showCreateModal = true; editingPackId = null; newPack = { title: '', description: '' };">Create Course Pack</button>
         <button class="btn btn-outline btn-sm" @click="handleImportClick">Import Course Pack</button>
         <input type="file" ref="importInput" class="hidden" @change="onImportFile" accept=".json,.zip" />
         <button class="btn btn-secondary btn-sm" @click="showAiGenerateModal = true">AI Generate</button>
@@ -29,8 +29,9 @@
               }"
               @cardClick="handleGoToCoursePack"
             >
-              <template #actions v-if="isAuthenticated() && (coursePack.creatorId === userStore.user?.userId || coursePack.uId === userStore.user?.userId)">
+              <template #actions v-if="isAuthenticated() && (coursePack.creatorId === userStore.user?.id || coursePack.uId === userStore.user?.id)">
                 <div class="mt-4 flex justify-end space-x-2 border-t pt-2 dark:border-gray-700" @click.stop>
+                  <button class="btn btn-xs btn-outline" @click.stop="openEditModal(coursePack)">Edit</button>
                   <button class="btn btn-xs btn-outline" @click.stop="exportPack(coursePack.id, coursePack.title)">Export</button>
                   <button class="btn btn-xs btn-error btn-outline" @click.stop="removeCoursePack(coursePack.id)">Delete</button>
                 </div>
@@ -41,10 +42,10 @@
       </div>
     </template>
 
-    <!-- Create Course Pack Modal -->
+    <!-- Create/Edit Course Pack Modal -->
     <UModal v-model="showCreateModal" :ui="{ width: 'w-full sm:max-w-lg' }">
       <UCard>
-        <h3 class="font-bold text-lg mb-4">Create Course Pack</h3>
+        <h3 class="font-bold text-lg mb-4">{{ editingPackId ? 'Edit Course Pack' : 'Create Course Pack' }}</h3>
         <div class="space-y-4">
           <div>
             <label class="label"><span class="label-text">Title</span></label>
@@ -107,9 +108,9 @@
             <input v-model="aiSettings.apiKey" type="password" placeholder="sk-..." class="input input-bordered w-full" />
           </div>
 
-          <div v-if="aiSettings.provider === 'openai'" class="form-control">
+          <div class="form-control">
             <label class="label"><span class="label-text">Base URL (Optional)</span></label>
-            <input v-model="aiSettings.apiBaseUrl" type="text" placeholder="https://api.openai.com/v1" class="input input-bordered w-full" />
+            <input v-model="aiSettings.apiBaseUrl" type="text" :placeholder="aiSettings.provider === 'openai' ? 'https://api.openai.com/v1' : 'https://generativelanguage.googleapis.com'" class="input input-bordered w-full" />
           </div>
         </div>
 
@@ -137,7 +138,7 @@ import { useCoursePackStore } from "~/store/coursePack";
 import { useUserStore } from "~/store/user";
 import { isAuthenticated } from "~/services/auth";
 import {
-  createCoursePack, deleteCoursePack,
+  createCoursePack, updateCoursePack, deleteCoursePack,
   exportCoursePack, importCoursePack, generateCourseViaAI
 } from '~/api/course-pack';
 import { fetchMaterials, type Material } from '~/api/material';
@@ -148,6 +149,7 @@ const { gotoCourseList } = useNavigation();
 const isLoading = ref(false);
 
 const showCreateModal = ref(false);
+const editingPackId = ref<string | null>(null);
 const newPack = ref({ title: '', description: '' });
 
 const importInput = ref<HTMLInputElement | null>(null);
@@ -200,15 +202,27 @@ watch(showAiGenerateModal, async (val) => {
   }
 });
 
+const openEditModal = (pack: any) => {
+  editingPackId.value = pack.id;
+  newPack.value = { title: pack.title, description: pack.description };
+  showCreateModal.value = true;
+};
+
 const saveNewPack = async () => {
   try {
-    await createCoursePack(newPack.value);
-    toast.success('Course Pack created');
+    if (editingPackId.value) {
+      await updateCoursePack(editingPackId.value, newPack.value);
+      toast.success('Course pack updated');
+    } else {
+      await createCoursePack(newPack.value);
+      toast.success('Course pack created');
+    }
     showCreateModal.value = false;
     newPack.value = { title: '', description: '' };
+    editingPackId.value = null;
     await setup();
   } catch {
-    toast.error('Failed to create course pack');
+    toast.error(editingPackId.value ? 'Failed to update course pack' : 'Failed to create course pack');
   }
 };
 

@@ -1,8 +1,10 @@
-import { Controller, Get, Post, Delete, Param, UseGuards, UseInterceptors, UploadedFile, BadRequestException } from '@nestjs/common';
+import { Controller, Get, Post, Delete, Param, UseGuards, UseInterceptors, UploadedFile, BadRequestException, Res, NotFoundException } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { MaterialService } from './material.service';
 import { AuthGuard } from '../guards/auth.guard';
 import { User, UserEntity } from '../user/user.decorators';
+import { Response } from 'express';
+import * as fs from 'fs';
 
 @Controller('materials')
 @UseGuards(AuthGuard)
@@ -27,6 +29,15 @@ export class MaterialController {
     }
 
     return this.materialService.saveMaterial(user.userId, file);
+  }
+
+  @Get(':name')
+  async getMaterialFile(@User() user: UserEntity, @Param('name') name: string, @Res() res: Response) {
+    const filePath = await this.materialService.getMaterialPath(user.userId, name);
+    if (!fs.existsSync(filePath)) {
+        throw new NotFoundException('Material not found');
+    }
+    return res.sendFile(filePath);
   }
 
   @Delete(':name')
