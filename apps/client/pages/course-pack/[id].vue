@@ -31,15 +31,15 @@
                 :coursePackId="course.coursePackId"
                 @click="handleChangeCourse(course.id)"
               />
-              <div v-if="isCreator" class="absolute top-2 right-2 flex flex-col space-y-2 opacity-0 group-hover:opacity-100 transition-opacity">
+              <div v-if="isCreator" class="absolute top-2 right-2 flex flex-col space-y-2 opacity-100 transition-opacity">
                 <button
-                  class="btn btn-xs btn-primary btn-circle"
+                  class="btn btn-sm btn-primary btn-circle shadow-lg"
                   @click.stop="openEditModal(course)"
                 >
                   ✎
                 </button>
                 <button
-                  class="btn btn-xs btn-error btn-circle"
+                  class="btn btn-sm btn-error btn-circle shadow-lg"
                   @click.stop="removeCourse(course.id)"
                 >
                   ✕

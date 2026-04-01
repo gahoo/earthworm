@@ -14,10 +14,17 @@ export function setupHttp() {
 
   http = ofetch.create({
     baseURL,
-    headers: { "Content-Type": "application/json" },
     async onRequest({ options }) {
       const token = await getToken();
-      options.headers = { ...options.headers, Authorization: `Bearer ${token}` };
+
+      // If body is FormData, don't set Content-Type to JSON so browser can set the boundary automatically
+      const isFormData = options.body instanceof FormData;
+
+      options.headers = {
+        ...(!isFormData ? { "Content-Type": "application/json" } : {}),
+        ...options.headers,
+        Authorization: `Bearer ${token}`
+      };
     },
     async onResponseError({ request, response, options }) {
       const { message } = response._data;
