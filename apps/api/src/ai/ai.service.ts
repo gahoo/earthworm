@@ -7,7 +7,14 @@ import { GoogleGenerativeAI } from '@google/generative-ai';
 export class AiService {
   constructor(private readonly materialService: MaterialService) {}
 
-  async generateCoursePack(userId: string, materialNames: string[], prompt?: string) {
+  async generateCoursePack(
+    userId: string,
+    materialNames: string[],
+    prompt?: string,
+    provider?: string,
+    apiKey?: string,
+    apiBaseUrl?: string
+  ) {
     if (!materialNames || materialNames.length === 0) {
       throw new BadRequestException('materialNames is required');
     }
@@ -40,20 +47,21 @@ Additional instructions from the user: ${prompt || 'None'}
 Materials:
 ${combinedText}`;
 
-    // Prefer OPENAI_API_KEY, fallback to GEMINI_API_KEY
-    if (process.env.OPENAI_API_KEY) {
-      return this.generateWithOpenAI(systemPrompt);
-    } else if (process.env.GEMINI_API_KEY) {
-      return this.generateWithGemini(systemPrompt);
+    const effectiveProvider = provider || (process.env.OPENAI_API_KEY ? 'openai' : 'gemini');
+
+    if (effectiveProvider === 'openai') {
+      return this.generateWithOpenAI(systemPrompt, apiKey, apiBaseUrl);
+    } else if (effectiveProvider === 'gemini') {
+      return this.generateWithGemini(systemPrompt, apiKey);
     } else {
-      throw new InternalServerErrorException('No AI provider API key found (OPENAI_API_KEY or GEMINI_API_KEY)');
+      throw new InternalServerErrorException('No valid AI provider configuration found.');
     }
   }
 
-  private async generateWithOpenAI(systemPrompt: string) {
+  private async generateWithOpenAI(systemPrompt: string, customApiKey?: string, customApiBaseUrl?: string) {
     const openai = new OpenAI({
-      apiKey: process.env.OPENAI_API_KEY,
-      baseURL: process.env.OPENAI_API_BASE_URL || 'https://api.openai.com/v1',
+      apiKey: customApiKey || process.env.OPENAI_API_KEY,
+      baseURL: customApiBaseUrl || process.env.OPENAI_API_BASE_URL || 'https://api.openai.com/v1',
     });
 
     const response = await openai.chat.completions.create({
@@ -73,13 +81,18 @@ ${combinedText}`;
     }
   }
 
-  private async generateWithGemini(systemPrompt: string) {
+  private async generateWithGemini(systemPrompt: string, customApiKey?: string) {
     const customFetch = (url: string | Request | URL, init?: RequestInit) => {
       return fetch(url, init);
     };
 
+    const key = customApiKey || process.env.GEMINI_API_KEY;
+    if (!key) {
+        throw new InternalServerErrorException('Gemini API key not provided');
+    }
+
     // Ensure fetch is explicitly passed or native fetch is used, but without overriding globals
-    const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
+    const genAI = new GoogleGenerativeAI(key);
     const model = genAI.getGenerativeModel(
       { model: "gemini-1.5-pro" },
       { customClient: { fetch: customFetch as any } } as any

@@ -6,6 +6,8 @@ export type CoursePacksItem = {
   isFree: boolean;
   description: string;
   cover: string;
+  creatorId?: string;
+  uId?: string;
 };
 
 export type CoursePack = {
@@ -14,5 +16,6 @@ export type CoursePack = {
   description: string;
   isFree: boolean;
   cover: string;
+  creatorId?: string;
   courses: Course[];
 };

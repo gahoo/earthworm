@@ -29,7 +29,7 @@
               }"
               @cardClick="handleGoToCoursePack"
             >
-              <template #actions v-if="isAuthenticated()">
+              <template #actions v-if="isAuthenticated() && (coursePack.creatorId === userStore.user?.userId || coursePack.uId === userStore.user?.userId)">
                 <div class="mt-4 flex justify-end space-x-2 border-t pt-2 dark:border-gray-700" @click.stop>
                   <button class="btn btn-xs btn-outline" @click.stop="exportPack(coursePack.id, coursePack.title)">Export</button>
                   <button class="btn btn-xs btn-error btn-outline" @click.stop="removeCoursePack(coursePack.id)">Delete</button>
@@ -91,6 +91,26 @@
             <label class="label"><span class="label-text">Additional Prompt (Optional)</span></label>
             <textarea v-model="aiPrompt" placeholder="E.g., Focus on business English vocabulary..." class="textarea textarea-bordered w-full h-20"></textarea>
           </div>
+
+          <div class="divider">AI Provider Settings</div>
+
+          <div class="form-control">
+            <label class="label"><span class="label-text">Provider</span></label>
+            <select v-model="aiSettings.provider" class="select select-bordered w-full">
+              <option value="openai">OpenAI / Compatible API</option>
+              <option value="gemini">Google Gemini</option>
+            </select>
+          </div>
+
+          <div class="form-control">
+            <label class="label"><span class="label-text">API Key (Optional if configured on backend)</span></label>
+            <input v-model="aiSettings.apiKey" type="password" placeholder="sk-..." class="input input-bordered w-full" />
+          </div>
+
+          <div v-if="aiSettings.provider === 'openai'" class="form-control">
+            <label class="label"><span class="label-text">Base URL (Optional)</span></label>
+            <input v-model="aiSettings.apiBaseUrl" type="text" placeholder="https://api.openai.com/v1" class="input input-bordered w-full" />
+          </div>
         </div>
 
         <div class="modal-action mt-6">
@@ -106,7 +126,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from "vue";
+import { ref, watch, onMounted } from "vue";
 import { toast } from 'vue-sonner';
 import JSZip from 'jszip';
 
@@ -114,6 +134,7 @@ import type { CoursePack } from "~/types";
 import CoursePackCard from "~/components/courses/CoursePackCard.vue";
 import { useNavigation } from "~/composables/useNavigation";
 import { useCoursePackStore } from "~/store/coursePack";
+import { useUserStore } from "~/store/user";
 import { isAuthenticated } from "~/services/auth";
 import {
   createCoursePack, deleteCoursePack,
@@ -122,6 +143,7 @@ import {
 import { fetchMaterials, type Material } from '~/api/material';
 
 const coursePackStore = useCoursePackStore();
+const userStore = useUserStore();
 const { gotoCourseList } = useNavigation();
 const isLoading = ref(false);
 
@@ -137,6 +159,11 @@ const selectedMaterials = ref<string[]>([]);
 const aiPrompt = ref('');
 const loadingMaterials = ref(false);
 const generating = ref(false);
+const aiSettings = ref({
+  provider: 'openai',
+  apiKey: '',
+  apiBaseUrl: ''
+});
 
 setup();
 
@@ -295,14 +322,30 @@ const onImportFile = async (event: Event) => {
   }
 };
 
+onMounted(() => {
+  // Load AI settings from local storage
+  const savedSettings = localStorage.getItem('aiSettings');
+  if (savedSettings) {
+    try {
+      aiSettings.value = JSON.parse(savedSettings);
+    } catch {}
+  }
+});
+
 const generateViaAi = async () => {
   generating.value = true;
   const toastId = toast.loading('AI is analyzing materials and generating course content... This may take a minute.');
 
+  // Save AI settings to local storage
+  localStorage.setItem('aiSettings', JSON.stringify(aiSettings.value));
+
   try {
     const aiResult = await generateCourseViaAI({
       materialNames: selectedMaterials.value,
-      prompt: aiPrompt.value
+      prompt: aiPrompt.value,
+      provider: aiSettings.value.provider,
+      apiKey: aiSettings.value.apiKey,
+      apiBaseUrl: aiSettings.value.apiBaseUrl
     });
 
     toast.loading('Saving generated course pack...', { id: toastId });

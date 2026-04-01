@@ -8,6 +8,8 @@ export type CoursePacksItemApiResponse = {
   isFree: boolean;
   description: string;
   cover: string;
+  creatorId?: string;
+  uId?: string;
 };
 
 export interface CoursePackApiResponse {
@@ -16,6 +18,7 @@ export interface CoursePackApiResponse {
   description: string;
   isFree: boolean;
   cover: string;
+  creatorId?: string;
   courses: CourseApiResponse[];
 }
 
@@ -63,7 +66,13 @@ export async function importCoursePack(data: any) {
   });
 }
 
-export async function generateCourseViaAI(data: { materialNames: string[], prompt?: string }) {
+export async function generateCourseViaAI(data: {
+  materialNames: string[],
+  prompt?: string,
+  provider?: string,
+  apiKey?: string,
+  apiBaseUrl?: string
+}) {
   const http = getHttp();
   return await http<any>("/ai/generate-course", {
     method: "post",
