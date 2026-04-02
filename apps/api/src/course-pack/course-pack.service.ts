@@ -217,9 +217,12 @@ export class CoursePackService {
 
     if (data.courses && Array.isArray(data.courses)) {
       for (const [index, c] of data.courses.entries()) {
+        const rawContent = c.description || c.content || '';
+        const parsedContent = typeof rawContent === 'object' ? JSON.stringify(rawContent) : rawContent;
+
         await this.db.insert(course).values({
           title: c.title,
-          description: c.description || c.content || '', // Fallback to content if provided
+          description: parsedContent,
           coursePackId: newCp.id,
           order: index + 1
         });

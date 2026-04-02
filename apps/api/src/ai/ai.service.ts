@@ -16,6 +16,9 @@ export class AiService {
         '.csv': 'text/csv',
         '.json': 'application/json',
         '.md': 'text/markdown',
+        '.srt': 'text/plain',
+        '.vtt': 'text/plain',
+        '.lrc': 'text/plain',
         '.pdf': 'application/pdf',
         '.png': 'image/png',
         '.jpg': 'image/jpeg',
@@ -73,12 +76,29 @@ The JSON must follow this structure exactly (do not wrap it in markdown codebloc
   "courses": [
     {
       "title": "Title of the first lesson/course",
-      "content": "A short markdown text summarizing the lesson, extracting key vocabulary or sentences."
+      "content": [
+        {
+          "chinese": "我",
+          "english": "I",
+          "soundmark": "/aɪ/"
+        },
+        {
+          "chinese": "喜欢",
+          "english": "like",
+          "soundmark": "/laɪk/"
+        },
+        {
+          "chinese": "我喜欢",
+          "english": "I like",
+          "soundmark": "/aɪ/ /laɪk/"
+        }
+      ]
     }
   ]
 }
 
-Ensure there are at least 3 courses in the "courses" array.
+Crucially, the "content" field of each course MUST be an array of objects containing exactly three string keys: "chinese", "english", and "soundmark" (phonetic transcription). Extract logical sentences, phrases, and key vocabulary from the materials to populate this array. The list should progressively build from words to full sentences.
+Ensure there are at least 3 courses in the "courses" array, each containing at least 10 vocabulary/sentence items in its "content" array.
 Additional instructions from the user: ${prompt || 'None'}`;
 
     const effectiveProvider = provider || (process.env.OPENAI_API_KEY ? 'openai' : 'gemini');

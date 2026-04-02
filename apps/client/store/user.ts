@@ -13,7 +13,7 @@ export const useUserStore = defineStore("user", () => {
   }
 
   function isNewUser() {
-    return !user.value?.username || !user.value?.avatar;
+    return !user.value?.username;
   }
 
   async function setupNewUser(info: { username: string; avatar: string }) {
