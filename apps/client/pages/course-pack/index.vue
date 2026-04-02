@@ -121,7 +121,7 @@
 
         <div class="modal-action mt-6">
           <button class="btn" @click="showAiGenerateModal = false" :disabled="generating">Cancel</button>
-          <button class="btn btn-secondary" @click="generateViaAi" :disabled="selectedMaterials.length === 0 || generating">
+          <button class="btn btn-secondary" @click="generateViaAi" :disabled="generating">
             <span v-if="generating" class="loading loading-spinner"></span>
             Generate
           </button>

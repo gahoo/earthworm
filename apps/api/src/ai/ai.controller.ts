@@ -12,7 +12,7 @@ export class AiController {
   async generateCourseViaAI(
     @User() user: UserEntity,
     @Body() body: {
-      materialNames: string[],
+      materialNames?: string[],
       prompt?: string,
       provider?: string,
       apiKey?: string,
@@ -22,7 +22,7 @@ export class AiController {
   ) {
     return this.aiService.generateCoursePack(
       user.userId,
-      body.materialNames,
+      body.materialNames || [],
       body.prompt,
       body.provider,
       body.apiKey,

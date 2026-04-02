@@ -44,9 +44,6 @@ export class AiService {
     apiBaseUrl?: string,
     modelName?: string
   ) {
-    if (!materialNames || materialNames.length === 0) {
-      throw new BadRequestException('materialNames is required');
-    }
 
     const fileParts: { mimeType: string, data: string, filename: string }[] = [];
 
@@ -161,7 +158,8 @@ Additional instructions from the user: ${prompt || 'None'}`;
     if (!result) throw new InternalServerErrorException('OpenAI returned empty response');
 
     try {
-      return JSON.parse(result);
+      const cleanResult = result.replace(/```json\n?|```/g, "").trim();
+      return JSON.parse(cleanResult);
     } catch (e) {
       throw new InternalServerErrorException('OpenAI did not return valid JSON');
     }
@@ -231,7 +229,8 @@ Additional instructions from the user: ${prompt || 'None'}`;
 
     const text = result.response.text();
     try {
-      return JSON.parse(text);
+      const cleanText = text.replace(/```json\n?|```/g, "").trim();
+      return JSON.parse(cleanText);
     } catch (e) {
       throw new InternalServerErrorException('Gemini did not return valid JSON');
     }
