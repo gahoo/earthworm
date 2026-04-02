@@ -112,6 +112,11 @@
             <label class="label"><span class="label-text">Base URL (Optional)</span></label>
             <input v-model="aiSettings.apiBaseUrl" type="text" :placeholder="aiSettings.provider === 'openai' ? 'https://api.openai.com/v1' : 'https://generativelanguage.googleapis.com'" class="input input-bordered w-full" />
           </div>
+
+          <div class="form-control">
+            <label class="label"><span class="label-text">Model Name (Optional)</span></label>
+            <input v-model="aiSettings.model" type="text" :placeholder="aiSettings.provider === 'openai' ? 'gpt-4o' : 'gemini-1.5-pro'" class="input input-bordered w-full" />
+          </div>
         </div>
 
         <div class="modal-action mt-6">
@@ -164,7 +169,8 @@ const generating = ref(false);
 const aiSettings = ref({
   provider: 'openai',
   apiKey: '',
-  apiBaseUrl: ''
+  apiBaseUrl: '',
+  model: ''
 });
 
 setup();
@@ -359,7 +365,8 @@ const generateViaAi = async () => {
       prompt: aiPrompt.value,
       provider: aiSettings.value.provider,
       apiKey: aiSettings.value.apiKey,
-      apiBaseUrl: aiSettings.value.apiBaseUrl
+      apiBaseUrl: aiSettings.value.apiBaseUrl,
+      model: aiSettings.value.model
     });
 
     toast.loading('Saving generated course pack...', { id: toastId });

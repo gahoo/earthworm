@@ -38,7 +38,8 @@ export class AiService {
     prompt?: string,
     provider?: string,
     apiKey?: string,
-    apiBaseUrl?: string
+    apiBaseUrl?: string,
+    modelName?: string
   ) {
     if (!materialNames || materialNames.length === 0) {
       throw new BadRequestException('materialNames is required');
@@ -83,15 +84,15 @@ Additional instructions from the user: ${prompt || 'None'}`;
     const effectiveProvider = provider || (process.env.OPENAI_API_KEY ? 'openai' : 'gemini');
 
     if (effectiveProvider === 'openai') {
-      return this.generateWithOpenAI(systemPrompt, fileParts, apiKey, apiBaseUrl);
+      return this.generateWithOpenAI(systemPrompt, fileParts, apiKey, apiBaseUrl, modelName);
     } else if (effectiveProvider === 'gemini') {
-      return this.generateWithGemini(systemPrompt, fileParts, apiKey, apiBaseUrl);
+      return this.generateWithGemini(systemPrompt, fileParts, apiKey, apiBaseUrl, modelName);
     } else {
       throw new InternalServerErrorException('No valid AI provider configuration found.');
     }
   }
 
-  private async generateWithOpenAI(systemPrompt: string, fileParts: any[], customApiKey?: string, customApiBaseUrl?: string) {
+  private async generateWithOpenAI(systemPrompt: string, fileParts: any[], customApiKey?: string, customApiBaseUrl?: string, customModel?: string) {
     const openai = new OpenAI({
       apiKey: customApiKey || process.env.OPENAI_API_KEY,
       baseURL: customApiBaseUrl || process.env.OPENAI_API_BASE_URL || 'https://api.openai.com/v1',
@@ -127,7 +128,7 @@ Additional instructions from the user: ${prompt || 'None'}`;
     }
 
     const response = await openai.chat.completions.create({
-      model: process.env.OPENAI_MODEL || 'gpt-4o', // Need vision model for multimodal
+      model: customModel || process.env.OPENAI_MODEL || 'gpt-4o', // Need vision model for multimodal
       messages: [
           { role: 'system', content: systemPrompt },
           { role: 'user', content: userContent }
@@ -146,7 +147,7 @@ Additional instructions from the user: ${prompt || 'None'}`;
     }
   }
 
-  private async generateWithGemini(systemPrompt: string, fileParts: any[], customApiKey?: string, customApiBaseUrl?: string) {
+  private async generateWithGemini(systemPrompt: string, fileParts: any[], customApiKey?: string, customApiBaseUrl?: string, customModel?: string) {
     const customFetch = (url: string | Request | URL, init?: RequestInit) => {
       if (customApiBaseUrl) {
           // Replace base URL if provided
@@ -187,7 +188,7 @@ Additional instructions from the user: ${prompt || 'None'}`;
     }
 
     const model = genAI.getGenerativeModel(
-      { model: "gemini-1.5-pro" },
+      { model: customModel || "gemini-1.5-pro" },
       requestOptions
     );
 

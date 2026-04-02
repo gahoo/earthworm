@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Post, Delete, Body, UseGuards } from "@nestjs/common";
+import { Controller, Get, Param, Post, Patch, Delete, Body, UseGuards } from "@nestjs/common";
 
 import { AuthGuard, UncheckAuth } from "../guards/auth.guard";
 import { User, UserEntity } from "../user/user.decorators";
@@ -54,6 +54,12 @@ export class CoursePackController {
   @Post()
   async createCoursePack(@User() user: UserEntity, @Body() body: { title: string, description: string }) {
     return await this.coursePackService.createCoursePack(user.userId, body.title, body.description);
+  }
+
+  @UseGuards(AuthGuard)
+  @Patch(':coursePackId')
+  async updateCoursePack(@User() user: UserEntity, @Param('coursePackId') coursePackId: string, @Body() body: { title?: string, description?: string }) {
+    return await this.coursePackService.updateCoursePack(user.userId, coursePackId, body.title, body.description);
   }
 
   @UseGuards(AuthGuard)

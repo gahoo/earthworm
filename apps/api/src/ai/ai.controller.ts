@@ -16,7 +16,8 @@ export class AiController {
       prompt?: string,
       provider?: string,
       apiKey?: string,
-      apiBaseUrl?: string
+      apiBaseUrl?: string,
+      model?: string
     }
   ) {
     return this.aiService.generateCoursePack(
@@ -25,7 +26,8 @@ export class AiController {
       body.prompt,
       body.provider,
       body.apiKey,
-      body.apiBaseUrl
+      body.apiBaseUrl,
+      body.model
     );
   }
 }

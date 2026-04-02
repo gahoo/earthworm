@@ -166,6 +166,23 @@ export class CoursePackService {
     return newCoursePack[0];
   }
 
+  async updateCoursePack(userId: string, coursePackId: string, title?: string, description?: string) {
+    const cp = await this.findOne(coursePackId);
+    if (cp.creatorId !== userId) {
+      throw new NotFoundException(`CoursePack with ID ${coursePackId} not found`);
+    }
+
+    const updates: Partial<{ title: string, description: string }> = {};
+    if (title !== undefined) updates.title = title;
+    if (description !== undefined) updates.description = description;
+
+    if (Object.keys(updates).length > 0) {
+      await this.db.update(coursePack).set(updates).where(eq(coursePack.id, coursePackId));
+    }
+
+    return { success: true };
+  }
+
   async deleteCoursePack(userId: string, coursePackId: string) {
     const cp = await this.findOne(coursePackId);
     if (cp.creatorId !== userId) {
@@ -237,7 +254,7 @@ export class CoursePackService {
       throw new NotFoundException(`CoursePack with ID ${coursePackId} not found`);
     }
 
-    await this.db.delete(course).where(eq(course.id, courseId));
+    await this.db.delete(course).where(and(eq(course.id, courseId), eq(course.coursePackId, coursePackId)));
     return { success: true };
   }
 
@@ -249,7 +266,7 @@ export class CoursePackService {
 
     const updatedCourse = await this.db.update(course)
       .set(data)
-      .where(eq(course.id, courseId))
+      .where(and(eq(course.id, courseId), eq(course.coursePackId, coursePackId)))
       .returning();
 
     return updatedCourse[0];

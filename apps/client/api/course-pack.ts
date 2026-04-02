@@ -79,7 +79,8 @@ export async function generateCourseViaAI(data: {
   prompt?: string,
   provider?: string,
   apiKey?: string,
-  apiBaseUrl?: string
+  apiBaseUrl?: string,
+  model?: string
 }) {
   const http = getHttp();
   return await http<any>("/ai/generate-course", {

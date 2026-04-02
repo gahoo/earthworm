@@ -60,7 +60,7 @@
 import { ref, onMounted } from 'vue';
 import { toast } from 'vue-sonner';
 import { fetchMaterials, uploadMaterial, deleteMaterial, type Material } from '~/api/material';
-import { getToken } from '~/services/auth';
+import { getHttp } from '~/api/http';
 
 const materials = ref<Material[]>([]);
 const loading = ref(true);
@@ -122,37 +122,22 @@ const onFileChange = async (event: Event) => {
 };
 
 const previewMaterial = async (mat: Material) => {
-  const config = useRuntimeConfig();
-  const baseURL = config.public.apiBase as string;
-  const token = await getToken();
-
-  // Create URL and add access token
-  const url = new URL(`${baseURL}/materials/${encodeURIComponent(mat.name)}`);
-
-  // Note: if the endpoint requires auth via headers, opening in a new tab directly won't send headers.
-  // One approach is to fetch it as a blob and create an object URL.
-  // We'll fetch it and open the blob URL so the user can preview it safely.
   const toastId = toast.loading('Loading preview...');
+  try {
+    const http = getHttp();
+    const blob = await http<Blob>(`/materials/${encodeURIComponent(mat.name)}`, {
+      method: "get",
+      responseType: "blob"
+    });
 
-  fetch(url.toString(), {
-    headers: {
-      'Authorization': `Bearer ${token}`
-    }
-  })
-  .then(res => {
-    if (!res.ok) throw new Error('Failed to load material');
-    return res.blob();
-  })
-  .then(blob => {
     const objectUrl = URL.createObjectURL(blob);
     window.open(objectUrl, '_blank');
     toast.dismiss(toastId);
-  })
-  .catch(err => {
+  } catch (err) {
     toast.dismiss(toastId);
     toast.error('Failed to preview material');
     console.error(err);
-  });
+  }
 };
 
 const removeMaterial = async (name: string) => {
