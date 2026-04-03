@@ -13,7 +13,7 @@ export const useUserStore = defineStore("user", () => {
   }
 
   function isNewUser() {
-    return !user.value?.username || !user.value?.avatar;
+    return !user.value?.username;
   }
 
   async function setupNewUser(info: { username: string; avatar: string }) {
@@ -29,7 +29,7 @@ export const useUserStore = defineStore("user", () => {
   }
 
   function isFounderMembership() {
-    return user.value?.membership.details?.type === MembershipType.FOUNDER;
+    return user.value?.membership?.details?.type === MembershipType.FOUNDER;
   }
 
   return {

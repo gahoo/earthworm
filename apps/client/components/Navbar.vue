@@ -46,6 +46,26 @@
               </li>
             </ul>
           </nav>
+          <nav v-else-if="isAuthenticated()" class="hidden md:block">
+            <ul class="flex items-center text-base">
+              <li class="px-4">
+                <NuxtLink
+                  class="text-nowrap font-bold hover:text-purple-600 dark:text-white dark:hover:text-purple-400"
+                  to="/course-pack"
+                >
+                  My Courses
+                </NuxtLink>
+              </li>
+              <li class="px-4">
+                <NuxtLink
+                  class="text-nowrap font-bold hover:text-purple-600 dark:text-white dark:hover:text-purple-400"
+                  to="/materials"
+                >
+                  Materials Library
+                </NuxtLink>
+              </li>
+            </ul>
+          </nav>
         </div>
 
         <div class="flex items-center">
