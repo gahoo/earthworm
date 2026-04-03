@@ -72,12 +72,8 @@
           <span class="loading loading-spinner"></span>
         </div>
 
-        <div v-else-if="availableMaterials.length === 0" class="alert alert-warning">
-          <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
-          <span>No materials found. Upload some in the Materials Library first.</span>
-        </div>
 
-        <div v-else class="space-y-4">
+        <div class="space-y-4">
           <div class="form-control">
             <label class="label"><span class="label-text">Select Materials</span></label>
             <div class="max-h-48 overflow-y-auto border border-base-300 rounded p-2 bg-base-200">
@@ -121,7 +117,7 @@
 
         <div class="modal-action mt-6">
           <button class="btn" @click="showAiGenerateModal = false" :disabled="generating">Cancel</button>
-          <button class="btn btn-secondary" @click="generateViaAi" :disabled="generating">
+          <button class="btn btn-secondary" @click="generateViaAi" :disabled="generating || (selectedMaterials.length === 0 && !aiPrompt.trim())">
             <span v-if="generating" class="loading loading-spinner"></span>
             Generate
           </button>

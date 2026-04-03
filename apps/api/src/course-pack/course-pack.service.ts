@@ -1,7 +1,7 @@
 import { Inject, Injectable, NotFoundException } from "@nestjs/common";
 import { and, asc, eq, or } from "drizzle-orm";
 
-import { course, coursePack } from "@earthworm/schema";
+import { course, coursePack, statement } from "@earthworm/schema";
 import { CourseHistoryService } from "../course-history/course-history.service";
 import { CourseService } from "../course/course.service";
 import { DB, DbType } from "../global/providers/db.provider";
@@ -220,12 +220,28 @@ export class CoursePackService {
         const rawContent = c.description || c.content || '';
         const parsedContent = typeof rawContent === 'object' ? JSON.stringify(rawContent) : rawContent;
 
-        await this.db.insert(course).values({
+        const newCourse = await this.db.insert(course).values({
           title: c.title,
           description: parsedContent,
           coursePackId: newCp.id,
           order: index + 1
-        });
+        }).returning();
+
+        let contentArr = [];
+        try {
+          contentArr = typeof rawContent === 'object' ? rawContent : JSON.parse(rawContent);
+        } catch(e) {}
+
+        if (Array.isArray(contentArr) && contentArr.length > 0) {
+          const statementsToInsert = contentArr.map((item: any, i: number) => ({
+            courseId: newCourse[0].id,
+            order: i + 1,
+            chinese: item.chinese || '',
+            english: item.english || '',
+            soundmark: item.soundmark || ''
+          }));
+          await this.db.insert(statement).values(statementsToInsert);
+        }
       }
     }
 
@@ -248,6 +264,24 @@ export class CoursePackService {
       coursePackId,
       order: currentCourses.length + 1
     }).returning();
+
+    // Parse description as JSON and insert into statements if valid
+    let contentArr = [];
+    try {
+      contentArr = JSON.parse(description);
+    } catch(e) {}
+
+    if (Array.isArray(contentArr) && contentArr.length > 0) {
+      const statementsToInsert = contentArr.map((item: any, index: number) => ({
+        courseId: newCourse[0].id,
+        order: index + 1,
+        chinese: item.chinese || '',
+        english: item.english || '',
+        soundmark: item.soundmark || ''
+      }));
+      await this.db.insert(statement).values(statementsToInsert);
+    }
+
     return newCourse[0];
   }
 
@@ -271,6 +305,27 @@ export class CoursePackService {
       .set(data)
       .where(and(eq(course.id, courseId), eq(course.coursePackId, coursePackId)))
       .returning();
+
+    if (data.description !== undefined) {
+      let contentArr = [];
+      try {
+        contentArr = JSON.parse(data.description);
+      } catch(e) {}
+
+      if (Array.isArray(contentArr)) {
+        await this.db.delete(statement).where(eq(statement.courseId, courseId));
+        if (contentArr.length > 0) {
+          const statementsToInsert = contentArr.map((item: any, index: number) => ({
+            courseId: courseId,
+            order: index + 1,
+            chinese: item.chinese || '',
+            english: item.english || '',
+            soundmark: item.soundmark || ''
+          }));
+          await this.db.insert(statement).values(statementsToInsert);
+        }
+      }
+    }
 
     return updatedCourse[0];
   }
