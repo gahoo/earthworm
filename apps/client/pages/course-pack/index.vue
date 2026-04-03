@@ -1,15 +1,16 @@
 <template>
-  <div class="flex w-full flex-col p-4">
-    <div class="mb-4 flex items-center justify-between">
-      <h2 class="text-3xl dark:border-gray-600">课程包列表</h2>
+  <div class="flex w-full flex-col">
 
-      <div v-if="isAuthenticated()" class="flex items-center space-x-2">
-        <button class="btn btn-primary btn-sm" @click="showCreateModal = true; editingPackId = null; newPack = { title: '', description: '' };">Create Course Pack</button>
-        <button class="btn btn-outline btn-sm" @click="handleImportClick">Import Course Pack</button>
-        <input type="file" ref="importInput" class="hidden" @change="onImportFile" accept=".json,.zip" />
+    <div class="flex items-center justify-between mb-4 px-4 sm:px-0">
+      <h2 class="text-3xl dark:border-gray-600 font-bold">课程包列表</h2>
+      <div class="flex space-x-2">
         <button class="btn btn-secondary btn-sm" @click="showAiGenerateModal = true">AI Generate</button>
+        <button class="btn btn-primary btn-sm" @click="showCreateModal = true">Create Pack</button>
+        <button class="btn btn-accent btn-sm" @click="handleImportClick">Import</button>
+        <input type="file" ref="importInput" class="hidden" accept=".json,.zip" @change="onImportFile" />
       </div>
     </div>
+
     <template v-if="isLoading">
       <Loading></Loading>
     </template>
@@ -18,60 +19,39 @@
         <div
           class="grid auto-rows-fr grid-cols-1 gap-4 px-4 sm:grid-cols-2 sm:px-0 md:grid-cols-3 lg:grid-cols-4"
         >
-          <template v-for="coursePack in coursePackStore.coursePacks" :key="coursePack.id">
-            <CoursePackCard
-              :coursePack="{
-                id: coursePack.id,
-                title: coursePack.title,
-                description: coursePack.description,
-                cover: coursePack.cover,
-                isFree: coursePack.isFree,
-              }"
-              @cardClick="handleGoToCoursePack"
-            >
-              <template #actions v-if="isAuthenticated() && (coursePack.creatorId === userStore.user?.id || coursePack.uId === userStore.user?.id)">
-                <div class="mt-4 flex justify-end space-x-2 border-t pt-2 dark:border-gray-700" @click.stop>
-                  <button class="btn btn-xs btn-outline" @click.stop="openEditModal(coursePack)">Edit</button>
-                  <button class="btn btn-xs btn-outline" @click.stop="exportPack(coursePack.id, coursePack.title)">Export</button>
-                  <button class="btn btn-xs btn-error btn-outline" @click.stop="removeCoursePack(coursePack.id)">Delete</button>
-                </div>
-              </template>
-            </CoursePackCard>
+          <template v-for="coursePack in coursePackStore.coursePacks">
+
+            <div class="relative group h-full">
+              <CoursePackCard
+                :coursePack="{
+                  id: coursePack.id,
+                  title: coursePack.title,
+                  description: coursePack.description,
+                  cover: coursePack.cover,
+                  isFree: coursePack.isFree,
+                }"
+                @cardClick="handleGoToCoursePack"
+              ></CoursePackCard>
+              <div v-if="isAuthenticated() && (coursePack.creatorId === userStore.user?.id || coursePack.uId === userStore.user?.id)" class="absolute bottom-2 right-2 flex space-x-1 z-10 opacity-0 group-hover:opacity-100 transition-opacity">
+                <button class="btn btn-xs btn-outline bg-base-100 shadow-md" @click.stop="openEditModal(coursePack)">Edit</button>
+                <button class="btn btn-xs btn-outline bg-base-100 shadow-md" @click.stop="exportPack(coursePack.id, coursePack.title)">Export</button>
+                <button class="btn btn-xs btn-error btn-outline bg-base-100 shadow-md" @click.stop="removeCoursePack(coursePack.id)">Delete</button>
+              </div>
+            </div>
+
           </template>
         </div>
       </div>
     </template>
 
-    <!-- Create/Edit Course Pack Modal -->
-    <UModal v-model="showCreateModal" :ui="{ width: 'w-full sm:max-w-lg' }">
-      <UCard>
-        <h3 class="font-bold text-lg mb-4">{{ editingPackId ? 'Edit Course Pack' : 'Create Course Pack' }}</h3>
-        <div class="space-y-4">
-          <div>
-            <label class="label"><span class="label-text">Title</span></label>
-            <input v-model="newPack.title" type="text" placeholder="Course Pack Title" class="input input-bordered w-full" />
-          </div>
-          <div>
-            <label class="label"><span class="label-text">Description</span></label>
-            <textarea v-model="newPack.description" placeholder="Description" class="textarea textarea-bordered w-full h-24"></textarea>
-          </div>
-        </div>
-        <div class="modal-action mt-4 flex justify-end space-x-2">
-          <button class="btn" @click="showCreateModal = false">Cancel</button>
-          <button class="btn btn-primary" @click="saveNewPack" :disabled="!newPack.title">Save</button>
-        </div>
-      </UCard>
-    </UModal>
-
     <!-- AI Generate Modal -->
     <UModal v-model="showAiGenerateModal" :ui="{ width: 'w-full sm:max-w-2xl' }" prevent-close>
       <UCard>
-        <h3 class="font-bold text-lg mb-4 text-gray-800 dark:text-white">Generate Course via AI</h3>
+        <h3 class="font-bold text-lg mb-4 text-gray-800 dark:text-white">Generate Course Pack via AI</h3>
 
         <div v-if="loadingMaterials" class="flex justify-center p-4">
           <span class="loading loading-spinner"></span>
         </div>
-
 
         <div class="space-y-4">
           <div class="form-control">
@@ -88,42 +68,40 @@
             <label class="label"><span class="label-text">Additional Prompt (Optional)</span></label>
             <textarea v-model="aiPrompt" placeholder="E.g., Focus on business English vocabulary..." class="textarea textarea-bordered w-full h-20"></textarea>
           </div>
-
-          <div class="divider">AI Provider Settings</div>
-
-          <div class="form-control">
-            <label class="label"><span class="label-text">Provider</span></label>
-            <select v-model="aiSettings.provider" class="select select-bordered w-full">
-              <option value="openai">OpenAI / Compatible API</option>
-              <option value="gemini">Google Gemini</option>
-            </select>
-          </div>
-
-          <div class="form-control">
-            <label class="label"><span class="label-text">API Key (Optional if configured on backend)</span></label>
-            <input v-model="aiSettings.apiKey" type="password" placeholder="sk-..." class="input input-bordered w-full" />
-          </div>
-
-          <div class="form-control">
-            <label class="label"><span class="label-text">Base URL (Optional)</span></label>
-            <input v-model="aiSettings.apiBaseUrl" type="text" :placeholder="aiSettings.provider === 'openai' ? 'https://api.openai.com/v1' : 'https://generativelanguage.googleapis.com'" class="input input-bordered w-full" />
-          </div>
-
-          <div class="form-control">
-            <label class="label"><span class="label-text">Model Name (Optional)</span></label>
-            <input v-model="aiSettings.model" type="text" :placeholder="aiSettings.provider === 'openai' ? 'gpt-4o' : 'gemini-1.5-pro'" class="input input-bordered w-full" />
-          </div>
         </div>
 
         <div class="modal-action mt-6">
           <button class="btn" @click="showAiGenerateModal = false" :disabled="generating">Cancel</button>
-          <button class="btn btn-secondary" @click="generateViaAi" :disabled="generating || (selectedMaterials.length === 0 && !aiPrompt.trim())">
+          <button class="btn btn-secondary" @click="generateViaAi" :disabled="generating">
             <span v-if="generating" class="loading loading-spinner"></span>
             Generate
           </button>
         </div>
       </UCard>
     </UModal>
+
+    <!-- Create/Edit Course Pack Modal -->
+    <UModal v-model="showCreateModal" :ui="{ width: 'w-full sm:max-w-lg' }">
+      <UCard>
+        <h3 class="font-bold text-lg mb-4">{{ editingPackId ? 'Edit Course Pack' : 'Create Course Pack' }}</h3>
+        <div class="space-y-4">
+          <div>
+            <label class="label"><span class="label-text">Title</span></label>
+            <input v-model="newPack.title" type="text" placeholder="My English Course" class="input input-bordered w-full" />
+          </div>
+          <div>
+            <label class="label"><span class="label-text">Description</span></label>
+            <textarea v-model="newPack.description" placeholder="A course for beginners..." class="textarea textarea-bordered w-full"></textarea>
+          </div>
+        </div>
+        <div class="modal-action mt-4 flex justify-end space-x-2">
+          <button class="btn" @click="showCreateModal = false">Cancel</button>
+          <button class="btn btn-primary" @click="saveNewPack" :disabled="!newPack.title">Save</button>
+        </div>
+      </UCard>
+    </UModal>
+
+
   </div>
 </template>
 
@@ -131,6 +109,12 @@
 import { ref, watch, onMounted } from "vue";
 import { toast } from 'vue-sonner';
 import JSZip from 'jszip';
+import {
+  createCoursePack, updateCoursePack, deleteCoursePack,
+  exportCoursePack, importCoursePack, generateCourseViaAI
+} from '~/api/course-pack';
+import { fetchMaterials, type Material } from '~/api/material';
+
 
 import type { CoursePack } from "~/types";
 import CoursePackCard from "~/components/courses/CoursePackCard.vue";
@@ -138,16 +122,25 @@ import { useNavigation } from "~/composables/useNavigation";
 import { useCoursePackStore } from "~/store/coursePack";
 import { useUserStore } from "~/store/user";
 import { isAuthenticated } from "~/services/auth";
-import {
-  createCoursePack, updateCoursePack, deleteCoursePack,
-  exportCoursePack, importCoursePack, generateCourseViaAI
-} from '~/api/course-pack';
-import { fetchMaterials, type Material } from '~/api/material';
+
 
 const coursePackStore = useCoursePackStore();
-const userStore = useUserStore();
 const { gotoCourseList } = useNavigation();
+const userStore = useUserStore();
+
 const isLoading = ref(false);
+
+setup();
+
+async function setup() {
+  // 课程包不会更新 所以初始化的时候只拉取一次数据就好了
+  if (true) {
+    isLoading.value = true;
+    await coursePackStore.setupCoursePacks();
+    isLoading.value = false;
+  }
+}
+
 
 const showCreateModal = ref(false);
 const editingPackId = ref<string | null>(null);
@@ -162,30 +155,6 @@ const selectedMaterials = ref<string[]>([]);
 const aiPrompt = ref('');
 const loadingMaterials = ref(false);
 const generating = ref(false);
-const aiSettings = ref({
-  provider: 'openai',
-  apiKey: '',
-  apiBaseUrl: '',
-  model: ''
-});
-
-setup();
-
-async function setup() {
-  isLoading.value = true;
-  await coursePackStore.setupCoursePacks();
-  isLoading.value = false;
-}
-
-function handleGoToCoursePack(coursePack: CoursePack) {
-  if (true) {
-    gotoCourseList(coursePack.id);
-  } else {
-    // 看看是不是会员 不是的话 直接弹出消息告知 需要是会员
-    // TODO 还没有检测是不是会员的功能函数
-    console.log("需要是会员");
-  }
-}
 
 watch(showAiGenerateModal, async (val) => {
   if (val) {
@@ -222,7 +191,7 @@ const saveNewPack = async () => {
     showCreateModal.value = false;
     newPack.value = { title: '', description: '' };
     editingPackId.value = null;
-    await setup();
+    await coursePackStore.setupCoursePacks();
   } catch {
     toast.error(editingPackId.value ? 'Failed to update course pack' : 'Failed to create course pack');
   }
@@ -233,7 +202,7 @@ const removeCoursePack = async (id: string) => {
   try {
     await deleteCoursePack(id);
     toast.success('Course Pack deleted');
-    await setup();
+    await coursePackStore.setupCoursePacks();
   } catch {
     toast.error('Failed to delete course pack');
   }
@@ -310,7 +279,7 @@ const onImportFile = async (event: Event) => {
       if (coursesFolder) {
         const files = Object.keys(coursesFolder.files)
           .filter(name => name.endsWith('.json') && !coursesFolder.files[name].dir)
-          .sort(); // Sort to maintain numerical order if files are named like "1_xxx.json"
+          .sort();
 
         for (const fileName of files) {
           const content = await coursesFolder.files[fileName].async("string");
@@ -330,7 +299,7 @@ const onImportFile = async (event: Event) => {
 
     await importCoursePack(importData);
     toast.success('Course pack imported successfully', { id: toastId });
-    await setup();
+    await coursePackStore.setupCoursePacks();
   } catch (err) {
     toast.error('Invalid file or failed to import', { id: toastId });
   } finally {
@@ -338,31 +307,19 @@ const onImportFile = async (event: Event) => {
   }
 };
 
-onMounted(() => {
-  // Load AI settings from local storage
-  const savedSettings = localStorage.getItem('aiSettings');
-  if (savedSettings) {
-    try {
-      aiSettings.value = JSON.parse(savedSettings);
-    } catch {}
-  }
-});
-
 const generateViaAi = async () => {
   generating.value = true;
   const toastId = toast.loading('AI is analyzing materials and generating course content... This may take a minute.');
 
-  // Save AI settings to local storage
-  localStorage.setItem('aiSettings', JSON.stringify(aiSettings.value));
-
   try {
+    const aiSettingsData = JSON.parse(localStorage.getItem('aiSettings') || '{}');
     const aiResult = await generateCourseViaAI({
       materialNames: selectedMaterials.value,
       prompt: aiPrompt.value,
-      provider: aiSettings.value.provider,
-      apiKey: aiSettings.value.apiKey,
-      apiBaseUrl: aiSettings.value.apiBaseUrl,
-      model: aiSettings.value.model
+      provider: aiSettingsData.provider,
+      apiKey: aiSettingsData.apiKey,
+      apiBaseUrl: aiSettingsData.apiBaseUrl,
+      model: aiSettingsData.model
     });
 
     toast.loading('Saving generated course pack...', { id: toastId });
@@ -370,9 +327,9 @@ const generateViaAi = async () => {
 
     toast.success('AI generation complete!', { id: toastId });
     showAiGenerateModal.value = false;
-    await setup();
+    await coursePackStore.setupCoursePacks();
   } catch (err) {
-    toast.error('AI generation failed. Please check your API keys, network connection, or try smaller files.', { id: toastId, duration: 8000 });
+    toast.error('AI generation failed.', { id: toastId, duration: 8000 });
   } finally {
     generating.value = false;
   }
@@ -385,6 +342,16 @@ const formatSize = (bytes: number) => {
   const i = Math.floor(Math.log(bytes) / Math.log(k));
   return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
 };
+
+function handleGoToCoursePack(coursePack: CoursePack) {
+  if (true) {
+    gotoCourseList(coursePack.id);
+  } else {
+    // 看看是不是会员 不是的话 直接弹出消息告知 需要是会员
+    // TODO 还没有检测是不是会员的功能函数
+    console.log("需要是会员");
+  }
+}
 </script>
 
 <style></style>

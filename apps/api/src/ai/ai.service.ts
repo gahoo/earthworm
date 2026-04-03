@@ -235,4 +235,49 @@ Additional instructions from the user: ${prompt || 'None'}`;
       throw new InternalServerErrorException('Gemini did not return valid JSON');
     }
   }
+
+  async generateSingleCourse(
+    prompt: string,
+    provider?: string,
+    apiKey?: string,
+    apiBaseUrl?: string,
+    modelName?: string
+  ) {
+    if (!prompt) {
+      throw new BadRequestException('prompt is required');
+    }
+
+    const systemPrompt = `You are an expert English language teacher.
+Based on the user's instructions, generate a JSON object representing a single course lesson.
+The JSON must follow this structure exactly (do not wrap it in markdown codeblocks like \`\`\`json):
+{
+  "title": "A short, descriptive title for the lesson",
+  "content": [
+    {
+      "chinese": "我",
+      "english": "I",
+      "soundmark": "/aɪ/"
+    },
+    {
+      "chinese": "喜欢",
+      "english": "like",
+      "soundmark": "/laɪk/"
+    }
+  ]
+}
+
+Crucially, the "content" field MUST be an array of objects containing exactly three string keys: "chinese", "english", and "soundmark" (phonetic transcription). Extract logical sentences, phrases, and key vocabulary to populate this array.
+User Instructions: ${prompt}`;
+
+    const effectiveProvider = provider || (process.env.OPENAI_API_KEY ? 'openai' : 'gemini');
+
+    if (effectiveProvider === 'openai') {
+      return this.generateWithOpenAI(systemPrompt, [], apiKey, apiBaseUrl, modelName);
+    } else if (effectiveProvider === 'gemini') {
+      return this.generateWithGemini(systemPrompt, [], apiKey, apiBaseUrl, modelName);
+    } else {
+      throw new InternalServerErrorException('No valid AI provider configuration found.');
+    }
+  }
+
 }

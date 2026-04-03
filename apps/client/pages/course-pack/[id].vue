@@ -1,5 +1,40 @@
 <template>
   <div class="flex w-full flex-col p-4 relative">
+      <!-- Create/Edit Course Modal -->
+      <UModal v-model="showCreateModal" :ui="{ width: 'w-full sm:max-w-2xl' }">
+        <UCard>
+          <h3 class="font-bold text-lg mb-4">{{ isEditing ? 'Edit Course' : 'Add New Course' }}</h3>
+          <div class="space-y-4">
+            <div>
+              <label class="label"><span class="label-text">Title</span></label>
+              <input v-model="newCourse.title" type="text" placeholder="Lesson 1" class="input input-bordered w-full" />
+            </div>
+
+            <div class="divider">AI Assistant (Optional)</div>
+            <div class="form-control">
+              <label class="label"><span class="label-text">Prompt for this specific course</span></label>
+              <div class="flex space-x-2">
+                <textarea v-model="singleCourseAiPrompt" placeholder="E.g. Generate 10 vocabulary words about traveling..." class="textarea textarea-bordered flex-grow h-20"></textarea>
+                <button class="btn btn-secondary h-auto" @click="generateSingleCourseViaAi" :disabled="generatingSingle || !singleCourseAiPrompt.trim()">
+                  <span v-if="generatingSingle" class="loading loading-spinner"></span>
+                  Generate Content
+                </button>
+              </div>
+            </div>
+            <div class="divider">Manual Content</div>
+
+            <div>
+              <label class="label"><span class="label-text">Content / Words (JSON Array)</span></label>
+              <textarea v-model="newCourse.description" placeholder="[{ &quot;chinese&quot;: &quot;我&quot;, &quot;english&quot;: &quot;I&quot;, &quot;soundmark&quot;: &quot;/aɪ/&quot; }]" class="textarea textarea-bordered w-full h-48"></textarea>
+            </div>
+          </div>
+          <div class="modal-action mt-4 flex justify-end space-x-2">
+            <button class="btn" @click="showCreateModal = false">Cancel</button>
+            <button class="btn btn-primary" @click="saveNewCourse" :disabled="!newCourse.title || generatingSingle">Save</button>
+          </div>
+        </UCard>
+      </UModal>
+
     <template v-if="isLoading">
       <Loading></Loading>
     </template>
@@ -77,71 +112,18 @@
               <textarea v-model="aiPrompt" placeholder="e.g. Generate 3 short reading comprehension lessons about history." class="textarea textarea-bordered w-full h-24"></textarea>
             </div>
 
-            <div class="divider">AI Provider Settings</div>
 
-            <div class="form-control">
-              <label class="label cursor-pointer">
-                <span class="label-text">Provider</span>
-                <div class="space-x-4">
-                  <label class="inline-flex items-center space-x-2">
-                    <input type="radio" v-model="aiSettings.provider" value="openai" class="radio radio-primary radio-sm" />
-                    <span>OpenAI / Compatible</span>
-                  </label>
-                  <label class="inline-flex items-center space-x-2">
-                    <input type="radio" v-model="aiSettings.provider" value="gemini" class="radio radio-primary radio-sm" />
-                    <span>Gemini</span>
-                  </label>
-                </div>
-              </label>
-            </div>
-
-            <div class="form-control">
-              <label class="label"><span class="label-text">API Key (Optional if configured on backend)</span></label>
-              <input v-model="aiSettings.apiKey" type="password" placeholder="sk-..." class="input input-bordered w-full" />
-            </div>
-
-            <div class="form-control">
-              <label class="label"><span class="label-text">Base URL (Optional)</span></label>
-              <input v-model="aiSettings.apiBaseUrl" type="text" :placeholder="aiSettings.provider === 'openai' ? 'https://api.openai.com/v1' : 'https://generativelanguage.googleapis.com'" class="input input-bordered w-full" />
-            </div>
-
-            <div class="form-control">
-              <label class="label"><span class="label-text">Model Name (Optional)</span></label>
-              <input v-model="aiSettings.model" type="text" :placeholder="aiSettings.provider === 'openai' ? 'gpt-4o' : 'gemini-1.5-pro'" class="input input-bordered w-full" />
-            </div>
           </div>
 
           <div class="modal-action mt-6">
             <button class="btn" @click="showAiGenerateModal = false" :disabled="generating">Cancel</button>
-            <button class="btn btn-secondary" @click="generateViaAi" :disabled="generating || (selectedMaterials.length === 0 && !aiPrompt.trim())">
+            <button class="btn btn-secondary" @click="generateViaAi" :disabled="generating">
               <span v-if="generating" class="loading loading-spinner"></span>
               Generate
             </button>
           </div>
         </UCard>
       </UModal>
-
-      <!-- Create/Edit Course Modal -->
-      <UModal v-model="showCreateModal" :ui="{ width: 'w-full sm:max-w-lg' }">
-        <UCard>
-          <h3 class="font-bold text-lg mb-4">{{ isEditing ? 'Edit Course' : 'Add New Course' }}</h3>
-          <div class="space-y-4">
-            <div>
-              <label class="label"><span class="label-text">Title</span></label>
-              <input v-model="newCourse.title" type="text" placeholder="Lesson 1" class="input input-bordered w-full" />
-            </div>
-            <div>
-              <label class="label"><span class="label-text">Content / Words (JSON/Text)</span></label>
-              <textarea v-model="newCourse.description" placeholder="Content data..." class="textarea textarea-bordered w-full h-32"></textarea>
-            </div>
-          </div>
-          <div class="modal-action mt-4 flex justify-end space-x-2">
-            <button class="btn" @click="showCreateModal = false">Cancel</button>
-            <button class="btn btn-primary" @click="saveNewCourse" :disabled="!newCourse.title">Save</button>
-          </div>
-        </UCard>
-      </UModal>
-
     </template>
   </div>
 </template>
@@ -157,6 +139,7 @@ import { useCoursePackStore } from "~/store/coursePack";
 import { useUserStore } from "~/store/user";
 import { createCourse, deleteCourse, updateCourse, generateCourseViaAI } from '~/api/course-pack';
 import { fetchMaterials, type Material } from '~/api/material';
+import { getHttp } from '~/api/http';
 
 const isLoading = ref(false);
 const route = useRoute();
@@ -177,12 +160,6 @@ const selectedMaterials = ref<string[]>([]);
 const aiPrompt = ref('');
 const loadingMaterials = ref(false);
 const generating = ref(false);
-const aiSettings = ref({
-  provider: 'openai',
-  apiKey: '',
-  apiBaseUrl: '',
-  model: ''
-});
 
 const isCreator = computed(() => {
   return coursePackStore.currentCoursePack?.creatorId === userStore.user?.id;
@@ -197,14 +174,6 @@ async function setup() {
 }
 
 onMounted(async () => {
-  // Load AI settings from local storage
-  const savedSettings = localStorage.getItem('aiSettings');
-  if (savedSettings) {
-    try {
-      aiSettings.value = JSON.parse(savedSettings);
-    } catch {}
-  }
-
   if (isCreator.value) {
     loadingMaterials.value = true;
     try {
@@ -221,17 +190,15 @@ const generateViaAi = async () => {
   generating.value = true;
   const toastId = toast.loading('AI is analyzing materials and generating course content... This may take a minute.');
 
-  // Save AI settings to local storage
-  localStorage.setItem('aiSettings', JSON.stringify(aiSettings.value));
-
   try {
+    const aiSettingsData = JSON.parse(localStorage.getItem('aiSettings') || '{}');
     const aiResult = await generateCourseViaAI({
       materialNames: selectedMaterials.value,
       prompt: aiPrompt.value,
-      provider: aiSettings.value.provider,
-      apiKey: aiSettings.value.apiKey,
-      apiBaseUrl: aiSettings.value.apiBaseUrl,
-      model: aiSettings.value.model
+      provider: aiSettingsData.provider,
+      apiKey: aiSettingsData.apiKey,
+      apiBaseUrl: aiSettingsData.apiBaseUrl,
+      model: aiSettingsData.model
     });
 
     toast.loading('Saving generated courses...', { id: toastId });
@@ -264,6 +231,7 @@ function handleChangeCourse(courseId: string) {
 
 const openEditModal = (course: any) => {
   isEditing.value = true;
+  singleCourseAiPrompt.value = '';
   editingCourseId.value = course.id;
   newCourse.value = { title: course.title, description: course.description };
   showCreateModal.value = true;
@@ -272,9 +240,44 @@ const openEditModal = (course: any) => {
 // Override the Add Course button to reset state
 const openAddModal = () => {
   isEditing.value = false;
+  singleCourseAiPrompt.value = '';
   editingCourseId.value = '';
   newCourse.value = { title: '', description: '' };
   showCreateModal.value = true;
+};
+
+const singleCourseAiPrompt = ref('');
+const generatingSingle = ref(false);
+
+const generateSingleCourseViaAi = async () => {
+  generatingSingle.value = true;
+  const toastId = toast.loading('AI is generating course content...');
+  try {
+    const aiSettingsData = JSON.parse(localStorage.getItem('aiSettings') || '{}');
+    const http = getHttp();
+    const result = await http<any>('/ai/generate-single-course', {
+      method: 'post',
+      body: {
+        prompt: singleCourseAiPrompt.value,
+        provider: aiSettingsData.provider,
+        apiKey: aiSettingsData.apiKey,
+        apiBaseUrl: aiSettingsData.apiBaseUrl,
+        model: aiSettingsData.model
+      }
+    });
+
+    if (result && result.title && result.content) {
+      newCourse.value.title = newCourse.value.title || result.title;
+      newCourse.value.description = JSON.stringify(result.content, null, 2);
+      toast.success('Generated successfully!', { id: toastId });
+    } else {
+      toast.error('AI did not return the expected format.', { id: toastId });
+    }
+  } catch (err) {
+    toast.error('AI generation failed.', { id: toastId });
+  } finally {
+    generatingSingle.value = false;
+  }
 };
 
 const saveNewCourse = async () => {
@@ -308,5 +311,3 @@ const removeCourse = async (courseId: string) => {
   }
 };
 </script>
-
-<style></style>

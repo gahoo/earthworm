@@ -30,4 +30,25 @@ export class AiController {
       body.model
     );
   }
+
+  @Post('generate-single-course')
+  async generateSingleCourseViaAI(
+    @User() user: UserEntity,
+    @Body() body: {
+      prompt: string,
+      provider?: string,
+      apiKey?: string,
+      apiBaseUrl?: string,
+      model?: string
+    }
+  ) {
+    return this.aiService.generateSingleCourse(
+      body.prompt,
+      body.provider,
+      body.apiKey,
+      body.apiBaseUrl,
+      body.model
+    );
+  }
+
 }

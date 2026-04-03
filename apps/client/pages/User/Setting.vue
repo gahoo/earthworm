@@ -172,8 +172,44 @@
         </tbody>
       </table>
     </section>
+
+    <section>
+      <h2 class="text-xl font-medium">AI 设置</h2>
+      <table class="table">
+        <tbody>
+          <tr class="hover">
+            <td class="label-text">Provider</td>
+            <td class="text-right">
+              <select v-model="aiSettings.provider" @change="saveAiSettings" class="select select-bordered select-sm w-full max-w-xs">
+                <option value="openai">OpenAI / Compatible API</option>
+                <option value="gemini">Google Gemini</option>
+              </select>
+            </td>
+          </tr>
+          <tr class="hover">
+            <td class="label-text">API Key (Optional)</td>
+            <td class="text-right">
+              <input v-model="aiSettings.apiKey" @input="saveAiSettings" type="password" placeholder="sk-..." class="input input-bordered input-sm w-full max-w-xs" />
+            </td>
+          </tr>
+          <tr class="hover">
+            <td class="label-text">Base URL (Optional)</td>
+            <td class="text-right">
+              <input v-model="aiSettings.apiBaseUrl" @input="saveAiSettings" type="text" :placeholder="aiSettings.provider === 'openai' ? 'https://api.openai.com/v1' : 'https://generativelanguage.googleapis.com'" class="input input-bordered input-sm w-full max-w-xs" />
+            </td>
+          </tr>
+          <tr class="hover">
+            <td class="label-text">Model Name (Optional)</td>
+            <td class="text-right">
+              <input v-model="aiSettings.model" @input="saveAiSettings" type="text" :placeholder="aiSettings.provider === 'openai' ? 'gpt-4o' : 'gemini-1.5-pro'" class="input input-bordered input-sm w-full max-w-xs" />
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
   </div>
-  <CustomShortcutDialog />
+
+<CustomShortcutDialog />
 </template>
 
 <script setup lang="ts">
@@ -188,6 +224,7 @@ import {
   useKeyboardSound,
 } from "~/composables/user/sound";
 import { useSpaceSubmitAnswer } from "~/composables/user/submitKey";
+import { ref, onMounted } from "vue";
 import { useShowWordsWidth } from "~/composables/user/words";
 import { parseShortcutKeys } from "~/utils/keyboardShortcuts";
 
@@ -203,7 +240,30 @@ const {
 } = usePronunciation();
 const { showWordsWidth, toggleAutoWordsWidth } = useShowWordsWidth();
 const { useSpace, toggleUseSpaceSubmitAnswer } = useSpaceSubmitAnswer();
+
 const { showErrorTip, toggleShowErrorTip } = useErrorTip();
+
+const aiSettings = ref({
+  provider: "openai",
+  apiKey: "",
+  apiBaseUrl: "",
+  model: ""
+});
+
+onMounted(() => {
+  const savedSettings = localStorage.getItem("aiSettings");
+  if (savedSettings) {
+    try {
+      aiSettings.value = JSON.parse(savedSettings);
+    } catch {}
+  }
+});
+
+const saveAiSettings = () => {
+  localStorage.setItem("aiSettings", JSON.stringify(aiSettings.value));
+};
+
+
 const { shortcutKeys, handleEdit } = useShortcutKeyMode();
 
 const { getGamePlayModeOptions, currentGamePlayMode, toggleGamePlayMode } = useGamePlayMode();
