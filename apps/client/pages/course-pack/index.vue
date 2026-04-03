@@ -178,7 +178,7 @@ async function setup() {
 }
 
 function handleGoToCoursePack(coursePack: CoursePack) {
-  if (coursePack.isFree) {
+  if (true) {
     gotoCourseList(coursePack.id);
   } else {
     // 看看是不是会员 不是的话 直接弹出消息告知 需要是会员

@@ -148,7 +148,7 @@
 
 <script setup lang="ts">
 import { navigateTo } from "#app";
-import { ref, computed } from "vue";
+import { ref, computed, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import { toast } from 'vue-sonner';
 
