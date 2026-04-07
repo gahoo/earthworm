@@ -18,8 +18,6 @@ function addClarity() {
 
 export default defineNuxtConfig({
   ssr: false,
-  // default is true, reference to https://nuxt.com/docs/guide/directory-structure/components
-  // components: true,
   imports: {
     autoImport: false,
   },
@@ -53,6 +51,9 @@ export default defineNuxtConfig({
     transpile: ["vue-sonner"],
   },
   vite: {
+    build: {
+      sourcemap: false,
+    },
     optimizeDeps: {
       include: [
         "vue",
@@ -61,12 +62,13 @@ export default defineNuxtConfig({
         "@vueuse/core",
         "lodash-es",
         "canvas-confetti",
-        "@iconify-json/ph",
-        "@iconify-json/simple-icons",
         "vue-sonner",
         "dayjs",
         "fuse.js",
+        "jszip",
+        "satori",
       ],
+      exclude: ["@iconify-json/ph", "@iconify-json/simple-icons"],
     },
   },
 });
