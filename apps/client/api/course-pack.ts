@@ -36,33 +36,33 @@ export async function fetchCoursePack(coursePackId: string) {
   })) as CoursePack;
 }
 
-export async function createCoursePack(data: { title: string, description?: string }) {
+export async function createCoursePack(data: { title: string; description?: string }) {
   const http = getHttp();
   return await http<any>("/course-pack", {
     method: "post",
-    body: data
+    body: data,
   });
 }
 
-export async function updateCoursePack(id: string, data: { title?: string, description?: string }) {
+export async function updateCoursePack(id: string, data: { title?: string; description?: string }) {
   const http = getHttp();
   return await http<any>(`/course-pack/${id}`, {
     method: "patch",
-    body: data
+    body: data,
   });
 }
 
 export async function deleteCoursePack(id: string) {
   const http = getHttp();
   return await http<any>(`/course-pack/${id}`, {
-    method: "delete"
+    method: "delete",
   });
 }
 
 export async function exportCoursePack(id: string) {
   const http = getHttp();
   return await http<any>(`/course-pack/${id}/export`, {
-    method: "get"
+    method: "get",
   });
 }
 
@@ -70,44 +70,51 @@ export async function importCoursePack(data: any) {
   const http = getHttp();
   return await http<any>("/course-pack/import", {
     method: "post",
-    body: data
+    body: data,
   });
 }
 
 export async function generateCourseViaAI(data: {
-  materialNames: string[],
-  prompt?: string,
-  provider?: string,
-  apiKey?: string,
-  apiBaseUrl?: string,
-  model?: string
+  materialNames: string[];
+  prompt?: string;
+  provider?: string;
+  apiKey?: string;
+  apiBaseUrl?: string;
+  model?: string;
 }) {
   const http = getHttp();
   return await http<any>("/ai/generate-course", {
     method: "post",
-    body: data
+    body: data,
   });
 }
 
-export async function createCourse(coursePackId: string, data: { title: string, description?: string }) {
+export async function createCourse(
+  coursePackId: string,
+  data: { title: string; description?: string },
+) {
   const http = getHttp();
   return await http<any>(`/course-pack/${coursePackId}/courses`, {
     method: "post",
-    body: data
+    body: data,
   });
 }
 
 export async function deleteCourse(coursePackId: string, courseId: string) {
   const http = getHttp();
   return await http<any>(`/course-pack/${coursePackId}/courses/${courseId}`, {
-    method: "delete"
+    method: "delete",
   });
 }
 
-export async function updateCourse(coursePackId: string, courseId: string, data: { title?: string, description?: string }) {
+export async function updateCourse(
+  coursePackId: string,
+  courseId: string,
+  data: { title?: string; description?: string },
+) {
   const http = getHttp();
   return await http<any>(`/course-pack/${coursePackId}/courses/${courseId}`, {
     method: "post",
-    body: data
+    body: data,
   });
 }

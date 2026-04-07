@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Post, Patch, Delete, Body, UseGuards } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from "@nestjs/common";
 
 import { AuthGuard, UncheckAuth } from "../guards/auth.guard";
 import { User, UserEntity } from "../user/user.decorators";
@@ -52,49 +52,79 @@ export class CoursePackController {
 
   @UseGuards(AuthGuard)
   @Post()
-  async createCoursePack(@User() user: UserEntity, @Body() body: { title: string, description: string }) {
+  async createCoursePack(
+    @User() user: UserEntity,
+    @Body() body: { title: string; description: string },
+  ) {
     return await this.coursePackService.createCoursePack(user.userId, body.title, body.description);
   }
 
   @UseGuards(AuthGuard)
-  @Patch(':coursePackId')
-  async updateCoursePack(@User() user: UserEntity, @Param('coursePackId') coursePackId: string, @Body() body: { title?: string, description?: string }) {
-    return await this.coursePackService.updateCoursePack(user.userId, coursePackId, body.title, body.description);
+  @Patch(":coursePackId")
+  async updateCoursePack(
+    @User() user: UserEntity,
+    @Param("coursePackId") coursePackId: string,
+    @Body() body: { title?: string; description?: string },
+  ) {
+    return await this.coursePackService.updateCoursePack(
+      user.userId,
+      coursePackId,
+      body.title,
+      body.description,
+    );
   }
 
   @UseGuards(AuthGuard)
-  @Delete(':coursePackId')
-  async deleteCoursePack(@User() user: UserEntity, @Param('coursePackId') coursePackId: string) {
+  @Delete(":coursePackId")
+  async deleteCoursePack(@User() user: UserEntity, @Param("coursePackId") coursePackId: string) {
     return await this.coursePackService.deleteCoursePack(user.userId, coursePackId);
   }
 
   @UseGuards(AuthGuard)
-  @Get(':coursePackId/export')
-  async exportCoursePack(@User() user: UserEntity, @Param('coursePackId') coursePackId: string) {
+  @Get(":coursePackId/export")
+  async exportCoursePack(@User() user: UserEntity, @Param("coursePackId") coursePackId: string) {
     return await this.coursePackService.exportCoursePack(user.userId, coursePackId);
   }
 
   @UseGuards(AuthGuard)
-  @Post('import')
+  @Post("import")
   async importCoursePack(@User() user: UserEntity, @Body() body: any) {
     return await this.coursePackService.importCoursePack(user.userId, body);
   }
 
   @UseGuards(AuthGuard)
-  @Post(':coursePackId/courses')
-  async createCourse(@User() user: UserEntity, @Param('coursePackId') coursePackId: string, @Body() body: { title: string, description?: string }) {
-    return await this.coursePackService.createCourse(user.userId, coursePackId, body.title, body.description);
+  @Post(":coursePackId/courses")
+  async createCourse(
+    @User() user: UserEntity,
+    @Param("coursePackId") coursePackId: string,
+    @Body() body: { title: string; description?: string },
+  ) {
+    return await this.coursePackService.createCourse(
+      user.userId,
+      coursePackId,
+      body.title,
+      body.description,
+    );
   }
 
   @UseGuards(AuthGuard)
-  @Delete(':coursePackId/courses/:courseId')
-  async deleteCourse(@User() user: UserEntity, @Param('coursePackId') coursePackId: string, @Param('courseId') courseId: string) {
+  @Delete(":coursePackId/courses/:courseId")
+  async deleteCourse(
+    @User() user: UserEntity,
+    @Param("coursePackId") coursePackId: string,
+    @Param("courseId") courseId: string,
+  ) {
     return await this.coursePackService.deleteCourse(user.userId, coursePackId, courseId);
   }
 
   @UseGuards(AuthGuard)
-  @Post(':coursePackId/courses/:courseId')
-  async updateCourse(@User() user: UserEntity, @Param('coursePackId') coursePackId: string, @Param('courseId') courseId: string, @Body() body: { title?: string, description?: string }) {
+  @Post(":coursePackId/courses/:courseId")
+  async updateCourse(
+    @User() user: UserEntity,
+    @Param("coursePackId") coursePackId: string,
+    @Param("courseId") courseId: string,
+    @Body() body: { title?: string; description?: string },
+  ) {
     return await this.coursePackService.updateCourse(user.userId, coursePackId, courseId, body);
   }
 }

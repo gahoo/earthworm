@@ -89,6 +89,7 @@ The project uses simple local authentication now. After starting both services, 
 **Option 1: Run Locally via Node.js (Recommended for Development)**
 
 Start the backend and frontend separately:
+
 ```bash
 # Start backend
 pnpm dev:serve
@@ -100,6 +101,7 @@ pnpm dev:client
 **Option 2: Run via Docker Compose**
 
 To quickly deploy or test locally, you can start the full stack using Docker:
+
 ```bash
 docker-compose up -d
 ```

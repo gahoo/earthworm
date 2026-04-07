@@ -11,7 +11,7 @@ export interface Material {
 export async function fetchMaterials() {
   const http = getHttp();
   return await http<Material[]>("/materials", {
-    method: "get"
+    method: "get",
   });
 }
 
@@ -19,13 +19,13 @@ export async function uploadMaterial(formData: FormData) {
   const http = getHttp();
   return await http<Material>("/materials", {
     method: "post",
-    body: formData
+    body: formData,
   });
 }
 
 export async function deleteMaterial(name: string) {
   const http = getHttp();
   return await http<any>(`/materials/${name}`, {
-    method: "delete"
+    method: "delete",
   });
 }

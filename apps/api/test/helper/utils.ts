@@ -5,6 +5,7 @@ import { DbType } from "src/global/providers/db.provider";
 
 import { schemas } from "@earthworm/schema";
 import { GlobalModule } from "../../src/global/global.module";
+import { getTokenOwner } from "../fixture/user";
 
 export async function cleanDB(db: DbType) {
   if (!db) return;
@@ -21,8 +22,6 @@ export async function cleanDB(db: DbType) {
   await db.delete(schemas.users).execute();
   await db.run(sql`PRAGMA foreign_keys = ON;`);
 }
-
-import { getTokenOwner } from "../fixture/user";
 
 export async function signin(builder: TestingModule, userId = getTokenOwner(), username = "test") {
   const jwtService = builder.get(JwtService);

@@ -23,7 +23,7 @@ export function setupHttp() {
       options.headers = {
         ...(!isFormData ? { "Content-Type": "application/json" } : {}),
         ...options.headers,
-        Authorization: `Bearer ${token}`
+        Authorization: `Bearer ${token}`,
       };
     },
     async onResponseError({ request, response, options }) {

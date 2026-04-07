@@ -153,26 +153,34 @@ export class CoursePackService {
 
   async createCoursePack(userId: string, title: string, description: string) {
     const packs = await this.db.query.coursePack.findMany({
-      where: eq(coursePack.creatorId, userId)
+      where: eq(coursePack.creatorId, userId),
     });
 
-    const newCoursePack = await this.db.insert(coursePack).values({
-      title,
-      description,
-      creatorId: userId,
-      shareLevel: 'private',
-      order: packs.length + 1
-    }).returning();
+    const newCoursePack = await this.db
+      .insert(coursePack)
+      .values({
+        title,
+        description,
+        creatorId: userId,
+        shareLevel: "private",
+        order: packs.length + 1,
+      })
+      .returning();
     return newCoursePack[0];
   }
 
-  async updateCoursePack(userId: string, coursePackId: string, title?: string, description?: string) {
+  async updateCoursePack(
+    userId: string,
+    coursePackId: string,
+    title?: string,
+    description?: string,
+  ) {
     const cp = await this.findOne(coursePackId);
     if (cp.creatorId !== userId) {
       throw new NotFoundException(`CoursePack with ID ${coursePackId} not found`);
     }
 
-    const updates: Partial<{ title: string, description: string }> = {};
+    const updates: Partial<{ title: string; description: string }> = {};
     if (title !== undefined) updates.title = title;
     if (description !== undefined) updates.description = description;
 
@@ -207,38 +215,46 @@ export class CoursePackService {
       cover: cp.cover,
       courses: cp.courses.map((c) => ({
         title: c.title,
-        description: c.description || '',
-      }))
+        description: c.description || "",
+      })),
     };
   }
 
   async importCoursePack(userId: string, data: any) {
-    const newCp = await this.createCoursePack(userId, data.title || 'Imported Course', data.description || '');
+    const newCp = await this.createCoursePack(
+      userId,
+      data.title || "Imported Course",
+      data.description || "",
+    );
 
     if (data.courses && Array.isArray(data.courses)) {
       for (const [index, c] of data.courses.entries()) {
-        const rawContent = c.description || c.content || '';
-        const parsedContent = typeof rawContent === 'object' ? JSON.stringify(rawContent) : rawContent;
+        const rawContent = c.description || c.content || "";
+        const parsedContent =
+          typeof rawContent === "object" ? JSON.stringify(rawContent) : rawContent;
 
-        const newCourse = await this.db.insert(course).values({
-          title: c.title,
-          description: parsedContent,
-          coursePackId: newCp.id,
-          order: index + 1
-        }).returning();
+        const newCourse = await this.db
+          .insert(course)
+          .values({
+            title: c.title,
+            description: parsedContent,
+            coursePackId: newCp.id,
+            order: index + 1,
+          })
+          .returning();
 
         let contentArr = [];
         try {
-          contentArr = typeof rawContent === 'object' ? rawContent : JSON.parse(rawContent);
-        } catch(e) {}
+          contentArr = typeof rawContent === "object" ? rawContent : JSON.parse(rawContent);
+        } catch (e) {}
 
         if (Array.isArray(contentArr) && contentArr.length > 0) {
           const statementsToInsert = contentArr.map((item: any, i: number) => ({
             courseId: newCourse[0].id,
             order: i + 1,
-            chinese: item.chinese || '',
-            english: item.english || '',
-            soundmark: item.soundmark || ''
+            chinese: item.chinese || "",
+            english: item.english || "",
+            soundmark: item.soundmark || "",
           }));
           await this.db.insert(statement).values(statementsToInsert);
         }
@@ -248,7 +264,12 @@ export class CoursePackService {
     return newCp;
   }
 
-  async createCourse(userId: string, coursePackId: string, title: string, description: string = '') {
+  async createCourse(
+    userId: string,
+    coursePackId: string,
+    title: string,
+    description: string = "",
+  ) {
     const cp = await this.findOne(coursePackId);
     if (cp.creatorId !== userId) {
       throw new NotFoundException(`CoursePack with ID ${coursePackId} not found`);
@@ -258,26 +279,29 @@ export class CoursePackService {
       where: eq(course.coursePackId, coursePackId),
     });
 
-    const newCourse = await this.db.insert(course).values({
-      title,
-      description,
-      coursePackId,
-      order: currentCourses.length + 1
-    }).returning();
+    const newCourse = await this.db
+      .insert(course)
+      .values({
+        title,
+        description,
+        coursePackId,
+        order: currentCourses.length + 1,
+      })
+      .returning();
 
     // Parse description as JSON and insert into statements if valid
     let contentArr = [];
     try {
       contentArr = JSON.parse(description);
-    } catch(e) {}
+    } catch (e) {}
 
     if (Array.isArray(contentArr) && contentArr.length > 0) {
       const statementsToInsert = contentArr.map((item: any, index: number) => ({
         courseId: newCourse[0].id,
         order: index + 1,
-        chinese: item.chinese || '',
-        english: item.english || '',
-        soundmark: item.soundmark || ''
+        chinese: item.chinese || "",
+        english: item.english || "",
+        soundmark: item.soundmark || "",
       }));
       await this.db.insert(statement).values(statementsToInsert);
     }
@@ -291,17 +315,25 @@ export class CoursePackService {
       throw new NotFoundException(`CoursePack with ID ${coursePackId} not found`);
     }
 
-    await this.db.delete(course).where(and(eq(course.id, courseId), eq(course.coursePackId, coursePackId)));
+    await this.db
+      .delete(course)
+      .where(and(eq(course.id, courseId), eq(course.coursePackId, coursePackId)));
     return { success: true };
   }
 
-  async updateCourse(userId: string, coursePackId: string, courseId: string, data: { title?: string, description?: string }) {
+  async updateCourse(
+    userId: string,
+    coursePackId: string,
+    courseId: string,
+    data: { title?: string; description?: string },
+  ) {
     const cp = await this.findOne(coursePackId);
     if (cp.creatorId !== userId) {
       throw new NotFoundException(`CoursePack with ID ${coursePackId} not found`);
     }
 
-    const updatedCourse = await this.db.update(course)
+    const updatedCourse = await this.db
+      .update(course)
       .set(data)
       .where(and(eq(course.id, courseId), eq(course.coursePackId, coursePackId)))
       .returning();
@@ -310,7 +342,7 @@ export class CoursePackService {
       let contentArr = [];
       try {
         contentArr = JSON.parse(data.description);
-      } catch(e) {}
+      } catch (e) {}
 
       if (Array.isArray(contentArr)) {
         await this.db.delete(statement).where(eq(statement.courseId, courseId));
@@ -318,9 +350,9 @@ export class CoursePackService {
           const statementsToInsert = contentArr.map((item: any, index: number) => ({
             courseId: courseId,
             order: index + 1,
-            chinese: item.chinese || '',
-            english: item.english || '',
-            soundmark: item.soundmark || ''
+            chinese: item.chinese || "",
+            english: item.english || "",
+            soundmark: item.soundmark || "",
           }));
           await this.db.insert(statement).values(statementsToInsert);
         }

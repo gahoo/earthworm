@@ -1,7 +1,8 @@
 import { HttpException, HttpStatus, Inject, Injectable } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
-import { eq } from "drizzle-orm";
 import * as argon2 from "argon2";
+import { eq } from "drizzle-orm";
+
 import { users } from "@earthworm/schema";
 import { DB, DbType } from "../global/providers/db.provider";
 import { AuthLoginDto, AuthRegisterDto } from "./auth.dto";

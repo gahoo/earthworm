@@ -1,24 +1,26 @@
-import { Controller, Post, Body, UseGuards } from '@nestjs/common';
-import { AiService } from './ai.service';
-import { AuthGuard } from '../guards/auth.guard';
-import { User, UserEntity } from '../user/user.decorators';
+import { Body, Controller, Post, UseGuards } from "@nestjs/common";
 
-@Controller('ai')
+import { AuthGuard } from "../guards/auth.guard";
+import { User, UserEntity } from "../user/user.decorators";
+import { AiService } from "./ai.service";
+
+@Controller("ai")
 @UseGuards(AuthGuard)
 export class AiController {
   constructor(private readonly aiService: AiService) {}
 
-  @Post('generate-course')
+  @Post("generate-course")
   async generateCourseViaAI(
     @User() user: UserEntity,
-    @Body() body: {
-      materialNames?: string[],
-      prompt?: string,
-      provider?: string,
-      apiKey?: string,
-      apiBaseUrl?: string,
-      model?: string
-    }
+    @Body()
+    body: {
+      materialNames?: string[];
+      prompt?: string;
+      provider?: string;
+      apiKey?: string;
+      apiBaseUrl?: string;
+      model?: string;
+    },
   ) {
     return this.aiService.generateCoursePack(
       user.userId,
@@ -27,7 +29,7 @@ export class AiController {
       body.provider,
       body.apiKey,
       body.apiBaseUrl,
-      body.model
+      body.model,
     );
   }
 }

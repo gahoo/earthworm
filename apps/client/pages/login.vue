@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { ref } from "vue";
 import { navigateTo } from "nuxt/app";
+import { ref } from "vue";
 import { toast } from "vue-sonner";
+
 import { getHttp } from "~/api/http";
 import { fetchCurrentUser } from "~/api/user";
 import { getSignInCallback, setToken } from "~/services/auth";
@@ -14,12 +15,8 @@ const username = ref("");
 const password = ref("");
 const isLoading = ref(false);
 
-const {
-  isShowSettingUsernameModal,
-  isLoadingFetchUserSetup,
-  handleChangeUsername,
-  newUsername
-} = useUsername();
+const { isShowSettingUsernameModal, isLoadingFetchUserSetup, handleChangeUsername, newUsername } =
+  useUsername();
 
 async function submit() {
   if (!username.value) {
@@ -129,10 +126,13 @@ function useUsername() {
   <div class="flex min-h-screen items-center justify-center p-4">
     <UCard class="w-full max-w-md">
       <h2 class="mb-6 text-center text-2xl font-bold">
-        {{ isLoginMode ? '登录' : '注册' }}
+        {{ isLoginMode ? "登录" : "注册" }}
       </h2>
 
-      <form @submit.prevent="submit" class="space-y-4">
+      <form
+        @submit.prevent="submit"
+        class="space-y-4"
+      >
         <div>
           <label class="mb-1 block text-sm font-medium">用户名 *</label>
           <input
@@ -159,7 +159,7 @@ function useUsername() {
           class="w-full justify-center"
           :loading="isLoading"
         >
-          {{ isLoginMode ? '登录' : '注册' }}
+          {{ isLoginMode ? "登录" : "注册" }}
         </UButton>
       </form>
 
@@ -168,7 +168,7 @@ function useUsername() {
           @click="isLoginMode = !isLoginMode"
           class="text-primary hover:underline"
         >
-          {{ isLoginMode ? '没有账号？点击注册' : '已有账号？点击登录' }}
+          {{ isLoginMode ? "没有账号？点击注册" : "已有账号？点击登录" }}
         </button>
       </div>
     </UCard>

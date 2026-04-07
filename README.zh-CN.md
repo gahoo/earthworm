@@ -89,6 +89,7 @@ pnpm db:upload
 **方式一：本地 Node 运行 (推荐开发使用)**
 
 分别启动后端服务和前端服务：
+
 ```bash
 # 启动后端服务
 pnpm dev:serve
@@ -100,6 +101,7 @@ pnpm dev:client
 **方式二：使用 Docker 启动**
 
 如果想快速在本地体验或者部署，直接使用 Docker Compose 启动全栈服务：
+
 ```bash
 # 启动
 docker-compose up -d

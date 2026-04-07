@@ -52,4 +52,21 @@ export default defineNuxtConfig({
   build: {
     transpile: ["vue-sonner"],
   },
+  vite: {
+    optimizeDeps: {
+      include: [
+        "vue",
+        "vue-router",
+        "pinia",
+        "@vueuse/core",
+        "lodash-es",
+        "canvas-confetti",
+        "@iconify-json/ph",
+        "@iconify-json/simple-icons",
+        "vue-sonner",
+        "dayjs",
+        "fuse.js",
+      ],
+    },
+  },
 });
