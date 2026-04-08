@@ -17,7 +17,6 @@ function addClarity() {
 }
 
 export default defineNuxtConfig({
-  ssr: false,
   imports: {
     autoImport: false,
   },
@@ -41,7 +40,7 @@ export default defineNuxtConfig({
   ],
   tailwindcss: {
     viewer: false,
-    configPath: "tailwind.config.js",
+    configPath: 'tailwind.config.js'
   },
   plugins: ["~/plugins/http.ts"],
   runtimeConfig: {
@@ -71,11 +70,14 @@ export default defineNuxtConfig({
         "fuse.js",
         "jszip",
         "satori",
-        "@iconify/vue",
         "defu",
-        "ofetch",
+        "ofetch"
       ],
-      exclude: ["@iconify-json/ph", "@iconify-json/simple-icons", "@nuxt/ui"],
+      exclude: [
+        "@iconify-json/ph",
+        "@iconify-json/simple-icons",
+        "@nuxt/ui"
+      ]
     },
   },
 });
