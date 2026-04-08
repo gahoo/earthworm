@@ -39,6 +39,10 @@ export default defineNuxtConfig({
     "@hypernym/nuxt-anime",
     "@nuxt/image",
   ],
+  tailwindcss: {
+    viewer: false,
+    configPath: "tailwind.config.js",
+  },
   plugins: ["~/plugins/http.ts"],
   runtimeConfig: {
     public: {
@@ -67,8 +71,11 @@ export default defineNuxtConfig({
         "fuse.js",
         "jszip",
         "satori",
+        "@iconify/vue",
+        "defu",
+        "ofetch",
       ],
-      exclude: ["@iconify-json/ph", "@iconify-json/simple-icons"],
+      exclude: ["@iconify-json/ph", "@iconify-json/simple-icons", "@nuxt/ui"],
     },
   },
 });
