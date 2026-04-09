@@ -19,6 +19,7 @@
     "docker:delete": "docker-compose down",
     "docker:down": "docker-compose down --volumes",
     "build:server": "pnpm schema:build && pnpm -F api build",
+    "start:fast": "pnpm build:client && pnpm -F client preview",
     "build:client": "pnpm -F client generate",
     "prod:serve": "pnpm -F api start:prod:pm",
     "format": "prettier --write --cache .",
