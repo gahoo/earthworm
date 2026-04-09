@@ -10,6 +10,9 @@ export default {
   out: "./drizzle",
   dialect: "sqlite",
   dbCredentials: {
-    url: process.env.DATABASE_URL === "sqlite_test.db" ? "../../apps/api/sqlite_test.db" : (process.env.DATABASE_URL || "../../apps/api/sqlite_test.db"),
+    url:
+      process.env.DATABASE_URL === "sqlite_test.db"
+        ? "../../apps/api/sqlite_test.db"
+        : process.env.DATABASE_URL || "../../apps/api/sqlite_test.db",
   },
 } satisfies Config;

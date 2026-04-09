@@ -46,7 +46,10 @@
               </li>
             </ul>
           </nav>
-          <nav v-else-if="isAuthenticated()" class="hidden md:block">
+          <nav
+            v-else-if="isAuthenticated()"
+            class="hidden md:block"
+          >
             <ul class="flex items-center text-base">
               <li class="px-4">
                 <NuxtLink

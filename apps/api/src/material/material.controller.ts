@@ -1,12 +1,26 @@
-import { Controller, Get, Post, Delete, Param, UseGuards, UseInterceptors, UploadedFile, BadRequestException, Res, NotFoundException } from '@nestjs/common';
-import { FileInterceptor } from '@nestjs/platform-express';
-import { MaterialService } from './material.service';
-import { AuthGuard } from '../guards/auth.guard';
-import { User, UserEntity } from '../user/user.decorators';
-import { Response } from 'express';
-import * as fs from 'fs';
+import * as fs from "fs";
 
-@Controller('materials')
+import {
+  BadRequestException,
+  Controller,
+  Delete,
+  Get,
+  NotFoundException,
+  Param,
+  Post,
+  Res,
+  UploadedFile,
+  UseGuards,
+  UseInterceptors,
+} from "@nestjs/common";
+import { FileInterceptor } from "@nestjs/platform-express";
+import { Response } from "express";
+
+import { AuthGuard } from "../guards/auth.guard";
+import { User, UserEntity } from "../user/user.decorators";
+import { MaterialService } from "./material.service";
+
+@Controller("materials")
 @UseGuards(AuthGuard)
 export class MaterialController {
   constructor(private readonly materialService: MaterialService) {}
@@ -17,31 +31,35 @@ export class MaterialController {
   }
 
   @Post()
-  @UseInterceptors(FileInterceptor('file'))
+  @UseInterceptors(FileInterceptor("file"))
   async uploadMaterial(@User() user: UserEntity, @UploadedFile() file: Express.Multer.File) {
     if (!file) {
-      throw new BadRequestException('No file uploaded');
+      throw new BadRequestException("No file uploaded");
     }
 
     // 20MB limit
     if (file.size > 20 * 1024 * 1024) {
-      throw new BadRequestException('File is too large');
+      throw new BadRequestException("File is too large");
     }
 
     return this.materialService.saveMaterial(user.userId, file);
   }
 
-  @Get(':name')
-  async getMaterialFile(@User() user: UserEntity, @Param('name') name: string, @Res() res: Response) {
+  @Get(":name")
+  async getMaterialFile(
+    @User() user: UserEntity,
+    @Param("name") name: string,
+    @Res() res: Response,
+  ) {
     const filePath = await this.materialService.getMaterialPath(user.userId, name);
     if (!fs.existsSync(filePath)) {
-        throw new NotFoundException('Material not found');
+      throw new NotFoundException("Material not found");
     }
     return res.sendFile(filePath);
   }
 
-  @Delete(':name')
-  async deleteMaterial(@User() user: UserEntity, @Param('name') name: string) {
+  @Delete(":name")
+  async deleteMaterial(@User() user: UserEntity, @Param("name") name: string) {
     return this.materialService.deleteMaterial(user.userId, name);
   }
 }

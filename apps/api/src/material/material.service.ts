@@ -1,10 +1,16 @@
-import { Injectable, InternalServerErrorException, BadRequestException, NotFoundException } from '@nestjs/common';
-import * as fs from 'fs';
-import * as path from 'path';
+import * as fs from "fs";
+import * as path from "path";
+
+import {
+  BadRequestException,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from "@nestjs/common";
 
 @Injectable()
 export class MaterialService {
-  private baseUploadDir = path.join(process.cwd(), 'uploads');
+  private baseUploadDir = path.join(process.cwd(), "uploads");
 
   constructor() {
     if (!fs.existsSync(this.baseUploadDir)) {
@@ -23,11 +29,11 @@ export class MaterialService {
   private getSafeFilePath(userId: string, filename: string) {
     const userDir = this.getUserDir(userId);
     // Path traversal mitigation
-    const sanitizedFilename = path.basename(filename).replace(/[^a-zA-Z0-9.-]/g, '_');
+    const sanitizedFilename = path.basename(filename).replace(/[^a-zA-Z0-9.-]/g, "_");
     const fullPath = path.resolve(userDir, sanitizedFilename);
 
     if (!fullPath.startsWith(userDir)) {
-        throw new BadRequestException('Invalid filename');
+      throw new BadRequestException("Invalid filename");
     }
     return fullPath;
   }
@@ -36,7 +42,7 @@ export class MaterialService {
     const userDir = this.getUserDir(userId);
     try {
       const files = fs.readdirSync(userDir);
-      return files.map(file => {
+      return files.map((file) => {
         const stats = fs.statSync(path.join(userDir, file));
         return {
           id: file,
@@ -47,7 +53,7 @@ export class MaterialService {
         };
       });
     } catch (e) {
-      throw new InternalServerErrorException('Failed to read materials');
+      throw new InternalServerErrorException("Failed to read materials");
     }
   }
 
@@ -64,7 +70,7 @@ export class MaterialService {
         createdAt: stats.birthtime.toISOString(),
       };
     } catch (e) {
-      throw new InternalServerErrorException('Failed to save material');
+      throw new InternalServerErrorException("Failed to save material");
     }
   }
 
@@ -74,7 +80,7 @@ export class MaterialService {
       fs.unlinkSync(safePath);
       return { success: true };
     }
-    throw new NotFoundException('Material not found');
+    throw new NotFoundException("Material not found");
   }
 
   async getMaterialPath(userId: string, name: string): Promise<string> {
@@ -93,9 +99,9 @@ export class MaterialService {
 
     try {
       // Basic text extraction for now
-      return fs.readFileSync(safePath, 'utf-8');
+      return fs.readFileSync(safePath, "utf-8");
     } catch (e) {
-      throw new InternalServerErrorException('Failed to read material content');
+      throw new InternalServerErrorException("Failed to read material content");
     }
   }
 }

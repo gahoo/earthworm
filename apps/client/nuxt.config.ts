@@ -17,9 +17,7 @@ function addClarity() {
 }
 
 export default defineNuxtConfig({
-  ssr: false,
-  // default is true, reference to https://nuxt.com/docs/guide/directory-structure/components
-  // components: true,
+  ssr: false, // Turn off SSR again because it breaks global composables trying to access localStorage immediately
   imports: {
     autoImport: false,
   },
@@ -41,6 +39,10 @@ export default defineNuxtConfig({
     "@hypernym/nuxt-anime",
     "@nuxt/image",
   ],
+  tailwindcss: {
+    viewer: false,
+    configPath: "tailwind.config.js",
+  },
   plugins: ["~/plugins/http.ts"],
   runtimeConfig: {
     public: {
@@ -51,5 +53,28 @@ export default defineNuxtConfig({
   },
   build: {
     transpile: ["vue-sonner"],
+  },
+  vite: {
+    build: {
+      sourcemap: false,
+    },
+    optimizeDeps: {
+      include: [
+        "vue",
+        "vue-router",
+        "pinia",
+        "@vueuse/core",
+        "lodash-es",
+        "canvas-confetti",
+        "vue-sonner",
+        "dayjs",
+        "fuse.js",
+        "jszip",
+        "satori",
+        "defu",
+        "ofetch",
+      ],
+      exclude: ["@iconify-json/ph", "@iconify-json/simple-icons", "@nuxt/ui"],
+    },
   },
 });
